@@ -1,35 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
+using Windows.Globalization;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using FunnyBees.Core;
+using FunnyBees.Views;
+using LibraProgramming.Windows.Locator;
+using LibraProgramming.Windows.Navigations;
 
 namespace FunnyBees
 {
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : Application
+    sealed partial class App
     {
+        internal CoreDispatcher Dispatcher
+        {
+            get;
+            set;
+        }
+
+        private ApplicationExecutionState PreviousExecutionState
+        {
+            get;
+            set;
+        }
+
+        private string LaunchArguments
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
         /// </summary>
         public App()
         {
-            this.InitializeComponent();
-            this.Suspending += OnSuspending;
+            InitializeComponent();
+            Suspending += OnSuspending;
         }
 
         /// <summary>
@@ -39,44 +52,67 @@ namespace FunnyBees
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-#if DEBUG
-            if (System.Diagnostics.Debugger.IsAttached)
-            {
-                this.DebugSettings.EnableFrameRateCounter = true;
-            }
-#endif
-            Frame rootFrame = Window.Current.Content as Frame;
+            var page = Window.Current.Content as HostPage;
+
+            PreviousExecutionState = e.PreviousExecutionState;
+            LaunchArguments = e.Arguments;
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active
-            if (rootFrame == null)
+            if (null == page)
             {
-                // Create a Frame to act as the navigation context and navigate to the first page
-                rootFrame = new Frame();
+                Window.Current.Content = new StartupPage(e.SplashScreen);
 
-                rootFrame.NavigationFailed += OnNavigationFailed;
+                e.SplashScreen.Dismissed += OnSplashScreenDismissed;
 
-                if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
-                {
-                    //TODO: Load state from previously suspended application
-                }
-
-                // Place the frame in the current Window
-                Window.Current.Content = rootFrame;
-            }
-
-            if (e.PrelaunchActivated == false)
-            {
-                if (rootFrame.Content == null)
-                {
-                    // When the navigation stack isn't restored navigate to the first page,
-                    // configuring the new page by passing required information as a navigation
-                    // parameter
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                }
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+        }
+
+        protected override void OnWindowCreated(WindowCreatedEventArgs args)
+        {
+            base.OnWindowCreated(args);
+            Dispatcher = args.Window.Dispatcher;
+        }
+
+        private void LaunchMainPage()
+        {
+            var page = new HostPage
+            {
+                Language = ApplicationLanguages.Languages[0]
+            };
+
+            page.ContentFrame.NavigationFailed += OnNavigationFailed;
+
+            if (ApplicationExecutionState.Terminated == PreviousExecutionState)
+            {
+                //TODO: Load state from previously suspended application
+            }
+
+            // Place the frame in the current Window
+            Window.Current.Content = page;
+
+            if (null == page.ContentFrame.Content)
+            {
+                // When the navigation stack isn't restored navigate to the first page,
+                // configuring the new page by passing required information as a navigation
+                // parameter
+                if (!PageNavigation.NavigateToPage(typeof(MainPage), LaunchArguments))
+                {
+                    throw new PageNavigationException(typeof(MainPage));
+                }
+            }
+        }
+
+        private async void OnSplashScreenDismissed(SplashScreen sender, object args)
+        {
+            sender.Dismissed -= OnSplashScreenDismissed;
+
+            Bootstrapper.RegisterServicesAsync(ServiceLocator.Current);
+            Bootstrapper.RegisterViewModels(ServiceLocator.Current);
+
+            await Dispatcher.ExecuteAsync(LaunchMainPage);
         }
 
         /// <summary>
@@ -84,7 +120,7 @@ namespace FunnyBees
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
-        void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+        private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
