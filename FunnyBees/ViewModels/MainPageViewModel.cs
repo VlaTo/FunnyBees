@@ -85,14 +85,20 @@ namespace FunnyBees.ViewModels
             return Task.CompletedTask;
         }
 
-        private static void ConfigureSession(ISessionBuilder builder)
+        private void ConfigureSession(ISessionBuilder builder)
         {
-            var temp = builder.BeeFactory;
-
-            builder.CreateBeehives(bc =>
+            for (var index = 0; index < options.NumberOfBeehives; index++)
             {
-                bc.AddBee(temp.CreateBee());
-            });
+                builder.CreateBeehive(beehive =>
+                {
+                    beehive.AddBee(bee => bee.SetBehaviour<QueenBeeBehaviour>());
+
+                    for (var number = 0; number < options.NumberOfWorkingBees; number++)
+                    {
+                        beehive.AddBee(bee => bee.SetBehaviour<WorkingBeeBehavoiur>());
+                    }
+                });
+            }
         }
 
         private void DoStartSession()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using LibraProgramming.FunnyBees.Models;
 using LibraProgramming.FunnyBees.Services;
 using LibraProgramming.Windows.Infrastructure;
@@ -19,9 +20,14 @@ namespace FunnyBees.Services
             bees = new List<IBee>();
         }
 
-        public IBeehiveBuilder AddBee(IBee bee)
+        public IBeehiveBuilder AddBee(Action<IBeeBuilder> configurator)
         {
-            bees.Add(bee);
+            IBeeBuilder builder = new BeeBuilder(beehiveIndex);
+
+            configurator.Invoke(builder);
+
+            bees.Add(builder.Construct());
+
             return this;
         }
 
@@ -31,7 +37,7 @@ namespace FunnyBees.Services
         /// <returns></returns>
         Beehive IObjectBuilder<Beehive>.Construct()
         {
-            return new Beehive(bees);
+            return new Beehive(beehiveIndex, bees);
         }
     }
 }

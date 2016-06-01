@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using LibraProgramming.FunnyBees.Interop;
 using LibraProgramming.FunnyBees.Models;
 using LibraProgramming.FunnyBees.Services;
 using LibraProgramming.Windows.Infrastructure;
@@ -9,37 +11,27 @@ namespace FunnyBees.Services
     internal sealed class SessionBuilder : ISessionBuilder
     {
         private readonly ITimeIntervalGenerator generator;
-        private readonly BeeApiarOptions options;
-        private readonly IList<Beehive> beehives;
-
-        public IBeeFactory BeeFactory
-        {
-            get
-            {
-                return 
-            }
-        }
+        private readonly TimeSpan interval;
+        private readonly IList<IEntity> beehives;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public SessionBuilder(ITimeIntervalGenerator generator, BeeApiarOptions options)
+        public SessionBuilder(ITimeIntervalGenerator generator, TimeSpan interval)
         {
             this.generator = generator;
-            this.options = options;
-            beehives = new List<Beehive>();
+            this.interval = interval;
+            beehives = new List<IEntity>();
         }
 
-        public void CreateBeehives(Action<IBeehiveBuilder> configurator)
+        public void CreateBeehive(Action<IBeehiveBuilder> configurator)
         {
-            for (var index = 0; index < options.NumberOfBeehives; index++)
-            {
-                IBeehiveBuilder temp = new BeehiveBuilder(index);
+            var count = beehives.OfType<Beehive>().Count();
+            IBeehiveBuilder builder = new BeehiveBuilder(count);
 
-                configurator.Invoke(temp);
+            configurator.Invoke(builder);
 
-                beehives.Add(temp.Construct());
-            }
+            beehives.Add(builder.Construct());
         }
 
         /// <summary>
@@ -48,7 +40,7 @@ namespace FunnyBees.Services
         /// <returns></returns>
         Session IObjectBuilder<Session>.Construct()
         {
-            return new Session(generator, beehives, options.Interval);
+            return new Session(generator, beehives, interval);
         }
     }
 }

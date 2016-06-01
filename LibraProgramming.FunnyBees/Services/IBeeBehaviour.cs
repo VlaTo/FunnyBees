@@ -2,9 +2,8 @@
 
 namespace LibraProgramming.FunnyBees.Services
 {
-
-    public interface IBeeFactory
+    public interface IBeeBehaviour
     {
-         IBee CreateBee()
+        void Update(IBee bee, ISessionContext context);
     }
 }

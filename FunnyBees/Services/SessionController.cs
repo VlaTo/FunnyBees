@@ -48,7 +48,7 @@ namespace FunnyBees.Services
                 throw new InvalidOperationException();
             }
 
-            var builder = new SessionBuilder(generator, options);
+            ISessionBuilder builder = new SessionBuilder(generator, options.Interval);
 
             configurator.Invoke(builder);
 

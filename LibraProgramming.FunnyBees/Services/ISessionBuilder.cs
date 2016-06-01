@@ -6,11 +6,6 @@ namespace LibraProgramming.FunnyBees.Services
 {
     public interface ISessionBuilder : IObjectBuilder<Session>
     {
-        IBeeFactory BeeFactory
-        {
-            get;
-        }
-
-        void CreateBeehives(Action<IBeehiveBuilder> configurator);
+        void CreateBeehive(Action<IBeehiveBuilder> configurator);
     }
 }

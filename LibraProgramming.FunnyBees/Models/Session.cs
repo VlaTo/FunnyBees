@@ -13,6 +13,7 @@ namespace LibraProgramming.FunnyBees.Models
     {
         private readonly ITimeIntervalGenerator generator;
         private readonly IList<IEntity> entities;
+        private readonly DateTime date;
         private IDisposable token;
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace LibraProgramming.FunnyBees.Models
 
             generator.TimeInterval += OnTimeInterval;
 
+            date = DateTime.UtcNow;
             token = generator.Start(interval);
         }
 
@@ -44,9 +46,35 @@ namespace LibraProgramming.FunnyBees.Models
 
         private void OnTimeInterval(ITimeIntervalGenerator sender, TimeIntervalEventArgs args)
         {
-            foreach (var entity in entities.OfType<IUpdatable>())
+            var context = new SessionContext(entities, DateTime.UtcNow - date);
+
+            foreach (var entity in entities.OfType<IUpdatable<ISessionContext>>())
             {
-                entity.Update();
+                entity.Update(context);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private class SessionContext : ISessionContext
+        {
+            private readonly IList<IEntity> entities;
+
+            public TimeSpan Elapsed
+            {
+                get;
+            }
+
+            public SessionContext(IList<IEntity> entities, TimeSpan elapsed)
+            {
+                this.entities = entities;
+                Elapsed = elapsed;
+            }
+
+            public Beehive GetBeehive(int index)
+            {
+                return entities.OfType<Beehive>().Skip(index).FirstOrDefault();
             }
         }
     }

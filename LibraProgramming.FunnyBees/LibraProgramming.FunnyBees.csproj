@@ -107,14 +107,23 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interop\EntityProperty.cs" />
     <Compile Include="Interop\IEntity.cs" />
+    <Compile Include="Models\Bee.cs" />
     <Compile Include="Models\BeeApiarOptions.cs" />
+    <Compile Include="Models\BeeBehaviour.cs" />
     <Compile Include="Models\Beehive.cs" />
+    <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\IBee.cs" />
+    <Compile Include="Models\IContext.cs" />
+    <Compile Include="Models\ISessionContext.cs" />
+    <Compile Include="Models\QueenBeeBehaviour.cs" />
     <Compile Include="Models\Session.cs" />
+    <Compile Include="Models\WorkingBeeBehavoiur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IBeeApiarOptionsProvider.cs" />
-    <Compile Include="Services\IBeeFactory.cs" />
+    <Compile Include="Services\IBeeBehaviour.cs" />
+    <Compile Include="Services\IBeeBuilder.cs" />
     <Compile Include="Services\IBeehiveBuilder.cs" />
     <Compile Include="Services\ISessionController.cs" />
     <Compile Include="Services\ITimeIntervalGenerator.cs" />

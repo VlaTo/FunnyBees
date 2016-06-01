@@ -3,26 +3,51 @@ using LibraProgramming.FunnyBees.Interop;
 
 namespace LibraProgramming.FunnyBees.Models
 {
-    public class Beehive : IEntity, IUpdatable
+    /// <summary>
+    /// 
+    /// </summary>
+    public class Beehive : Entity, IUpdatable<ISessionContext>
     {
-        private IList<IBee> bees;
+        /// <summary>
+        /// 
+        /// </summary>
+        public IList<IBee> Bees
+        {
+            get;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int Index
+        {
+            get;
+        }
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public Beehive(IEnumerable<IBee> collection)
+        public Beehive(int index, IEnumerable<IBee> collection)
         {
-            bees = new List<IBee>();
+            Bees = new List<IBee>();
+            Index = index;
 
             foreach (var bee in collection)
             {
-                bees.Add(bee);
+                Bees.Add(bee);
             }
         }
 
-        public void Update()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        public void Update(ISessionContext context)
         {
-            throw new System.NotImplementedException();
+            foreach (var bee in Bees)
+            {
+                bee.Update(context);
+            }
         }
     }
 }

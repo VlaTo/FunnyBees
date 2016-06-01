@@ -24,5 +24,14 @@ namespace LibraProgramming.FunnyBees.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int NumberOfWorkingBees
+        {
+            get;
+            set;
+        }
     }
 }
