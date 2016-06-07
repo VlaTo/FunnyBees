@@ -10,7 +10,7 @@ namespace LibraProgramming.Windows.Commands
     /// </summary>
     public class AsynchronousCommand : AsynchronousCommandBase, ICommand
     {
-        private readonly WeakDelegate<Func<object, Task>> action;
+        private readonly WeakFunc<object, Task> action;
         private readonly WeakPredicate<object> condition;
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace LibraProgramming.Windows.Commands
         /// <param name="condition"></param>
         public AsynchronousCommand(Func<object, Task> action, Predicate<object> condition = null)
         {
-            this.action = new WeakDelegate<Func<object, Task>>(action);
+            this.action = new WeakFunc<object, Task>(action);
             this.condition = null != condition ? new WeakPredicate<object>(condition) : null;
         }
 

@@ -97,20 +97,34 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\CoreDispatcherExtension.cs" />
+    <Compile Include="Core\NumberConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
+    <Compile Include="Design\MainPageDesignModel.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
+    <Compile Include="Models\ApplicationOptions.cs" />
+    <Compile Include="Models\Bee.cs" />
+    <Compile Include="Models\BeeFactory.cs" />
+    <Compile Include="Models\Beehive.cs" />
+    <Compile Include="Models\BeehiveFactory.cs" />
+    <Compile Include="Models\FuzzyValue.cs" />
+    <Compile Include="Models\IBee.cs" />
+    <Compile Include="Models\IBeeFactory.cs" />
+    <Compile Include="Models\IBeehive.cs" />
+    <Compile Include="Models\IBeehiveFactory.cs" />
+    <Compile Include="Models\ISimulation.cs" />
+    <Compile Include="Models\IRunSimulationToken.cs" />
+    <Compile Include="Models\IUpdatable.cs" />
+    <Compile Include="Models\Simulation.cs" />
+    <Compile Include="Models\UpdateContext.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="Services\BeeApiarOptionProvider.cs" />
-    <Compile Include="Services\BeeBuilder.cs" />
-    <Compile Include="Services\BeehiveBuilder.cs" />
-    <Compile Include="Services\IUIThreadDispatcher.cs" />
-    <Compile Include="Services\SessionBuilder.cs" />
+    <Compile Include="Services\ApplicationOptionProvider.cs" />
+    <Compile Include="Services\IApplicationOptionsProvider.cs" />
+    <Compile Include="Services\IDispatcherProvider.cs" />
     <Compile Include="Services\SessionController.cs" />
     <Compile Include="Services\TimeIntervalGenerator.cs" />
-    <Compile Include="Services\UIThreadDispatcher.cs" />
     <Compile Include="ViewModels\BeehiveViewModel.cs" />
     <Compile Include="ViewModels\HostPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
@@ -138,13 +152,49 @@
     <None Include="FunnyBees_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\BadgeLogo.scale-100.png" />
+    <Content Include="Assets\BadgeLogo.scale-125.png" />
+    <Content Include="Assets\BadgeLogo.scale-150.png" />
+    <Content Include="Assets\BadgeLogo.scale-200.png" />
+    <Content Include="Assets\BadgeLogo.scale-400.png" />
+    <Content Include="Assets\SplashScreen.scale-100.png" />
+    <Content Include="Assets\SplashScreen.scale-125.png" />
+    <Content Include="Assets\SplashScreen.scale-150.png" />
+    <Content Include="Assets\SplashScreen.scale-400.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square310x310Logo.scale-125.png" />
+    <Content Include="Assets\Square310x310Logo.scale-150.png" />
+    <Content Include="Assets\Square310x310Logo.scale-200.png" />
+    <Content Include="Assets\Square310x310Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48_altform-unplated.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\Square71x71Logo.scale-125.png" />
+    <Content Include="Assets\Square71x71Logo.scale-150.png" />
+    <Content Include="Assets\Square71x71Logo.scale-200.png" />
+    <Content Include="Assets\Square71x71Logo.scale-400.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\StoreLogo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-150.png" />
+    <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Assets\StoreLogo.scale-400.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />
     <Content Include="Assets\Square150x150Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.scale-200.png" />
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
-    <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +202,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <DesignDataWithDesignTimeCreatableTypes Include="Design\MainPageDesignData.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </DesignDataWithDesignTimeCreatableTypes>
     <Page Include="Themes\Common.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -182,10 +236,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibraProgramming.FunnyBees\LibraProgramming.FunnyBees.csproj">
-      <Project>{42da47a5-6aca-4a36-b4c4-5cc634e2303d}</Project>
-      <Name>LibraProgramming.FunnyBees</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LibraProgramming.Hessian\LibraProgramming.Hessian.csproj">
       <Project>{cdfa46e2-5d84-47f6-a099-d1578cdd5b4f}</Project>
       <Name>LibraProgramming.Hessian</Name>
@@ -211,9 +261,7 @@
       <Name>LibraProgramming.Windows</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

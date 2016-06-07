@@ -1,9 +1,10 @@
 ﻿using Windows.UI.Xaml;
 using FunnyBees.Localization;
+using FunnyBees.Models;
 using FunnyBees.Services;
 using FunnyBees.ViewModels;
-using LibraProgramming.FunnyBees.Services;
 using LibraProgramming.Windows.Locator;
+using LibraProgramming.Windows.Messaging;
 
 namespace FunnyBees
 {
@@ -15,26 +16,30 @@ namespace FunnyBees
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="locator"></param>
-        public static void RegisterServicesAsync(ServiceLocator locator)
+        /// <param name="registry"></param>
+        public static void RegisterServicesAsync(IServiceRegistry registry)
         {
-//            locator.Register<IEventMessenger, EventMessenger>(lifetime: InstanceLifetime.Singleton);
-            locator.Register<IApplicationLocalization>(() => ApplicationLocalizationManager.Current,lifetime: InstanceLifetime.Singleton);
-            locator.Register<IUIThreadDispatcher>(() => new UIThreadDispatcher(((App)Application.Current).Dispatcher),lifetime: InstanceLifetime.CreateNew);
-            locator.Register<IBeeApiarOptionsProvider, BeeApiarOptionProvider>(lifetime: InstanceLifetime.Singleton);
-            locator.Register<ITimeIntervalGenerator, TimeIntervalGenerator>(lifetime: InstanceLifetime.Singleton);
-            locator.Register<ISessionController, SessionController>(lifetime: InstanceLifetime.Singleton);
+            registry.Register<IEventMessenger, EventMessenger>(lifetime: InstanceLifetime.Singleton);
+            registry.Register<IApplicationLocalization>(() => ApplicationLocalizationManager.Current, lifetime: InstanceLifetime.Singleton);
+            registry.Register<IDispatcherProvider>(() => (App) Application.Current, lifetime: InstanceLifetime.Singleton);
+            registry.Register<IApplicationOptionsProvider, ApplicationOptionProvider>(lifetime: InstanceLifetime.Singleton);
+//            registry.Register<ITimeIntervalGenerator, TimeIntervalGenerator>(lifetime: InstanceLifetime.Singleton);
+//            registry.Register<ISessionController, SessionController>(lifetime: InstanceLifetime.Singleton);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="locator"></param>
-        public static void RegisterViewModels(ServiceLocator locator)
+        /// <param name="registry"></param>
+        public static void RegisterViewModels(IServiceRegistry registry)
         {
-            locator.Register<HostPageViewModel>(lifetime: InstanceLifetime.CreateNew);
-            locator.Register<MainPageViewModel>(lifetime: InstanceLifetime.CreateNew);
-            locator.Register<OptionsPageViewModel>(lifetime: InstanceLifetime.CreateNew);
+            registry.Register<IBeehiveFactory, BeehiveFactory>(lifetime: InstanceLifetime.Singleton);
+            registry.Register<IBeeFactory, BeeFactory>(lifetime: InstanceLifetime.Singleton);
+            registry.Register<ISimulation, Simulation>(lifetime: InstanceLifetime.CreateNew);
+
+            registry.Register<HostPageViewModel>(lifetime: InstanceLifetime.CreateNew);
+            registry.Register<MainPageViewModel>(lifetime: InstanceLifetime.CreateNew);
+            registry.Register<OptionsPageViewModel>(lifetime: InstanceLifetime.CreateNew);
         }
     }
 }

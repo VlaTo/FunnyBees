@@ -7,7 +7,7 @@ namespace LibraProgramming.Windows.Locator
     /// <summary>
     /// Implementation of the IOC pattern.
     /// </summary>
-    public sealed partial class ServiceLocator : IServiceLocator, IInstanceProvider
+    public sealed partial class ServiceLocator : IServiceLocator, IInstanceProvider, IServiceRegistry
     {
         private static readonly Lazy<ServiceLocator> instance;
         private static readonly object sync;
@@ -32,11 +32,22 @@ namespace LibraProgramming.Windows.Locator
 
         #region Service Locator implementation
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serviceType"></param>
+        /// <returns></returns>
         public object GetService(Type serviceType)
         {
             return GetInstance(serviceType);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serviceType"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public object GetInstance(Type serviceType, string key = null)
         {
             if (null == serviceType)
@@ -49,26 +60,24 @@ namespace LibraProgramming.Windows.Locator
             return GetInstanceInternal(queue, serviceType, key);
         }
 
-        private object GetInstanceInternal(Queue<ServiceTypeReference> queue, Type serviceType, string key = null)
-        {
-            lock (sync)
-            {
-                InstanceCollection collection;
-
-                if (!registration.TryGetValue(serviceType, out collection))
-                {
-                    Throw.MissingServiceRegistration(serviceType, nameof(serviceType));
-                }
-
-                return collection[key].ResolveInstance(queue);
-            }
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="queue"></param>
+        /// <param name="serviceType"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         object IInstanceProvider.GetInstance(Queue<ServiceTypeReference> queue, Type serviceType, string key)
         {
             return GetInstanceInternal(queue, serviceType, key);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public TService GetInstance<TService>(string key = null)
         {
             return (TService) GetInstance(typeof (TService), key);
@@ -78,6 +87,13 @@ namespace LibraProgramming.Windows.Locator
 
         #region Service Registration
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="lifetime"></param>
+        /// <param name="key"></param>
+        /// <param name="createimmediate"></param>
         public void Register(Type service, Func<Factory, InstanceLifetime> lifetime = null, string key = null, bool createimmediate = false)
         {
             if (null == service)
@@ -95,6 +111,14 @@ namespace LibraProgramming.Windows.Locator
             RegisterService(service, new TypeFactory(this, service), lifetime, key, createimmediate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="service"></param>
+        /// <param name="impl"></param>
+        /// <param name="lifetime"></param>
+        /// <param name="key"></param>
+        /// <param name="createimmediate"></param>
         public void Register(Type service, Type impl, Func<Factory, InstanceLifetime> lifetime = null, string key = null, bool createimmediate = false)
         {
             if (null == service)
@@ -124,20 +148,58 @@ namespace LibraProgramming.Windows.Locator
             RegisterService(service, new TypeFactory(this, impl), lifetime, key, createimmediate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="factory"></param>
+        /// <param name="lifetime"></param>
+        /// <param name="key"></param>
+        /// <param name="createimmediate"></param>
         public void Register<TService>(Func<TService> factory, Func<Factory, InstanceLifetime> lifetime = null, string key = null, bool createimmediate = false)
         {
             RegisterService(typeof (TService), new CreatorFactory<TService>(this, factory), lifetime, key, createimmediate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="lifetime"></param>
+        /// <param name="key"></param>
+        /// <param name="createimmediate"></param>
         public void Register<TService>(Func<Factory, InstanceLifetime> lifetime = null, string key = null, bool createimmediate = false) where TService : class 
         {
             Register(typeof (TService), lifetime, key, createimmediate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <typeparam name="TConcrete"></typeparam>
+        /// <param name="lifetime"></param>
+        /// <param name="key"></param>
+        /// <param name="createimmediate"></param>
         public void Register<TService, TConcrete>(Func<Factory, InstanceLifetime> lifetime = null, string key = null, bool createimmediate = false)
             where TConcrete : class, TService
         {
             Register(typeof (TService), typeof (TConcrete), lifetime, key, createimmediate);
+        }
+
+        private object GetInstanceInternal(Queue<ServiceTypeReference> queue, Type serviceType, string key = null)
+        {
+            lock (sync)
+            {
+                InstanceCollection collection;
+
+                if (!registration.TryGetValue(serviceType, out collection))
+                {
+                    Throw.MissingServiceRegistration(serviceType, nameof(serviceType));
+                }
+
+                return collection[key].ResolveInstance(queue);
+            }
         }
 
         #endregion

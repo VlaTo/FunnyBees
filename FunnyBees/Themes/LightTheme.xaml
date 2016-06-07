@@ -19,6 +19,7 @@
     <Color x:Key="TitleBarInactiveForegroundColor">#FF999999</Color>
     <Color x:Key="TitleBarButtonHoverForegroundColor">#41000000</Color>
     <!-- -->
+    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="#FF858378" />
     <SolidColorBrush x:Key="ApplicationPageHeaderTextForegroundThemeBrush" Color="White" />
-    <SolidColorBrush x:Key="ApplicationPageHeaderBackgroundThemeBrush" Color="#2980B9" />
+    <SolidColorBrush x:Key="ApplicationPageHeaderBackgroundThemeBrush" Color="#FF2980B9" />
 </ResourceDictionary>

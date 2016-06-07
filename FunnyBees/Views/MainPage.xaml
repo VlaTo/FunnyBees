@@ -6,8 +6,11 @@
     xmlns:local="using:FunnyBees.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:core="using:FunnyBees.Core"
 
     mc:Ignorable="d"
+    
+    d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}">
     <Grid
@@ -17,6 +20,9 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.Resources>
+            <core:NumberConverter
+                x:Name="NumberConverter"
+            />
             <CollectionViewSource
                 x:Name="HivesViewSource"
                 Source="{Binding Path=Beehives}"
@@ -26,13 +32,53 @@
         <CommandBar
             Grid.Row="0">
             <AppBarButton
-                Command="{Binding Path=StartSession}">
+                Command="{Binding Path=RunSimulation}">
                 Start
             </AppBarButton>
         </CommandBar>
         <GridView
             Grid.Row="1"
-            ItemsSource="{Binding Source={StaticResource HivesViewSource}}">
+            ItemsSource="{Binding Source={StaticResource HivesViewSource}}"
+            Margin="24">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        Background="LightGray"
+                        Width="312"
+                        Height="408">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="2"
+                            Margin="10,0,10,10"
+                            TextAlignment="Justify"
+                            VerticalAlignment="Bottom">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Normal" />
+                                    <Setter Property="FontSize" Value="42" />
+                                </Style>
+                            </TextBlock.Style>
+                            <Run 
+                                FontSize="36"
+                                Text="{Binding Path=CurrentNumber, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
+                            />
+                            <Run Text="/" />
+                            <Run
+                                Text="{Binding Path=NumberOfBees, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
+                            />
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
         </GridView>
     </Grid>
 </local:ContentPage>

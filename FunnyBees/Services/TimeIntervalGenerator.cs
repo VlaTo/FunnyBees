@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading;
 using Windows.Foundation;
-using LibraProgramming.FunnyBees.Services;
 using LibraProgramming.Windows;
 using LibraProgramming.Windows.Infrastructure;
 
 namespace FunnyBees.Services
 {
 
+/*
     public sealed class TimeIntervalGenerator : ITimeIntervalGenerator
     {
         private readonly TypedWeakEventHandler<ITimeIntervalGenerator, TimeIntervalEventArgs> timeInterval;
@@ -66,4 +66,5 @@ namespace FunnyBees.Services
             timeInterval.Invoke(this, new TimeIntervalEventArgs());
         }
     }
+*/
 }

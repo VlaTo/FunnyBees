@@ -120,6 +120,7 @@
     <Compile Include="InstanceLifetime.cs" />
     <Compile Include="InstanceLifetime.SingletonLifetime.cs" />
     <Compile Include="IServiceLocator.cs" />
+    <Compile Include="IServiceRegistry.cs" />
     <Compile Include="PrefferedConstructorAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceAttribute.cs" />

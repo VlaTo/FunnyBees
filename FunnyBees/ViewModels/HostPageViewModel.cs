@@ -1,14 +1,15 @@
-﻿using System.Threading.Tasks;
-using LibraProgramming.FunnyBees.Services;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FunnyBees.Services;
 using LibraProgramming.Windows.Infrastructure;
 
 namespace FunnyBees.ViewModels
 {
     public class HostPageViewModel : ObservableViewModel, ISetupRequired, ICleanupRequired
     {
-        private readonly IBeeApiarOptionsProvider optionsProvider;
+        private readonly IApplicationOptionsProvider optionsProvider;
 
-        public HostPageViewModel(IBeeApiarOptionsProvider optionsProvider)
+        public HostPageViewModel(IApplicationOptionsProvider optionsProvider)
         {
             this.optionsProvider = optionsProvider;
             optionsProvider.OptionsChanged += OnOptionsChanged;
@@ -16,7 +17,7 @@ namespace FunnyBees.ViewModels
 
         async Task ISetupRequired.SetupAsync()
         {
-            var options = await optionsProvider.GetOptionsAsync();
+            var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
         }
 
         Task ICleanupRequired.CleanupAsync()
@@ -25,7 +26,7 @@ namespace FunnyBees.ViewModels
             return Task.CompletedTask;
         }
 
-        private void OnOptionsChanged(IBeeApiarOptionsProvider provider, OptionsChangedEventArgs e)
+        private void OnOptionsChanged(IApplicationOptionsProvider provider, OptionsChangedEventArgs e)
         {
         }
     }

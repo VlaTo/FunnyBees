@@ -1,11 +1,10 @@
 ﻿using System;
 using Windows.Foundation;
-using LibraProgramming.FunnyBees.Models;
-using LibraProgramming.FunnyBees.Services;
 using LibraProgramming.Windows.Infrastructure;
 
 namespace FunnyBees.Services
 {
+/*
     /// <summary>
     /// 
     /// </summary>
@@ -64,4 +63,5 @@ namespace FunnyBees.Services
             return false == args.Cancel;
         }
     }
+*/
 }

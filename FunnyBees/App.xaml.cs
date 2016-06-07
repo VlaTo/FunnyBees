@@ -6,6 +6,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 using FunnyBees.Core;
+using FunnyBees.Services;
 using FunnyBees.Views;
 using LibraProgramming.Windows.Locator;
 using LibraProgramming.Windows.Navigations;
@@ -15,9 +16,11 @@ namespace FunnyBees
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App
+    sealed partial class App : IDispatcherProvider
     {
-        internal CoreDispatcher Dispatcher
+        CoreDispatcher IDispatcherProvider.Dispatcher => Dispatcher;
+
+        private CoreDispatcher Dispatcher
         {
             get;
             set;
