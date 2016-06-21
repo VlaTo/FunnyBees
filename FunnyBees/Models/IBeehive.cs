@@ -4,11 +4,6 @@ namespace FunnyBees.Models
 {
     public interface IBeehive : IUpdatable<UpdateContext>
     {
-        FuzzyValue<int> NumberOfBees
-        {
-            get;
-        }
-
         IList<IBee> Bees
         {
             get;
@@ -17,7 +12,6 @@ namespace FunnyBees.Models
         int Number
         {
             get;
-            set;
         } 
     }
 }

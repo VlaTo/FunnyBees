@@ -20,6 +20,8 @@ namespace FunnyBees.Models
         private readonly IList<IBeehive> beehives;
         private DateTime started;
 
+        public ICollection<IBeehive> Beehives => beehives;
+
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
@@ -40,22 +42,21 @@ namespace FunnyBees.Models
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<IRunSimulationToken> RunAsync()
+        public async Task<ISimulationToken> RunAsync()
         {
-//            var random = new Random();
+            var random = new Random();
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
 
             foreach (var index in Enumerable.Range(0, options.NumberOfBeehives))
             {
-                var beehive = beehiveFactory.GetBeehive();
-
-                beehive.Number = index;
+                var number = random.Next(options.MinimumNumberOfBees, options.MaximumNumberOfBees);
+                var beehive = beehiveFactory.GetBeehive(index, number);
 
                 beehives.Add(beehive);
 
-                foreach (var number in Enumerable.Range(0, beehive.MaximumNumberOfBees))
+                foreach (var num in Enumerable.Range(0, beehive.MaximumNumberOfBees))
                 {
-                    var bee = beeFactory.CreateBee();
+                    var bee = beeFactory.CreateBee(num);
 
                     beehive.Bees.Add(bee);
                     bee.Beehive = beehive;
@@ -65,7 +66,7 @@ namespace FunnyBees.Models
             started = DateTime.Now;
             timer = new Timer(DoTimerCallback, null, TimeSpan.Zero, options.Interval);
 
-            return new RunSimulationToken(Cleanup);
+            return new SimulationToken(Cleanup);
         }
 
         private void Cleanup()
@@ -88,9 +89,9 @@ namespace FunnyBees.Models
         /// <summary>
         /// 
         /// </summary>
-        private class RunSimulationToken : DisposableToken, IRunSimulationToken
+        private class SimulationToken : DisposableToken, ISimulationToken
         {
-            public RunSimulationToken(Action cleanup)
+            public SimulationToken(Action cleanup)
                 : base(cleanup)
             {
             }

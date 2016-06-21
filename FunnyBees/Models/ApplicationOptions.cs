@@ -24,5 +24,23 @@ namespace FunnyBees.Models
             get;
             set;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MinimumNumberOfBees
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public int MaximumNumberOfBees
+        {
+            get;
+            set;
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Models
 {
-    public interface IRunSimulationToken : IDisposable
+    public interface ISimulationToken : IDisposable
     {
          
     }

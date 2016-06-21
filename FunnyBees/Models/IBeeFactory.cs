@@ -2,6 +2,6 @@
 {
     public interface IBeeFactory
     {
-        IBee CreateBee();
+        IBee CreateBee(int index);
     }
 }

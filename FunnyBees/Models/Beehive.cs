@@ -4,11 +4,6 @@ namespace FunnyBees.Models
 {
     public class Beehive : IBeehive
     {
-        public FuzzyValue<int> NumberOfBees
-        {
-            get;
-        }
-
         public IList<IBee> Bees
         {
             get;
@@ -17,7 +12,6 @@ namespace FunnyBees.Models
         public int Number
         {
             get;
-            set;
         }
 
         public int MaximumNumberOfBees
@@ -28,8 +22,9 @@ namespace FunnyBees.Models
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public Beehive(int maximumNumberOfBees)
+        public Beehive(int number, int maximumNumberOfBees)
         {
+            Number = number;
             MaximumNumberOfBees = maximumNumberOfBees;
             Bees = new List<IBee>();
         }

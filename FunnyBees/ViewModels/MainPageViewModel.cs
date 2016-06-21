@@ -18,7 +18,7 @@ namespace FunnyBees.ViewModels
         private readonly InteractionRequest<Confirmation> confirmRequest;
         private readonly InteractionRequest<Notification> notificationRequest;
         private readonly ISimulation simulation;
-        private IRunSimulationToken token;
+        private ISimulationToken token;
 
         /// <summary>
         /// 
@@ -114,6 +114,8 @@ namespace FunnyBees.ViewModels
         private async Task RunSimulationAsync(object arg)
         {
             token = await simulation.RunAsync();
+
+            simulation.Beehives
         }
 
         private void DoConfirm()

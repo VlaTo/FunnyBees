@@ -2,6 +2,6 @@
 {
     public interface IBeehiveFactory
     {
-        Beehive GetBeehive();
+        Beehive GetBeehive(int index, int maximumNumberOfBees);
     }
 }

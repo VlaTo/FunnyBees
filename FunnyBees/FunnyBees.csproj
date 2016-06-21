@@ -113,7 +113,7 @@
     <Compile Include="Models\IBeehive.cs" />
     <Compile Include="Models\IBeehiveFactory.cs" />
     <Compile Include="Models\ISimulation.cs" />
-    <Compile Include="Models\IRunSimulationToken.cs" />
+    <Compile Include="Models\ISimulationToken.cs" />
     <Compile Include="Models\IUpdatable.cs" />
     <Compile Include="Models\Simulation.cs" />
     <Compile Include="Models\UpdateContext.cs" />
