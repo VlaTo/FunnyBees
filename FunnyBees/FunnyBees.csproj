@@ -97,24 +97,22 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\CoreDispatcherExtension.cs" />
-    <Compile Include="Core\NumberConverter.cs" />
+    <Compile Include="Core\ValueFormatConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
     <Compile Include="Design\MainPageDesignModel.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />
     <Compile Include="Models\Bee.cs" />
-    <Compile Include="Models\BeeFactory.cs" />
     <Compile Include="Models\Beehive.cs" />
-    <Compile Include="Models\BeehiveFactory.cs" />
     <Compile Include="Models\FuzzyValue.cs" />
     <Compile Include="Models\IBee.cs" />
-    <Compile Include="Models\IBeeFactory.cs" />
+    <Compile Include="Models\IBeeBehaviour.cs" />
     <Compile Include="Models\IBeehive.cs" />
-    <Compile Include="Models\IBeehiveFactory.cs" />
     <Compile Include="Models\ISimulation.cs" />
     <Compile Include="Models\ISimulationSession.cs" />
     <Compile Include="Models\IUpdatable.cs" />
+    <Compile Include="Models\BeeBehaviour.cs" />
     <Compile Include="Models\Simulation.cs" />
     <Compile Include="Models\Simulation.Session.cs" />
     <Compile Include="Models\UpdateContext.cs" />

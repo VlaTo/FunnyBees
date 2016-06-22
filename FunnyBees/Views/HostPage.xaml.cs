@@ -14,7 +14,7 @@ namespace FunnyBees.Views
     /// </summary>
     public sealed partial class HostPage : IPageNavigationProvider
     {
-        public static readonly DependencyProperty HeaderProperty;
+//        public static readonly DependencyProperty HeaderProperty;
 
         /// <summary>
         /// 
@@ -35,6 +35,7 @@ namespace FunnyBees.Views
             InitializeComponent();
         }
 
+/*
         public static FrameworkElement GetHeader(ContentPage page)
         {
             if (null == page)
@@ -44,7 +45,9 @@ namespace FunnyBees.Views
 
             return (FrameworkElement) page.GetValue(HeaderProperty);
         }
+*/
 
+/*
         public static void SetHeader(ContentPage page, FrameworkElement value)
         {
             if (null == page)
@@ -54,7 +57,9 @@ namespace FunnyBees.Views
 
             page.SetValue(HeaderProperty, value);
         }
+*/
 
+/*
         static HostPage()
         {
             HeaderProperty = DependencyProperty
@@ -65,6 +70,7 @@ namespace FunnyBees.Views
                     new PropertyMetadata(DependencyProperty.UnsetValue, OnHeaderPropertyChanged)
                 );
         }
+*/
 
         private static IEnumerable<RadioButton> GetAllNavigationButtons(UIElementCollection elements)
         {
@@ -85,7 +91,7 @@ namespace FunnyBees.Views
                 button.IsChecked = e.SourcePageType == command.TargetPage;
             }
 
-            var header = PageHeaderCustomContent.Content as FrameworkElement;
+            /*var header = PageHeaderCustomContent.Content as FrameworkElement;
 
             if (null != header)
             {
@@ -111,7 +117,7 @@ namespace FunnyBees.Views
 
 //                PageTitle.Text = title ?? String.Empty;
                 PageHeaderCustomContent.Content = content;
-            }
+            }*/
 
             MenuSplitView.IsPaneOpen = false;
         }
@@ -131,8 +137,10 @@ namespace FunnyBees.Views
             return ContentFrame.Navigate(targetPage, parameter);
         }
 
+/*
         private static void OnHeaderPropertyChanged(DependencyObject source, DependencyPropertyChangedEventArgs e)
         {
         }
+*/
     }
 }

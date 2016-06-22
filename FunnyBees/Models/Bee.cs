@@ -2,13 +2,17 @@
 {
     public class Bee : IBee
     {
-        public int Lifetime
+        public IBeeBehaviour Behaviour
         {
             get;
-            private set;
         }
 
-        public Beehive Beehive
+        public IBeehive Beehive
+        {
+            get;
+        }
+
+        public int Number
         {
             get;
             set;
@@ -17,22 +21,25 @@
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public Bee(int index, int lifetime)
+        public Bee(IBeehive beehive, int number, IBeeBehaviour behaviour)
         {
-            Lifetime = lifetime;
+            Beehive = beehive;
+            Number = number;
+            Behaviour = behaviour;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
         public void Update(UpdateContext context)
         {
-            if (Lifetime <= 0)
-            {
-                return;
-            }
+            Behaviour.Update(this, context);
+        }
 
-            if (--Lifetime == 0)
-            {
-//                Beehive
-            }
+        public void Die()
+        {
+            Beehive.RemoveBee(this);
         }
     }
 }

@@ -86,7 +86,7 @@ namespace FunnyBees
                 Language = ApplicationLanguages.Languages[0]
             };
 
-            page.ContentFrame.NavigationFailed += OnNavigationFailed;
+//            page.ContentFrame.NavigationFailed += OnNavigationFailed;
 
             if (ApplicationExecutionState.Terminated == PreviousExecutionState)
             {
@@ -96,8 +96,8 @@ namespace FunnyBees
             // Place the frame in the current Window
             Window.Current.Content = page;
 
-            if (null == page.ContentFrame.Content)
-            {
+//            if (null == page.ContentFrame.Content)
+//            {
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
@@ -105,7 +105,7 @@ namespace FunnyBees
                 {
                     throw new PageNavigationException(typeof(MainPage));
                 }
-            }
+//            }
         }
 
         private async void OnSplashScreenDismissed(SplashScreen sender, object args)
@@ -123,10 +123,12 @@ namespace FunnyBees
         /// </summary>
         /// <param name="sender">The Frame which failed navigation</param>
         /// <param name="e">Details about the navigation failure</param>
+/*
         private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
         }
+*/
 
         /// <summary>
         /// Invoked when application execution is being suspended.  Application state is saved

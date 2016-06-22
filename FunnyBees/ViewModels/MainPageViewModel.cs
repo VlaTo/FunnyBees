@@ -1,9 +1,12 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FunnyBees.Core;
 using FunnyBees.Models;
 using FunnyBees.Services;
+using LibraProgramming.Windows;
 using LibraProgramming.Windows.Commands;
 using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
@@ -23,6 +26,7 @@ namespace FunnyBees.ViewModels
         private readonly ISimulation simulation;
         private ISimulationSession session;
         private bool isSessionRunning;
+        private TimeSpan sessionElapsedTime;
 
         /// <summary>
         /// 
@@ -33,6 +37,21 @@ namespace FunnyBees.ViewModels
         /// 
         /// </summary>
         public IInteractionRequest NotificationRequest => notificationRequest;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public TimeSpan SessionElapsedTime
+        {
+            get
+            {
+                return sessionElapsedTime;
+            }
+            set
+            {
+                SetProperty(ref sessionElapsedTime, value);
+            }
+        }
 
         /// <summary>
         /// 
@@ -111,18 +130,51 @@ namespace FunnyBees.ViewModels
 
                 foreach (var beehive in session.Beehives)
                 {
-                    Beehives.Add(new BeehiveViewModel
+                    var model = new BeehiveViewModel
                     {
                         Number = beehive.Number,
-                        MaximumNumberOfBees = beehive.Bees.Count
-                    });
+                        MaximumNumberOfBees = beehive.MaximumNumberOfBees,
+                        CurrentBeesCount = beehive.Bees.Count()
+                    };
+
+                    beehive.Changed += OnBeehiveChanged;
+
+                    Beehives.Add(model);
                 }
             });
         }
 
+        private void OnBeehiveChanged(IBeehive sender, BeehiveChangedEventArgs args)
+        {
+            var model = Beehives.First(beehive => beehive.Number == sender.Number);
+
+            dp.Dispatcher
+                .ExecuteAsync(() =>
+                {
+                    switch (args.Acion)
+                    {
+                        case BeehiveAcion.BeeAdded:
+                        {
+                            model.CurrentBeesCount++;
+                            break;
+                        }
+
+                        case BeehiveAcion.BeeRemoved:
+                        {
+                            model.CurrentBeesCount--;
+                            break;
+                        }
+
+                    }
+                })
+                .RunAndForget();
+        }
+
         private void OnSessionUpdated(object sender, SessionUpdatedEventArgs e)
         {
-            
+            dp.Dispatcher
+                .ExecuteAsync(() => SessionElapsedTime = e.Elapsed)
+                .RunAndForget();
         }
 
         private void DoConfirm()

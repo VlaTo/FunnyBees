@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using FunnyBees.ViewModels;
 
 namespace FunnyBees.Design
@@ -8,21 +9,21 @@ namespace FunnyBees.Design
     /// </summary>
     public class MainPageDesignModel : ObservableViewModel
     {
-        /// <summary>
-        /// 
-        /// </summary>
+        public TimeSpan SessionElapsedTime
+        {
+            get;
+            set;
+        }
+
         public ObservableCollection<BeehiveViewModel> Beehives
         {
             get;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public MainPageDesignModel()
         {
-            Beehives = new ObservableCollection<BeehiveViewModel>
-            {
+            Beehives = new ObservableCollection<BeehiveViewModel>();
+            /*{
                 new BeehiveViewModel
                 {
                     MaximumNumberOfBees = 100,
@@ -38,7 +39,7 @@ namespace FunnyBees.Design
                     MaximumNumberOfBees = 999,
                     Number = 300
                 }
-            };
+            };*/
         }
     }
 }

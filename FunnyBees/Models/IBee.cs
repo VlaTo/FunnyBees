@@ -2,15 +2,21 @@
 {
     public interface IBee : IUpdatable<UpdateContext>
     {
-        int Lifetime
+        int Number
         {
             get;
         }
 
-        Beehive Beehive
+        IBeeBehaviour Behaviour
         {
             get;
-            set;
         }
+
+        IBeehive Beehive
+        {
+            get;
+        }
+
+        void Die();
     }
 }

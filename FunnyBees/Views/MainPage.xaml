@@ -13,6 +13,7 @@
     d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}">
+<!--
     <local:HostPage.Header>
         <CommandBar>
             <AppBarToggleButton
@@ -25,6 +26,7 @@
             </AppBarToggleButton>
         </CommandBar>
     </local:HostPage.Header>
+-->
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -32,7 +34,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.Resources>
-            <core:NumberConverter
+            <core:ValueFormatConverter
                 x:Name="NumberConverter"
             />
             <CollectionViewSource
@@ -42,18 +44,32 @@
             />
         </Grid.Resources>
         <Grid
-            Grid.Row="1">
+            Grid.Row="0"
+            Background="{ThemeResource ApplicationPageHeaderBackgroundThemeBrush}"
+            Padding="16,0,0,0"
+            Height="48">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <TextBlock
                 Grid.Column="0"
-                Text="Lorem Ipsum"
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Left"
-                TextAlignment="Left"
+                Style="{StaticResource PageTitleTextBlockStyle}"
+                Text="{Binding Path=SessionElapsedTime, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:hh\\:mm\\:ss\}'}"
             />
+            <CommandBar
+                Grid.Column="1"
+                Background="{ThemeResource ApplicationPageHeaderBackgroundThemeBrush}"
+                VerticalAlignment="Center">
+                <AppBarToggleButton
+                    Command="{Binding Path=RunSimulation}"
+                    IsChecked="{Binding Path=RunSimulation.IsExecuting}"
+                    Label="Start">
+                    <AppBarToggleButton.Icon>
+                        <SymbolIcon Symbol="Play" />
+                    </AppBarToggleButton.Icon>
+                </AppBarToggleButton>
+            </CommandBar>
         </Grid>
         <GridView
             Grid.Row="1"
@@ -95,7 +111,7 @@
                             </TextBlock.Style>
                             <Run 
                                 FontSize="36"
-                                Text="{Binding Path=Number, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
+                                Text="{Binding Path=CurrentBeesCount, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
                             />
                             <Run Text="/" />
                             <Run

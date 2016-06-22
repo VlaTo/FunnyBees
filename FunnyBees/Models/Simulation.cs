@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FunnyBees.Services;
-using LibraProgramming.Windows;
 
 namespace FunnyBees.Models
 {
@@ -15,21 +13,13 @@ namespace FunnyBees.Models
     public sealed partial class Simulation : ISimulation
     {
         private readonly IApplicationOptionsProvider optionsProvider;
-        private readonly IBeehiveFactory beehiveFactory;
-        private readonly IBeeFactory beeFactory;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public Simulation(
-            IApplicationOptionsProvider optionsProvider, 
-            IBeehiveFactory beehiveFactory,
-            IBeeFactory beeFactory
-            )
+        public Simulation(IApplicationOptionsProvider optionsProvider)
         {
             this.optionsProvider = optionsProvider;
-            this.beehiveFactory = beehiveFactory;
-            this.beeFactory = beeFactory;
         }
 
         /// <summary>
@@ -44,17 +34,30 @@ namespace FunnyBees.Models
 
             foreach (var index in Enumerable.Range(1, options.NumberOfBeehives + 1))
             {
-                var number = random.Next(options.MinimumNumberOfBees, options.MaximumNumberOfBees);
-                var beehive = beehiveFactory.GetBeehive(index, number);
+                var maximumNumberOfBees = random.Next(options.MinimumNumberOfBees, options.MaximumNumberOfBees);
+                var beehive = new Beehive(index, maximumNumberOfBees);
+                var hasQueen = false;
 
                 beehives.Add(beehive);
 
-                foreach (var num in Enumerable.Range(1, beehive.MaximumNumberOfBees + 1))
+                foreach (var num in Enumerable.Range(0, beehive.MaximumNumberOfBees))
                 {
-                    var bee = beeFactory.CreateBee(num);
+                    IBeeBehaviour behaviour;
 
-                    beehive.Bees.Add(bee);
-                    bee.Beehive = beehive;
+                    if (hasQueen)
+                    {
+                        var lifetime = random.Next(100, 500);
+                        behaviour = new WorkingBeeBehaviour(lifetime);
+                    }
+                    else
+                    {
+                        behaviour = new QueenBeeBehaviour();
+                        hasQueen = true;
+                    }
+
+                    var bee = new Bee(beehive, num, behaviour);
+
+                    beehive.AddBee(bee);
                 }
             }
 

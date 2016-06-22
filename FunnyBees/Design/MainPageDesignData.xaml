@@ -1,5 +1,24 @@
 ﻿<design:MainPageDesignModel
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:design="using:FunnyBees.Design">
+    xmlns:design="using:FunnyBees.Design"
+    xmlns:vm="using:FunnyBees.ViewModels"
+    SessionElapsedTime="00:12:23.3456">
+    <design:MainPageDesignModel.Beehives>
+        <vm:BeehiveViewModel
+            Number="1"
+            MaximumNumberOfBees="34"
+            CurrentBeesCount="12"
+        />
+        <vm:BeehiveViewModel
+            Number="2"
+            MaximumNumberOfBees="88"
+            CurrentBeesCount="32"
+        />
+        <vm:BeehiveViewModel
+            Number="3"
+            MaximumNumberOfBees="999"
+            CurrentBeesCount="999"
+        />
+    </design:MainPageDesignModel.Beehives>
 </design:MainPageDesignModel>

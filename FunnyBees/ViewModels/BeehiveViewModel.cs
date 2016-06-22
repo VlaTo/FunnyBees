@@ -1,7 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using FunnyBees.Models;
-
-namespace FunnyBees.ViewModels
+﻿namespace FunnyBees.ViewModels
 {
     /// <summary>
     /// 
@@ -10,6 +7,7 @@ namespace FunnyBees.ViewModels
     {
         private long number;
         private long maximumNumberOfBees;
+        private long currentBeesCount;
 
         /// <summary>
         /// 
@@ -44,14 +42,20 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public ObservableCollection<IBee> Bees
+        public long CurrentBeesCount
         {
-            get;
+            get
+            {
+                return currentBeesCount;
+            }
+            set
+            {
+                SetProperty(ref currentBeesCount, value);
+            }
         }
 
         public BeehiveViewModel()
         {
-            Bees = new ObservableCollection<IBee>();
         }
     }
 }
