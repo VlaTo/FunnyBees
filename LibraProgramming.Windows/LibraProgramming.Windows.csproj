@@ -107,11 +107,27 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Async\AsyncConditionVariable.cs" />
+    <Compile Include="Async\AsyncLock.cs" />
+    <Compile Include="Async\AsyncProducerConsumerQueue.cs" />
+    <Compile Include="Async\AsyncProducerConsumerQueueExtension.cs" />
+    <Compile Include="Async\AsyncReaderWriterLock.cs" />
+    <Compile Include="Async\AsyncSemaphore.cs" />
+    <Compile Include="Async\AsyncWaitQueue.cs" />
+    <Compile Include="Async\AsyncWaitQueueExtension.cs" />
+    <Compile Include="Async\AwaitableDisposable.cs" />
+    <Compile Include="Async\Deque.cs" />
+    <Compile Include="Async\EventAsync.cs" />
+    <Compile Include="Async\FrameworkElementExtension.cs" />
+    <Compile Include="Async\IAsyncWaitQueue.cs" />
+    <Compile Include="Async\IdManager.cs" />
+    <Compile Include="Async\IReaderLockProvider.cs" />
+    <Compile Include="Async\IReaderWriterLock.cs" />
+    <Compile Include="Async\IWriterLockProvider.cs" />
     <Compile Include="Collections\ItemCollectionBase.cs" />
     <Compile Include="Collections\ObservableVector.cs" />
-    <Compile Include="Commands\AsynchronousCommand.cs" />
-    <Compile Include="Commands\AsynchronousCommandBase.cs" />
-    <Compile Include="Commands\ICancelRequired.cs" />
+    <Compile Include="Commands\AsyncRelayCommand.cs" />
+    <Compile Include="Commands\IAsyncCommand.cs" />
     <Compile Include="Commands\NavigateToPageCommand.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Dependency\DependencyDictionary.cs" />
@@ -130,6 +146,9 @@
     <Compile Include="Dependency\Tracking\PropertyDependency.cs" />
     <Compile Include="DisposableToken.cs" />
     <Compile Include="GenericDataTemplateSelector.cs" />
+    <Compile Include="Infrastructure\AggregatedCancellationToken.cs" />
+    <Compile Include="Infrastructure\CancellationTokenHelper.cs" />
+    <Compile Include="Infrastructure\ExceptionHelper.cs" />
     <Compile Include="Infrastructure\IActivationRequired.cs" />
     <Compile Include="Infrastructure\IAwaitable.cs" />
     <Compile Include="Infrastructure\ICleanupRequired.cs" />
@@ -137,6 +156,9 @@
     <Compile Include="Infrastructure\IDeferred.cs" />
     <Compile Include="Infrastructure\INavigationRequired.cs" />
     <Compile Include="Infrastructure\ISetupRequired.cs" />
+    <Compile Include="Infrastructure\TaskCompletionSource.cs" />
+    <Compile Include="Infrastructure\TaskCompletionSourceExtension.cs" />
+    <Compile Include="Infrastructure\TaskExtension.cs" />
     <Compile Include="Infrastructure\TypedWeakEventHandler.cs" />
     <Compile Include="Infrastructure\WeakAction.cs" />
     <Compile Include="Infrastructure\WeakDelegate.cs" />

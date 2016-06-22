@@ -25,18 +25,18 @@ namespace FunnyBees.Design
             {
                 new BeehiveViewModel
                 {
-                    NumberOfBees = 100,
-                    CurrentNumber = 88
+                    MaximumNumberOfBees = 100,
+                    Number = 88
                 },
                 new BeehiveViewModel
                 {
-                    NumberOfBees = 125,
-                    CurrentNumber = 54
+                    MaximumNumberOfBees = 125,
+                    Number = 54
                 },
                 new BeehiveViewModel
                 {
-                    NumberOfBees = 999,
-                    CurrentNumber = 300
+                    MaximumNumberOfBees = 999,
+                    Number = 300
                 }
             };
         }

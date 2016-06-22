@@ -1,41 +1,57 @@
-﻿namespace FunnyBees.ViewModels
+﻿using System.Collections.ObjectModel;
+using FunnyBees.Models;
+
+namespace FunnyBees.ViewModels
 {
     /// <summary>
     /// 
     /// </summary>
     public sealed class BeehiveViewModel : ObservableViewModel
     {
-        private long currentNumber;
-        private long numberOfBees;
+        private long number;
+        private long maximumNumberOfBees;
 
         /// <summary>
         /// 
         /// </summary>
-        public long CurrentNumber
+        public long Number
         {
             get
             {
-                return currentNumber;
+                return number;
             }
             set
             {
-                SetProperty(ref currentNumber, value);
+                SetProperty(ref number, value);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public long NumberOfBees
+        public long MaximumNumberOfBees
         {
             get
             {
-                return numberOfBees;
+                return maximumNumberOfBees;
             }
             set
             {
-                SetProperty(ref numberOfBees, value);
+                SetProperty(ref maximumNumberOfBees, value);
             }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public ObservableCollection<IBee> Bees
+        {
+            get;
+        }
+
+        public BeehiveViewModel()
+        {
+            Bees = new ObservableCollection<IBee>();
         }
     }
 }

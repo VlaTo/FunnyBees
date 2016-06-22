@@ -5,10 +5,10 @@ using Windows.Foundation;
 
 namespace LibraProgramming.Windows.Infrastructure
 {
-    public class TypedWeakEventHandler<TSender, TResult>
-        where TResult : EventArgs
+    public class TypedWeakEventHandler<TSender, TEventArgs>
+        where TEventArgs : EventArgs
     {
-        private readonly IList<WeakDelegate<TypedEventHandler<TSender, TResult>>> handlers;
+        private readonly IList<WeakDelegate<TypedEventHandler<TSender, TEventArgs>>> handlers;
 
         /// <summary>
         /// 
@@ -41,17 +41,17 @@ namespace LibraProgramming.Windows.Infrastructure
         /// </summary>
         public TypedWeakEventHandler()
         {
-            handlers = new List<WeakDelegate<TypedEventHandler<TSender, TResult>>>();
+            handlers = new List<WeakDelegate<TypedEventHandler<TSender, TEventArgs>>>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="eventHandler"></param>
-        public void AddHandler(TypedEventHandler<TSender, TResult> eventHandler)
+        public void AddHandler(TypedEventHandler<TSender, TEventArgs> eventHandler)
         {
             var handler = (Delegate)((object)eventHandler);
-            var @delegate = new WeakDelegate<TypedEventHandler<TSender, TResult>>(handler);
+            var @delegate = new WeakDelegate<TypedEventHandler<TSender, TEventArgs>>(handler);
 
             if (false == handlers.Contains(@delegate))
             {
@@ -63,10 +63,10 @@ namespace LibraProgramming.Windows.Infrastructure
         /// 
         /// </summary>
         /// <param name="eventHandler"></param>
-        public void RemoveHandler(TypedEventHandler<TSender, TResult> eventHandler)
+        public void RemoveHandler(TypedEventHandler<TSender, TEventArgs> eventHandler)
         {
             var handler = (Delegate)((object)eventHandler);
-            handlers.Remove(new WeakDelegate<TypedEventHandler<TSender, TResult>>(handler));
+            handlers.Remove(new WeakDelegate<TypedEventHandler<TSender, TEventArgs>>(handler));
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace LibraProgramming.Windows.Infrastructure
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        public void Invoke(object sender, EventArgs args)
+        public void Invoke(object sender, TEventArgs args)
         {
             var delegates = handlers.ToArray();
 

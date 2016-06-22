@@ -14,10 +14,10 @@ namespace FunnyBees.Models
             random = new Random();
         }
 
-        public IBee CreateBee()
+        public IBee CreateBee(int index)
         {
             var lifetime = random.Next(10, 15);
-            return new Bee(lifetime);
+            return new Bee(index, lifetime);
         }
     }
 }

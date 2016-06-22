@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace FunnyBees.Models
 {
@@ -11,15 +10,7 @@ namespace FunnyBees.Models
         /// <summary>
         /// 
         /// </summary>
-        ICollection<IBeehive> Beehives
-        {
-            get;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <returns></returns>
-        Task<ISimulationToken> RunAsync();
+        Task<ISimulationSession> RunAsync();
     }
 }

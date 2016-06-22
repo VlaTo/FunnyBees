@@ -56,7 +56,17 @@ namespace LibraProgramming.Windows.Infrastructure
 
         private bool Equals(WeakDelegate<TDelegate> other)
         {
-            return null != other && Reference.Target == other.Reference.Target && Method.Equals(other.Method);
+            if (null != Instance)
+            {
+                return Instance.Equals(other.Instance) && Method.Equals(other.Method);
+            }
+
+            if (null != other.Instance)
+            {
+                return false;
+            }
+
+            return Method.Equals(other.Method);
         }
     }
 }

@@ -17,7 +17,7 @@
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public Bee(int lifetime)
+        public Bee(int index, int lifetime)
         {
             Lifetime = lifetime;
         }

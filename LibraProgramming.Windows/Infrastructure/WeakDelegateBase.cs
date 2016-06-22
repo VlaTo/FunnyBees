@@ -5,10 +5,10 @@ namespace LibraProgramming.Windows.Infrastructure
 {
     public class WeakDelegateBase
     {
-        protected readonly WeakReference Reference;
+        protected readonly WeakReference Instance;
         protected readonly MethodInfo Method;
 
-        public bool IsAlive => null != Reference && Reference.IsAlive;
+        public bool IsAlive => null != Instance && Instance.IsAlive;
 
         public WeakDelegateBase(Delegate @delegate)
         {
@@ -19,7 +19,7 @@ namespace LibraProgramming.Windows.Infrastructure
 
             if (null != @delegate.Target)
             {
-                Reference = new WeakReference(@delegate.Target);
+                Instance = new WeakReference(@delegate.Target);
             }
 
             Method = @delegate.GetMethodInfo();
@@ -27,7 +27,7 @@ namespace LibraProgramming.Windows.Infrastructure
 
         public bool Equals(Delegate other)
         {
-            return null != other && Reference.Target == other.Target && Method.Equals(other.GetMethodInfo());
+            return null != other && Instance.Target == other.Target && Method.Equals(other.GetMethodInfo());
         }
 
         protected Delegate CreateDelegate<TDelegate>()
@@ -37,12 +37,12 @@ namespace LibraProgramming.Windows.Infrastructure
                 return Method.CreateDelegate(typeof(TDelegate));
             }
 
-            if (null == Reference)
+            if (null == Instance)
             {
                 throw new InvalidOperationException();
             }
 
-            return Method.CreateDelegate(typeof(TDelegate), Reference.Target);
+            return Method.CreateDelegate(typeof(TDelegate), Instance.Target);
         }
     }
 }

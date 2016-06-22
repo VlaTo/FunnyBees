@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,16 +12,11 @@ namespace FunnyBees.Models
     /// <summary>
     /// 
     /// </summary>
-    public class Simulation : ISimulation
+    public sealed partial class Simulation : ISimulation
     {
         private readonly IApplicationOptionsProvider optionsProvider;
-        private Timer timer;
         private readonly IBeehiveFactory beehiveFactory;
         private readonly IBeeFactory beeFactory;
-        private readonly IList<IBeehive> beehives;
-        private DateTime started;
-
-        public ICollection<IBeehive> Beehives => beehives;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
@@ -34,27 +30,26 @@ namespace FunnyBees.Models
             this.optionsProvider = optionsProvider;
             this.beehiveFactory = beehiveFactory;
             this.beeFactory = beeFactory;
-
-            beehives = new List<IBeehive>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public async Task<ISimulationToken> RunAsync()
+        public async Task<ISimulationSession> RunAsync()
         {
             var random = new Random();
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
+            var beehives = new Collection<IBeehive>();
 
-            foreach (var index in Enumerable.Range(0, options.NumberOfBeehives))
+            foreach (var index in Enumerable.Range(1, options.NumberOfBeehives + 1))
             {
                 var number = random.Next(options.MinimumNumberOfBees, options.MaximumNumberOfBees);
                 var beehive = beehiveFactory.GetBeehive(index, number);
 
                 beehives.Add(beehive);
 
-                foreach (var num in Enumerable.Range(0, beehive.MaximumNumberOfBees))
+                foreach (var num in Enumerable.Range(1, beehive.MaximumNumberOfBees + 1))
                 {
                     var bee = beeFactory.CreateBee(num);
 
@@ -63,38 +58,11 @@ namespace FunnyBees.Models
                 }
             }
 
-            started = DateTime.Now;
-            timer = new Timer(DoTimerCallback, null, TimeSpan.Zero, options.Interval);
-
-            return new SimulationToken(Cleanup);
+            return new SimulationSession(beehives, options.Interval, Cleanup);
         }
 
         private void Cleanup()
         {
-            timer.Dispose();
-            timer = null;
-        }
-
-        private void DoTimerCallback(object state)
-        {
-            var now = DateTime.Now;
-            var context = new UpdateContext(now - started);
-
-            foreach (var entity in beehives)
-            {
-                entity.Update(context);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private class SimulationToken : DisposableToken, ISimulationToken
-        {
-            public SimulationToken(Action cleanup)
-                : base(cleanup)
-            {
-            }
         }
     }
 }

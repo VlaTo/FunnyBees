@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FunnyBees.Core;
 using FunnyBees.Models;
 using FunnyBees.Services;
 using LibraProgramming.Windows.Commands;
+using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
 using LibraProgramming.Windows.Interaction;
 
@@ -12,13 +14,15 @@ namespace FunnyBees.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class MainPageViewModel : ObservableViewModel, ISetupRequired, ICleanupRequired
+    public class MainPageViewModel : ObservableViewModel, ICleanupRequired
     {
         private readonly IApplicationOptionsProvider optionsProvider;
+        private readonly IDispatcherProvider dp;
         private readonly InteractionRequest<Confirmation> confirmRequest;
         private readonly InteractionRequest<Notification> notificationRequest;
         private readonly ISimulation simulation;
-        private ISimulationToken token;
+        private ISimulationSession session;
+        private bool isSessionRunning;
 
         /// <summary>
         /// 
@@ -41,7 +45,7 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public ICommand RunSimulation
+        public IAsyncCommand RunSimulation
         {
             get;
         }
@@ -57,35 +61,27 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public MainPageViewModel(IApplicationOptionsProvider optionsProvider, ISimulation simulation)
+        public MainPageViewModel(IApplicationOptionsProvider optionsProvider, IDispatcherProvider dp, ISimulation simulation)
         {
             this.optionsProvider = optionsProvider;
+            this.dp = dp;
             this.simulation = simulation;
 
             confirmRequest = new InteractionRequest<Confirmation>();
             notificationRequest = new InteractionRequest<Notification>();
             Confirm = new RelayCommand(DoConfirm);
-            RunSimulation = new AsynchronousCommand(RunSimulationAsync, arg => null == token);
+            RunSimulation = new AsyncRelayCommand(RunSimulationAsync);
             Beehives = new ObservableCollection<BeehiveViewModel>();
 
             optionsProvider.OptionsChanged += OnOptionsChanged;
         }
 
-        Task ISetupRequired.SetupAsync()
-        {
-            Beehives.Add(new BeehiveViewModel());
-            Beehives.Add(new BeehiveViewModel());
-            Beehives.Add(new BeehiveViewModel());
-
-            return Task.CompletedTask;
-        }
-
         Task ICleanupRequired.CleanupAsync()
         {
-            if (null != token)
+            if (null != session)
             {
-                token.Dispose();
-                token = null;
+                session.Dispose();
+                session = null;
             }
 
             optionsProvider.OptionsChanged -= OnOptionsChanged;
@@ -93,29 +89,40 @@ namespace FunnyBees.ViewModels
             return Task.CompletedTask;
         }
 
-/*
-        private void ConfigureSession(ISessionBuilder builder)
+        private async Task RunSimulationAsync(object notused)
         {
-            for (var index = 0; index < options.NumberOfBeehives; index++)
+            if (null != session)
             {
-                builder.CreateBeehive(beehive =>
-                {
-                    beehive.AddBee(bee => bee.SetBehaviour<QueenBeeBehaviour>());
+                session.Updated -= OnSessionUpdated;
 
-                    for (var number = 0; number < options.NumberOfWorkingBees; number++)
-                    {
-                        beehive.AddBee(bee => bee.SetBehaviour<WorkingBeeBehavoiur>());
-                    }
-                });
+                session.Dispose();
+                session = null;
+
+                return;
             }
+
+            session = await simulation.RunAsync().ConfigureAwait(false);
+
+            await dp.Dispatcher.ExecuteAsync(() =>
+            {
+                session.Updated += OnSessionUpdated;
+
+                Beehives.Clear();
+
+                foreach (var beehive in session.Beehives)
+                {
+                    Beehives.Add(new BeehiveViewModel
+                    {
+                        Number = beehive.Number,
+                        MaximumNumberOfBees = beehive.Bees.Count
+                    });
+                }
+            });
         }
-*/
 
-        private async Task RunSimulationAsync(object arg)
+        private void OnSessionUpdated(object sender, SessionUpdatedEventArgs e)
         {
-            token = await simulation.RunAsync();
-
-            simulation.Beehives
+            
         }
 
         private void DoConfirm()

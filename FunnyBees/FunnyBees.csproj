@@ -113,9 +113,10 @@
     <Compile Include="Models\IBeehive.cs" />
     <Compile Include="Models\IBeehiveFactory.cs" />
     <Compile Include="Models\ISimulation.cs" />
-    <Compile Include="Models\ISimulationToken.cs" />
+    <Compile Include="Models\ISimulationSession.cs" />
     <Compile Include="Models\IUpdatable.cs" />
     <Compile Include="Models\Simulation.cs" />
+    <Compile Include="Models\Simulation.Session.cs" />
     <Compile Include="Models\UpdateContext.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

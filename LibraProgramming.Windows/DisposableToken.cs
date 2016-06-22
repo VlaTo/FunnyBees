@@ -19,7 +19,7 @@ namespace LibraProgramming.Windows
             this.cleanup = cleanup;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             cleanup.Invoke();
         }

@@ -13,6 +13,18 @@
     d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}">
+    <local:HostPage.Header>
+        <CommandBar>
+            <AppBarToggleButton
+                    Command="{Binding Path=RunSimulation}"
+                    IsChecked="{Binding Path=RunSimulation.IsExecuting}"
+                    Label="Start">
+                <AppBarToggleButton.Icon>
+                    <SymbolIcon Symbol="Play" />
+                </AppBarToggleButton.Icon>
+            </AppBarToggleButton>
+        </CommandBar>
+    </local:HostPage.Header>
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
@@ -29,17 +41,31 @@
                 IsSourceGrouped="False"
             />
         </Grid.Resources>
-        <CommandBar
-            Grid.Row="0">
-            <AppBarButton
-                Command="{Binding Path=RunSimulation}">
-                Start
-            </AppBarButton>
-        </CommandBar>
+        <Grid
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Grid.Column="0"
+                Text="Lorem Ipsum"
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Left"
+                TextAlignment="Left"
+            />
+        </Grid>
         <GridView
             Grid.Row="1"
-            ItemsSource="{Binding Source={StaticResource HivesViewSource}}"
-            Margin="24">
+            ItemsSource="{Binding Source={StaticResource HivesViewSource}}">
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid
+                        Orientation="Horizontal"
+                        Margin="24"
+                    />
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Grid
@@ -69,11 +95,11 @@
                             </TextBlock.Style>
                             <Run 
                                 FontSize="36"
-                                Text="{Binding Path=CurrentNumber, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
+                                Text="{Binding Path=Number, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
                             />
                             <Run Text="/" />
                             <Run
-                                Text="{Binding Path=NumberOfBees, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
+                                Text="{Binding Path=MaximumNumberOfBees, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:D\}'}"
                             />
                         </TextBlock>
                     </Grid>
@@ -82,3 +108,4 @@
         </GridView>
     </Grid>
 </local:ContentPage>
+
