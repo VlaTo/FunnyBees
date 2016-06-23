@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Windows.Foundation;
-using Windows.UI.Xaml;
 using LibraProgramming.Windows.Interaction;
 using LibraProgramming.Windows.Interactivity;
 

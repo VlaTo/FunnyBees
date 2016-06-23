@@ -479,13 +479,7 @@ namespace LibraProgramming.Windows.Interactivity
     public abstract class EventTriggerBase<T> : EventTriggerBase
         where T : class
     {
-        public new T Source
-        {
-            get
-            {
-                return (T)base.Source;
-            }
-        }
+        public new T Source => (T)base.Source;
 
         protected EventTriggerBase()
             : base(typeof(T))

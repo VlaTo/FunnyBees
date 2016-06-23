@@ -34,11 +34,12 @@ namespace LibraProgramming.Windows.Interactivity
 
         static EventTrigger()
         {
-            EventNameProperty = DependencyProperty.Register("EventName",
-                typeof (string),
-                typeof (EventTrigger),
-                new PropertyMetadata("Loaded",
-                    OnEventNameChanged));
+            EventNameProperty = DependencyProperty
+                .Register(nameof(EventName),
+                    typeof (string),
+                    typeof (EventTrigger),
+                    new PropertyMetadata("Loaded", OnEventNameChanged)
+                );
         }
     
         private static void OnEventNameChanged(object source, DependencyPropertyChangedEventArgs args)

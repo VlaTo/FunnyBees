@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Globalization;
@@ -16,15 +17,9 @@ namespace FunnyBees
     /// <summary>
     /// Provides application-specific behavior to supplement the default Application class.
     /// </summary>
-    sealed partial class App : IDispatcherProvider
+    sealed partial class App : IUIThreadAccessor
     {
-        CoreDispatcher IDispatcherProvider.Dispatcher => Dispatcher;
-
-        private CoreDispatcher Dispatcher
-        {
-            get;
-            set;
-        }
+        private CoreDispatcher dispatcher;
 
         private ApplicationExecutionState PreviousExecutionState
         {
@@ -76,7 +71,7 @@ namespace FunnyBees
         protected override void OnWindowCreated(WindowCreatedEventArgs args)
         {
             base.OnWindowCreated(args);
-            Dispatcher = args.Window.Dispatcher;
+            dispatcher = args.Window.Dispatcher;
         }
 
         private void LaunchMainPage()
@@ -115,7 +110,7 @@ namespace FunnyBees
             Bootstrapper.RegisterServicesAsync(ServiceLocator.Current);
             Bootstrapper.RegisterViewModels(ServiceLocator.Current);
 
-            await Dispatcher.ExecuteAsync(LaunchMainPage);
+            await dispatcher.ExecuteAsync(LaunchMainPage);
         }
 
         /// <summary>
@@ -142,6 +137,42 @@ namespace FunnyBees
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
             deferral.Complete();
+        }
+
+        Task IUIThreadAccessor.ExecuteAsync(Action action)
+        {
+            if (null == dispatcher)
+            {
+                throw new Exception();
+            }
+
+            if (dispatcher.HasThreadAccess)
+            {
+                action.Invoke();
+                return Task.FromResult(true);
+            }
+
+            return dispatcher.RunAsync(CoreDispatcherPriority.Normal, ()=> action.Invoke()).AsTask();
+        }
+
+        Task IUIThreadAccessor.ExecuteAsync(Func<Task> action)
+        {
+            if (null == dispatcher)
+            {
+                throw new Exception();
+            }
+
+            if (dispatcher.HasThreadAccess)
+            {
+                action.Invoke();
+                return Task.FromResult(true);
+            }
+
+            return dispatcher
+                .RunAsync(
+                    CoreDispatcherPriority.Normal,
+                    async () => { await action(); })
+                .AsTask();
         }
     }
 }

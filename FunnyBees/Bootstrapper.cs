@@ -21,7 +21,7 @@ namespace FunnyBees
         {
             registry.Register<IEventMessenger, EventMessenger>(lifetime: InstanceLifetime.Singleton);
             registry.Register<IApplicationLocalization>(() => ApplicationLocalizationManager.Current, lifetime: InstanceLifetime.Singleton);
-            registry.Register<IDispatcherProvider>(() => (App) Application.Current, lifetime: InstanceLifetime.Singleton);
+            registry.Register<IUIThreadAccessor>(() => (App) Application.Current, lifetime: InstanceLifetime.Singleton);
             registry.Register<IApplicationOptionsProvider, ApplicationOptionProvider>(lifetime: InstanceLifetime.Singleton);
         }
 

@@ -121,7 +121,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Services\ApplicationOptionProvider.cs" />
     <Compile Include="Services\IApplicationOptionsProvider.cs" />
-    <Compile Include="Services\IDispatcherProvider.cs" />
+    <Compile Include="Services\IUIThreadAccessor.cs" />
     <Compile Include="Services\SessionController.cs" />
     <Compile Include="Services\TimeIntervalGenerator.cs" />
     <Compile Include="ViewModels\BeehiveViewModel.cs" />

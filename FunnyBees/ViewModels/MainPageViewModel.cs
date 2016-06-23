@@ -20,7 +20,7 @@ namespace FunnyBees.ViewModels
     public class MainPageViewModel : ObservableViewModel, ICleanupRequired
     {
         private readonly IApplicationOptionsProvider optionsProvider;
-        private readonly IDispatcherProvider dp;
+        private readonly IUIThreadAccessor accessor;
         private readonly InteractionRequest<Confirmation> confirmRequest;
         private readonly InteractionRequest<Notification> notificationRequest;
         private readonly ISimulation simulation;
@@ -56,6 +56,21 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
+        public bool IsSessionRunning
+        {
+            get
+            {
+                return isSessionRunning;
+            }
+            set
+            {
+                SetProperty(ref isSessionRunning, value);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ICommand Confirm
         {
             get;
@@ -80,10 +95,10 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public MainPageViewModel(IApplicationOptionsProvider optionsProvider, IDispatcherProvider dp, ISimulation simulation)
+        public MainPageViewModel(IApplicationOptionsProvider optionsProvider, IUIThreadAccessor accessor, ISimulation simulation)
         {
             this.optionsProvider = optionsProvider;
-            this.dp = dp;
+            this.accessor = accessor;
             this.simulation = simulation;
 
             confirmRequest = new InteractionRequest<Confirmation>();
@@ -110,7 +125,25 @@ namespace FunnyBees.ViewModels
 
         private async Task RunSimulationAsync(object notused)
         {
-            if (null != session)
+            await accessor.ExecuteAsync(async () =>
+            {
+                if (IsSessionRunning)
+                {
+                    IsSessionRunning = false;
+
+                    session.Dispose();
+                    session = null;
+
+                    return;
+                }
+
+                IsSessionRunning = true;
+
+                session = await simulation.RunAsync().ConfigureAwait(false);
+
+            });
+
+            /*if (null != session)
             {
                 session.Updated -= OnSessionUpdated;
 
@@ -118,12 +151,12 @@ namespace FunnyBees.ViewModels
                 session = null;
 
                 return;
-            }
+            }*/
 
-            session = await simulation.RunAsync().ConfigureAwait(false);
 
-            await dp.Dispatcher.ExecuteAsync(() =>
+            /*await accessor.ExecuteAsync(() =>
             {
+
                 session.Updated += OnSessionUpdated;
 
                 Beehives.Clear();
@@ -141,14 +174,15 @@ namespace FunnyBees.ViewModels
 
                     Beehives.Add(model);
                 }
-            });
+            });*/
         }
 
+/*
         private void OnBeehiveChanged(IBeehive sender, BeehiveChangedEventArgs args)
         {
             var model = Beehives.First(beehive => beehive.Number == sender.Number);
 
-            dp.Dispatcher
+            accessor
                 .ExecuteAsync(() =>
                 {
                     switch (args.Acion)
@@ -169,13 +203,12 @@ namespace FunnyBees.ViewModels
                 })
                 .RunAndForget();
         }
+*/
 
-        private void OnSessionUpdated(object sender, SessionUpdatedEventArgs e)
+        /*private void OnSessionUpdated(object sender, SessionUpdatedEventArgs e)
         {
-            dp.Dispatcher
-                .ExecuteAsync(() => SessionElapsedTime = e.Elapsed)
-                .RunAndForget();
-        }
+            accessor.ExecuteAsync(() => SessionElapsedTime = e.Elapsed).RunAndForget();
+        }*/
 
         private void DoConfirm()
         {
