@@ -13,20 +13,6 @@
     d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}">
-<!--
-    <local:HostPage.Header>
-        <CommandBar>
-            <AppBarToggleButton
-                    Command="{Binding Path=RunSimulation}"
-                    IsChecked="{Binding Path=RunSimulation.IsExecuting}"
-                    Label="Start">
-                <AppBarToggleButton.Icon>
-                    <SymbolIcon Symbol="Play" />
-                </AppBarToggleButton.Icon>
-            </AppBarToggleButton>
-        </CommandBar>
-    </local:HostPage.Header>
--->
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
