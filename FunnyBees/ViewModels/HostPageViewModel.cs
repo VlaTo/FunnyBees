@@ -5,7 +5,7 @@ using LibraProgramming.Windows.Infrastructure;
 
 namespace FunnyBees.ViewModels
 {
-    public class HostPageViewModel : ObservableViewModel, ISetupRequired, ICleanupRequired
+    public class HostPageViewModel : ViewModel, ISetupRequired, ICleanupRequired
     {
         private readonly IApplicationOptionsProvider optionsProvider;
 

@@ -127,7 +127,7 @@
     <Compile Include="ViewModels\BeehiveViewModel.cs" />
     <Compile Include="ViewModels\HostPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
-    <Compile Include="ViewModels\ObservableViewModel.cs" />
+    <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\OptionsPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\ContentPage.cs" />

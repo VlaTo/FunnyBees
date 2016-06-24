@@ -59,7 +59,6 @@ namespace LibraProgramming.Windows.Interactivity
 
             OnAssociatedObjectChanged();
 
-            //Attach handles the DataContext
             base.Attach(element);
             
             OnAttached();
@@ -88,7 +87,8 @@ namespace LibraProgramming.Windows.Interactivity
 
     }
 
-    public abstract class TriggerAction<T> : TriggerAction where T : FrameworkElement
+    public abstract class TriggerAction<T> : TriggerAction
+        where T : FrameworkElement
     {
         protected new T AttachedObject
         {

@@ -11,7 +11,7 @@ namespace FunnyBees.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class OptionsPageViewModel : ObservableViewModel, ISetupRequired, ICleanupRequired
+    public class OptionsPageViewModel : ViewModel, ISetupRequired, ICleanupRequired
     {
         private static readonly IDependencyTracker<OptionsPageViewModel> tracker;
         private readonly IApplicationOptionsProvider provider;

@@ -11,6 +11,7 @@ namespace FunnyBees.Views
         public MainPage()
         {
             InitializeComponent();
+            AnimatedControl.Paused = true;
         }
 
         private void OnPageUnload(object sender, RoutedEventArgs e)

@@ -3,7 +3,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public sealed class BeehiveViewModel : ObservableViewModel
+    public sealed class BeehiveViewModel : ViewModel
     {
         private long number;
         private long maximumNumberOfBees;

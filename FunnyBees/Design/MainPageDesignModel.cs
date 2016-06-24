@@ -7,7 +7,7 @@ namespace FunnyBees.Design
     /// <summary>
     /// 
     /// </summary>
-    public class MainPageDesignModel : ObservableViewModel
+    public class MainPageDesignModel : ViewModel
     {
         public TimeSpan SessionElapsedTime
         {

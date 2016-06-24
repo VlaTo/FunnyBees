@@ -30,7 +30,7 @@ namespace LibraProgramming.Windows.Async
                 using (var aggregation = CancellationTokenHelper.Aggregate(cancellation.Token, ct))
                 {
                     var token = aggregation.Token;
-                    var tasks = queues.Select(queue => queue.TryEnqueueAsync(item, token, abort));
+                    var tasks = queues.Select(queue => queue.TryPostAsync(item, token, abort));
                     var results = await Task.WhenAll(tasks).ConfigureAwait(false);
                     var candidate = results.FirstOrDefault(value => null != value);
 
@@ -159,7 +159,7 @@ namespace LibraProgramming.Windows.Async
         /// <param name="queues"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<AsyncProducerConsumerQueue<T>.DequeueResult> TryDequeueFromAnyAsync<T>(
+        public static async Task<AsyncProducerConsumerQueue<T>.ReceiveResult> TryDequeueFromAnyAsync<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues, CancellationToken ct)
         {
             var abort = new TaskCompletionSource();
@@ -169,7 +169,7 @@ namespace LibraProgramming.Windows.Async
                 using (var aggregation = CancellationTokenHelper.Aggregate(cancellation.Token, ct))
                 {
                     var token = aggregation.Token;
-                    var tasks = queues.Select(queue => queue.TryDequeueAsync(token, abort));
+                    var tasks = queues.Select(queue => queue.TryReceiveAsync(token, abort));
                     var results = await Task.WhenAll(tasks).ConfigureAwait(false);
                     var result = results.FirstOrDefault(value => value.Success);
 
@@ -191,7 +191,7 @@ namespace LibraProgramming.Windows.Async
         /// <typeparam name="T"></typeparam>
         /// <param name="queues"></param>
         /// <returns></returns>
-        public static Task<AsyncProducerConsumerQueue<T>.DequeueResult> TryDequeueFromAnyAsync<T>(
+        public static Task<AsyncProducerConsumerQueue<T>.ReceiveResult> TryDequeueFromAnyAsync<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues)
         {
             return TryDequeueFromAnyAsync(queues, CancellationToken.None);
@@ -204,7 +204,7 @@ namespace LibraProgramming.Windows.Async
         /// <param name="queues"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public static AsyncProducerConsumerQueue<T>.DequeueResult TryDequeueFromAny<T>(
+        public static AsyncProducerConsumerQueue<T>.ReceiveResult TryDequeueFromAny<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues, CancellationToken ct)
         {
             return TryDequeueFromAnyAsync(queues, ct).WaitAndUnwrapException();
@@ -216,7 +216,7 @@ namespace LibraProgramming.Windows.Async
         /// <typeparam name="T"></typeparam>
         /// <param name="queues"></param>
         /// <returns></returns>
-        public static AsyncProducerConsumerQueue<T>.DequeueResult TryDequeueFromAny<T>(
+        public static AsyncProducerConsumerQueue<T>.ReceiveResult TryDequeueFromAny<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues)
         {
             return TryDequeueFromAny(queues, CancellationToken.None);
@@ -229,7 +229,7 @@ namespace LibraProgramming.Windows.Async
         /// <param name="queues"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public static async Task<AsyncProducerConsumerQueue<T>.DequeueResult> DequeueFromAnyAsync<T>(
+        public static async Task<AsyncProducerConsumerQueue<T>.ReceiveResult> DequeueFromAnyAsync<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues, CancellationToken ct)
         {
             var result = await TryDequeueFromAnyAsync(queues, ct).ConfigureAwait(false);
@@ -248,7 +248,7 @@ namespace LibraProgramming.Windows.Async
         /// <typeparam name="T"></typeparam>
         /// <param name="queues"></param>
         /// <returns></returns>
-        public static Task<AsyncProducerConsumerQueue<T>.DequeueResult> DequeueFromAnyAsync<T>(
+        public static Task<AsyncProducerConsumerQueue<T>.ReceiveResult> DequeueFromAnyAsync<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues)
         {
             return DequeueFromAnyAsync(queues, CancellationToken.None);
@@ -261,7 +261,7 @@ namespace LibraProgramming.Windows.Async
         /// <param name="queues"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public static AsyncProducerConsumerQueue<T>.DequeueResult DequeueFromAny<T>(
+        public static AsyncProducerConsumerQueue<T>.ReceiveResult DequeueFromAny<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues, CancellationToken ct)
         {
             var result = TryDequeueFromAny(queues, ct);
@@ -280,7 +280,7 @@ namespace LibraProgramming.Windows.Async
         /// <typeparam name="T"></typeparam>
         /// <param name="queues"></param>
         /// <returns></returns>
-        public static AsyncProducerConsumerQueue<T>.DequeueResult DequeueFromAny<T>(
+        public static AsyncProducerConsumerQueue<T>.ReceiveResult DequeueFromAny<T>(
             this IEnumerable<AsyncProducerConsumerQueue<T>> queues)
         {
             return DequeueFromAny(queues, CancellationToken.None);

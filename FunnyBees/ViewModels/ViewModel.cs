@@ -10,7 +10,7 @@ namespace FunnyBees.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class ObservableViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged
     {
         /// <summary>
         /// 

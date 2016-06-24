@@ -12,7 +12,7 @@ namespace LibraProgramming.Windows.Async
     /// <typeparam name="T"></typeparam>
     public sealed class AsyncProducerConsumerQueue<T> : IDisposable
     {
-        internal static readonly DequeueResult FalseResult;
+        internal static readonly ReceiveResult FalseResult;
 
         private readonly Queue<T> queue;
         private readonly int maxCount;
@@ -79,7 +79,7 @@ namespace LibraProgramming.Windows.Async
 
         static AsyncProducerConsumerQueue()
         {
-            FalseResult = new DequeueResult(null, default(T));
+            FalseResult = new ReceiveResult(null, default(T));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace LibraProgramming.Windows.Async
         /// <summary>
         /// 
         /// </summary>
-        public void AppendDone()
+        public void Complete()
         {
             using (mutex.Lock())
             {
@@ -113,9 +113,9 @@ namespace LibraProgramming.Windows.Async
         /// <param name="item"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async Task<bool> TryEnqueueAsync(T item, CancellationToken ct)
+        public async Task<bool> TryPostAsync(T item, CancellationToken ct)
         {
-            var result = await TryEnqueueAsync(item, ct, null).ConfigureAwait(false);
+            var result = await TryPostAsync(item, ct, null).ConfigureAwait(false);
 
             if (null != result)
             {
@@ -132,9 +132,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task<bool> TryEnqueueAsync(T item)
+        public Task<bool> TryPostAsync(T item)
         {
-            return TryEnqueueAsync(item, CancellationToken.None);
+            return TryPostAsync(item, CancellationToken.None);
         }
 
         /// <summary>
@@ -143,7 +143,7 @@ namespace LibraProgramming.Windows.Async
         /// <param name="item"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public bool TryEnqueue(T item, CancellationToken ct)
+        public bool TryPost(T item, CancellationToken ct)
         {
             var result = TryEnqueueInternal(item, ct);
 
@@ -162,9 +162,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public bool TryEnqueue(T item)
+        public bool TryPost(T item)
         {
-            return TryEnqueue(item, CancellationToken.None);
+            return TryPost(item, CancellationToken.None);
         }
 
         /// <summary>
@@ -173,9 +173,9 @@ namespace LibraProgramming.Windows.Async
         /// <param name="item"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async Task EnqueueAsync(T item, CancellationToken ct)
+        public async Task PostAsync(T item, CancellationToken ct)
         {
-            var result = await TryEnqueueAsync(item, ct).ConfigureAwait(false);
+            var result = await TryPostAsync(item, ct).ConfigureAwait(false);
 
             if (false == result)
             {
@@ -188,9 +188,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        public Task EnqueueAsync(T item)
+        public Task PostAsync(T item)
         {
-            return EnqueueAsync(item, CancellationToken.None);
+            return PostAsync(item, CancellationToken.None);
         }
 
         /// <summary>
@@ -198,9 +198,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="item"></param>
         /// <param name="ct"></param>
-        public void Enqueue(T item, CancellationToken ct)
+        public void Post(T item, CancellationToken ct)
         {
-            var result = TryEnqueue(item, ct);
+            var result = TryPost(item, ct);
 
             if (false == result)
             {
@@ -212,9 +212,9 @@ namespace LibraProgramming.Windows.Async
         /// 
         /// </summary>
         /// <param name="item"></param>
-        public void Enqueue(T item)
+        public void Post(T item)
         {
-            Enqueue(item, CancellationToken.None);
+            Post(item, CancellationToken.None);
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async Task<bool> HasItemsAsync(CancellationToken ct)
+        public async Task<bool> OutputAvailableAsync(CancellationToken ct)
         {
             using (await mutex.LockAsync().ConfigureAwait(false))
             {
@@ -239,9 +239,9 @@ namespace LibraProgramming.Windows.Async
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<bool> HasItemsAsync()
+        public Task<bool> OutputAvailableAsync()
         {
-            return HasItemsAsync(CancellationToken.None);
+            return OutputAvailableAsync(CancellationToken.None);
         }
 
         /// <summary>
@@ -249,18 +249,18 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public IEnumerable<T> EnumerateConsuming(CancellationToken ct)
+        public IEnumerable<T> ReceiveAll(CancellationToken ct)
         {
             while (true)
             {
-                var result = TryDequeueInternal(ct);
+                T item;
 
-                if (false == result.Success)
+                if (false == TryReceiveInternal(out item, ct))
                 {
                     yield break;
                 }
 
-                yield return result.Item;
+                yield return item;
             }
         }
 
@@ -268,9 +268,9 @@ namespace LibraProgramming.Windows.Async
         /// 
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<T> EnumerateConsuming()
+        public IEnumerable<T> ReceiveAll()
         {
-            return EnumerateConsuming(CancellationToken.None);
+            return ReceiveAll(CancellationToken.None);
         }
 
         /// <summary>
@@ -278,9 +278,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async Task<DequeueResult> TryDequeueAsync(CancellationToken ct)
+        public async Task<ReceiveResult> TryReceiveAsync(CancellationToken ct)
         {
-            var result = await TryDequeueAsync(ct, null).ConfigureAwait(false);
+            var result = await TryReceiveAsync(ct, null).ConfigureAwait(false);
 
             if (false == result.Success)
             {
@@ -294,35 +294,36 @@ namespace LibraProgramming.Windows.Async
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<DequeueResult> TryDequeueAsync()
+        public Task<ReceiveResult> TryReceiveAsync()
         {
-            return TryDequeueAsync(CancellationToken.None);
+            return TryReceiveAsync(CancellationToken.None);
         }
 
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="item"></param>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public DequeueResult TryDequeue(CancellationToken ct)
+        public bool TryReceive(out T item, CancellationToken ct)
         {
-            var result = TryDequeueInternal(ct);
-
-            if (false == result.Success)
+            if (TryReceiveInternal(out item, ct))
             {
-                ct.ThrowIfCancellationRequested();
+                return true;
             }
 
-            return result;
+            ct.ThrowIfCancellationRequested();
+
+            return false;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public DequeueResult TryDequeue()
+        public bool TryReceive(out T item)
         {
-            return TryDequeue(CancellationToken.None);
+            return TryReceive(out item, CancellationToken.None);
         }
 
         /// <summary>
@@ -330,9 +331,9 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public async Task<T> DequeueAsync(CancellationToken ct)
+        public async Task<T> ReceiveAsync(CancellationToken ct)
         {
-            var result = await TryDequeueAsync(ct).ConfigureAwait(false);
+            var result = await TryReceiveAsync(ct).ConfigureAwait(false);
 
             if (false == result.Success)
             {
@@ -346,9 +347,9 @@ namespace LibraProgramming.Windows.Async
         /// 
         /// </summary>
         /// <returns></returns>
-        public Task<T> DequeueAsync()
+        public Task<T> ReceiveAsync()
         {
-            return DequeueAsync(CancellationToken.None);
+            return ReceiveAsync(CancellationToken.None);
         }
 
         /// <summary>
@@ -356,28 +357,28 @@ namespace LibraProgramming.Windows.Async
         /// </summary>
         /// <param name="ct"></param>
         /// <returns></returns>
-        public T Dequeue(CancellationToken ct)
+        public T Receive(CancellationToken ct)
         {
-            var result = TryDequeue(ct);
+            T item;
 
-            if (false == result.Success)
+            if (false == TryReceive(out item, ct))
             {
                 throw new InvalidOperationException();
             }
 
-            return result.Item;
+            return item;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public T Dequeue()
+        public T Receive()
         {
-            return Dequeue(CancellationToken.None);
+            return Receive(CancellationToken.None);
         }
 
-        internal async Task<AsyncProducerConsumerQueue<T>> TryEnqueueAsync(T item, CancellationToken ct, TaskCompletionSource abort)
+        internal async Task<AsyncProducerConsumerQueue<T>> TryPostAsync(T item, CancellationToken ct, TaskCompletionSource abort)
         {
             try
             {
@@ -413,7 +414,7 @@ namespace LibraProgramming.Windows.Async
             }
         }
 
-        internal async Task<DequeueResult> TryDequeueAsync(CancellationToken ct, TaskCompletionSource abort)
+        internal async Task<ReceiveResult> TryReceiveAsync(CancellationToken ct, TaskCompletionSource abort)
         {
             try
             {
@@ -438,7 +439,7 @@ namespace LibraProgramming.Windows.Async
 
                     notFull.Notify();
 
-                    return new DequeueResult(this, item);
+                    return new ReceiveResult(this, item);
                 }
             }
             catch (OperationCanceledException)
@@ -447,8 +448,10 @@ namespace LibraProgramming.Windows.Async
             }
         }
 
-        internal DequeueResult TryDequeueInternal(CancellationToken ct)
+        internal bool TryReceiveInternal(out T item, CancellationToken ct)
         {
+            item = default(T);
+
             try
             {
                 using (mutex.Lock())
@@ -460,19 +463,19 @@ namespace LibraProgramming.Windows.Async
 
                     if (completed.IsCancellationRequested && IsEmpty)
                     {
-                        return FalseResult;
+                        return false;
                     }
 
-                    var item = queue.Dequeue();
+                    item = queue.Dequeue();
 
                     notFull.Notify();
 
-                    return new DequeueResult(this, item);
+                    return true;
                 }
             }
             catch (OperationCanceledException)
             {
-                return FalseResult;
+                return false;
             }
         }
 
@@ -510,12 +513,12 @@ namespace LibraProgramming.Windows.Async
         /// <summary>
         /// 
         /// </summary>
-        public sealed class DequeueResult
+        public sealed class ReceiveResult
         {
             /// <summary>
             /// 
             /// </summary>
-            public AsyncProducerConsumerQueue<T> Queue
+            private AsyncProducerConsumerQueue<T> Queue
             {
                 get;
             }
@@ -533,7 +536,7 @@ namespace LibraProgramming.Windows.Async
             /// </summary>
             public bool Success => null != Queue;
 
-            internal DequeueResult(AsyncProducerConsumerQueue<T> queue, T item)
+            internal ReceiveResult(AsyncProducerConsumerQueue<T> queue, T item)
             {
                 Queue = queue;
                 Item = item;

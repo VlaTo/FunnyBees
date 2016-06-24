@@ -17,7 +17,7 @@ namespace FunnyBees.ViewModels
     /// <summary>
     /// 
     /// </summary>
-    public class MainPageViewModel : ObservableViewModel, ICleanupRequired
+    public class MainPageViewModel : ViewModel, ICleanupRequired
     {
         private readonly IApplicationOptionsProvider optionsProvider;
         private readonly IUIThreadAccessor accessor;
@@ -125,56 +125,20 @@ namespace FunnyBees.ViewModels
 
         private async Task RunSimulationAsync(object notused)
         {
-            await accessor.ExecuteAsync(async () =>
+            if (null != session)
             {
-                if (IsSessionRunning)
-                {
-                    IsSessionRunning = false;
-
-                    session.Dispose();
-                    session = null;
-
-                    return;
-                }
-
-                IsSessionRunning = true;
-
-                session = await simulation.RunAsync().ConfigureAwait(false);
-
-            });
-
-            /*if (null != session)
-            {
-                session.Updated -= OnSessionUpdated;
-
                 session.Dispose();
                 session = null;
-
-                return;
-            }*/
-
-
-            /*await accessor.ExecuteAsync(() =>
+            }
+            else
             {
+                session = await simulation.RunAsync().ConfigureAwait(false);
+            }
 
-                session.Updated += OnSessionUpdated;
-
-                Beehives.Clear();
-
-                foreach (var beehive in session.Beehives)
-                {
-                    var model = new BeehiveViewModel
-                    {
-                        Number = beehive.Number,
-                        MaximumNumberOfBees = beehive.MaximumNumberOfBees,
-                        CurrentBeesCount = beehive.Bees.Count()
-                    };
-
-                    beehive.Changed += OnBeehiveChanged;
-
-                    Beehives.Add(model);
-                }
-            });*/
+            await accessor.ExecuteAsync(() =>
+            {
+                IsSessionRunning = null != session;
+            });
         }
 
 /*

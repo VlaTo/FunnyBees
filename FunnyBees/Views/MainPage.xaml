@@ -67,8 +67,15 @@
                 ClearColor="CadetBlue"
                 CreateResources="OnCanvasCreateResources"
                 Draw="OnCanvasDraw"
-                Update="OnCanvasUpdate"
-            />
+                Update="OnCanvasUpdate">
+                <i:Interaction.Triggers>
+                    <i:DataTrigger
+                        Binding="{Binding Path=IsSessionRunning}"
+                        Value="True">
+                        
+                    </i:DataTrigger>
+                </i:Interaction.Triggers>
+            </canvas:CanvasAnimatedControl>
         </Grid>
         <ux:CustomDialog
             Title="User Interaction Dialog #1"
