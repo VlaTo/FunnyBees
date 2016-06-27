@@ -129,8 +129,13 @@
     <Compile Include="NameResolver.cs" />
     <Compile Include="OrientationToStateAction.cs" />
     <Compile Include="PageOrientationTrigger.cs" />
+    <Compile Include="PlaySoundAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedTrigger.cs" />
+    <Compile Include="StoryboardAction.cs" />
+    <Compile Include="StoryboardCompletedTrigger.cs" />
+    <Compile Include="StoryboardControlAction.cs" />
+    <Compile Include="StoryboardTrigger.cs" />
     <Compile Include="TargetTriggerAction.cs" />
     <Compile Include="TriggerAction.cs" />
     <Compile Include="TriggerActionCollection.cs" />

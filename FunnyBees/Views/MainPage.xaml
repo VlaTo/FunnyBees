@@ -68,13 +68,18 @@
                 CreateResources="OnCanvasCreateResources"
                 Draw="OnCanvasDraw"
                 Update="OnCanvasUpdate">
-                <i:Interaction.Triggers>
+                <!--<i:Interaction.Triggers>
+                    <i:DataTrigger
+                        Binding="{Binding Path=IsSessionRunning}"
+                        Value="False">
+                        <i:ChangePropertyAction PropertyName="Paused" Value="True" />
+                    </i:DataTrigger>
                     <i:DataTrigger
                         Binding="{Binding Path=IsSessionRunning}"
                         Value="True">
-                        
+                        <i:ChangePropertyAction PropertyName="Paused" Value="False" />
                     </i:DataTrigger>
-                </i:Interaction.Triggers>
+                </i:Interaction.Triggers>-->
             </canvas:CanvasAnimatedControl>
         </Grid>
         <ux:CustomDialog
