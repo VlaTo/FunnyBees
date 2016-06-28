@@ -1,15 +1,45 @@
-﻿namespace FunnyBees.Engine
+﻿using System;
+
+namespace FunnyBees.Engine
 {
     public class Component : IComponent
     {
+        protected ComponentContainer Container
+        {
+            get;
+            private set;
+        }
+
         public void Attach(ComponentContainer container)
         {
-            throw new System.NotImplementedException();
+            if (null != Container)
+            {
+                throw new InvalidOperationException();
+            }
+
+            Container = container;
+
+            OnAttach();
         }
 
         public void Remove()
         {
-            throw new System.NotImplementedException();
+            if (null == Container)
+            {
+                throw new InvalidOperationException();
+            }
+
+            Container = null;
+
+            OnDetach();
+        }
+
+        protected virtual void OnAttach()
+        {
+        }
+
+        protected virtual void OnDetach()
+        {
         }
     }
 }

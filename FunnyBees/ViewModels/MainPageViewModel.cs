@@ -131,7 +131,8 @@ namespace FunnyBees.ViewModels
             var bee = new Bee();
             var beehive = new Beehive();
 
-            bee.InteractWith(beehive).Using<TestInteractor>();
+            bee.AddComponent<Lifetime>();
+            bee.InteractWith(beehive).Using<BeeHost>();
 
             /*if (null != session)
             {

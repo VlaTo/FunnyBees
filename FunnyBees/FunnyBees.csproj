@@ -101,7 +101,7 @@
     <Compile Include="Core\RuntimeDataCache.cs" />
     <Compile Include="Design\MainPageDesignModel.cs" />
     <Compile Include="Engine\Beehive.cs" />
-    <Compile Include="Engine\BeehiveConnector.cs" />
+    <Compile Include="Engine\BeehiveOwnedBees.cs" />
     <Compile Include="Engine\Component.cs" />
     <Compile Include="Engine\ComponentContainer.cs" />
     <Compile Include="Engine\IComponent.cs" />
@@ -110,7 +110,8 @@
     <Compile Include="Engine\Interaction.cs" />
     <Compile Include="Engine\Bee.cs" />
     <Compile Include="Engine\Interactor.cs" />
-    <Compile Include="Engine\TestInteractor.cs" />
+    <Compile Include="Engine\Lifetime.cs" />
+    <Compile Include="Engine\BeeHost.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />
