@@ -5,7 +5,7 @@
     /// </summary>
     public interface IInteractor
     {
-         
+        void Interact(ComponentContainer source, ComponentContainer target);
     }
 
     /// <summary>

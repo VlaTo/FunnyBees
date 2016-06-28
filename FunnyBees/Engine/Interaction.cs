@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 namespace FunnyBees.Engine
@@ -28,7 +29,9 @@ namespace FunnyBees.Engine
                 throw new ArgumentNullException(nameof(interactor));
             }
 
-            var type = typeof (IInteractor).MakeGenericType(left.GetType(), right.GetType());
+            interactor.Interact(left, right);
+
+            /*var type = typeof (IInteractor).MakeGenericType(left.GetType(), right.GetType());
 
             if (type.IsInstanceOfType(interactor))
             {
@@ -36,9 +39,8 @@ namespace FunnyBees.Engine
 
                 foreach (var method in methods.Where(info=>String.Equals("Interact", info.Name)))
                 {
-                    method.
                 }
-            }
+            }*/
         }
     }
 }

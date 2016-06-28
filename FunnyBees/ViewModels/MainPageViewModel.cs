@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FunnyBees.Core;
+using FunnyBees.Engine;
 using FunnyBees.Models;
 using FunnyBees.Services;
 using LibraProgramming.Windows;
@@ -11,6 +12,8 @@ using LibraProgramming.Windows.Commands;
 using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
 using LibraProgramming.Windows.Interaction;
+using Bee = FunnyBees.Engine.Bee;
+using Beehive = FunnyBees.Engine.Beehive;
 
 namespace FunnyBees.ViewModels
 {
@@ -123,9 +126,14 @@ namespace FunnyBees.ViewModels
             return Task.CompletedTask;
         }
 
-        private async Task RunSimulationAsync(object notused)
+        private Task RunSimulationAsync(object notused)
         {
-            if (null != session)
+            var bee = new Bee();
+            var beehive = new Beehive();
+
+            bee.InteractWith(beehive).Using<TestInteractor>();
+
+            /*if (null != session)
             {
                 session.Dispose();
                 session = null;
@@ -138,7 +146,9 @@ namespace FunnyBees.ViewModels
             await accessor.ExecuteAsync(() =>
             {
                 IsSessionRunning = null != session;
-            });
+            });*/
+
+            return Task.CompletedTask;
         }
 
 /*
