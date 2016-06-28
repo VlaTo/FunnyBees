@@ -131,6 +131,7 @@ namespace FunnyBees.ViewModels
             var bee = new Bee();
             var beehive = new Beehive();
 
+            beehive.AddComponent<BeehiveOwnedBees>();
             bee.AddComponent<Lifetime>();
             bee.InteractWith(beehive).Using<BeeHost>();
 

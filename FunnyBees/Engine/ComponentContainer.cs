@@ -1,36 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using LibraProgramming.Windows;
 
 namespace FunnyBees.Engine
 {
     /// <summary>
     /// 
     /// </summary>
-    public class ComponentContainer
+    public class ComponentContainer : IComponentObservable
     {
         private readonly IDictionary<Type, IComponent> components;
+        private readonly ICollection<IComponentObserver> componentObservers; 
 
         protected ComponentContainer()
         {
             components = new Dictionary<Type, IComponent>();
+            componentObservers = new List<IComponentObserver>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         public void AddComponent<TComponent>()
-            where TComponent : IComponent, new ()
+            where TComponent : IComponent, new()
         {
-            if (IsComponentExists(typeof(TComponent)))
+            if (IsComponentExists(typeof (TComponent)))
             {
                 throw new ArgumentException();
             }
 
             var component = new TComponent();
 
-            components.Add(typeof(TComponent), component);
+            components.Add(typeof (TComponent), component);
+
+            var observers = componentObservers.ToArray();
 
             component.Attach(this);
+
+            foreach (var observer in observers)
+            {
+                observer.OnComponentAttached(component);
+            }
         }
 
         /// <summary>
@@ -53,7 +65,14 @@ namespace FunnyBees.Engine
 
             components.Add(typeof (TComponent), component);
 
+            var observers = componentObservers.ToArray();
+
             component.Attach(this);
+
+            foreach (var observer in observers)
+            {
+                observer.OnComponentAttached(component);
+            }
         }
 
         /// <summary>
@@ -61,13 +80,18 @@ namespace FunnyBees.Engine
         /// </summary>
         /// <typeparam name="TComponent"></typeparam>
         /// <returns></returns>
-        public TComponent GetComponent<TComponent>()
+        public TComponent GetComponent<TComponent>(bool failIfNotExists = true)
             where TComponent : IComponent
         {
             IComponent component;
 
             if (false == components.TryGetValue(typeof (TComponent), out component))
             {
+                if (failIfNotExists)
+                {
+                    throw new KeyNotFoundException();
+                }
+
                 return default(TComponent);
             }
 
@@ -88,7 +112,6 @@ namespace FunnyBees.Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="component"></param>
         /// <returns></returns>
         public bool RemoveComponent<TComponent>()
             where TComponent : IComponent
@@ -100,40 +123,20 @@ namespace FunnyBees.Engine
                 return false;
             }
 
-            if (components.Remove(typeof(TComponent)))
+            if (components.Remove(typeof (TComponent)))
             {
                 component.Remove();
+
+                foreach (var observer in componentObservers.ToArray())
+                {
+                    observer.OnComponentDetached(component);
+                }
+
                 return true;
             }
 
             return false;
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="component"></param>
-        /// <returns></returns>
-        /*public bool RemoveComponent(IComponent component)
-        {
-            if (null == component)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (false == IsComponentExists(component.GetType()))
-            {
-                return false;
-            }
-
-            if (components.Remove(component.GetType()))
-            {
-                component.Remove();
-                return true;
-            }
-
-            return false;
-        }*/
 
         /// <summary>
         /// 
@@ -148,6 +151,21 @@ namespace FunnyBees.Engine
             }
 
             return new Interaction(this, other);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public IDisposable Subscribe(IComponentObserver observer)
+        {
+            if (false == componentObservers.Contains(observer))
+            {
+                componentObservers.Add(observer);
+            }
+
+            return new DisposableToken<IComponentObserver>(observer, RemoveComponentObserver);
         }
 
         private bool IsComponentExists(Type targetType)
@@ -165,6 +183,11 @@ namespace FunnyBees.Engine
             }
 
             return null;
+        }
+
+        private void RemoveComponentObserver(IComponentObserver observer)
+        {
+            componentObservers.Remove(observer);
         }
     }
 }

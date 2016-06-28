@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
@@ -6,23 +7,38 @@ using System.Reflection;
 
 namespace FunnyBees.Engine
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Interactor : IInteractor
     {
-        private readonly InteractorEntry[] matches;
+        private static readonly IDictionary<Type, InteractorMatches> cache;
          
         protected Interactor()
         {
-            matches = BuildEntries(GetType());
+            RegisterInteractionEntries(GetType());
+        }
+
+        static Interactor()
+        {
+            cache = new Dictionary<Type, InteractorMatches>();
         }
 
         public void Interact(ComponentContainer source, ComponentContainer target)
         {
+            InteractorMatches matches;
+
+            if (false == cache.TryGetValue(GetType(), out matches))
+            {
+                throw new InvalidOperationException();
+            }
+
             var args = new[]
             {
                 source.GetType(), target.GetType()
             };
 
-            var entry = Array.Find(matches, item => item.CanHandle(args));
+            var entry = matches.FindEntry(args);
 
             if (null == entry)
             {
@@ -32,9 +48,9 @@ namespace FunnyBees.Engine
             entry.InteractMethod.DynamicInvoke(source, target);
         }
 
-        private InteractorEntry[] BuildEntries(Type type)
+        private void RegisterInteractionEntries(Type type)
         {
-            var collection = new Collection<InteractorEntry>();
+            var entries = new Collection<MatchEntry>();
 
             foreach (var intf in type.GetInterfaces())
             {
@@ -71,14 +87,52 @@ namespace FunnyBees.Engine
                         arg0,
                         arg1)
                         .Compile();
-                    collection.Add(new InteractorEntry(args, temp));
+
+                    entries.Add(new MatchEntry(args, temp));
                 }
             }
 
-            return collection.ToArray();
+            InteractorMatches matches;
+
+            if (false == cache.TryGetValue(type, out matches))
+            {
+                matches = new InteractorMatches();
+                cache.Add(type, matches);
+            }
+
+            matches.AddRange(entries);
         }
 
-        private class InteractorEntry
+        /// <summary>
+        /// 
+        /// </summary>
+        private class InteractorMatches
+        {
+            private readonly ICollection<MatchEntry> entries;
+
+            public InteractorMatches()
+            {
+                entries = new Collection<MatchEntry>();
+            }
+
+            public void AddRange(IEnumerable<MatchEntry> items)
+            {
+                foreach (var item in items)
+                {
+                    entries.Add(item);
+                }
+            }
+
+            public MatchEntry FindEntry(Type[] types)
+            {
+                return entries.FirstOrDefault(entry => entry.Match(types));
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private class MatchEntry
         {
             private readonly Type[] types;
 
@@ -87,13 +141,16 @@ namespace FunnyBees.Engine
                 get;
             }
 
-            public InteractorEntry(Type[] types, Delegate @delegate)
+            /// <summary>
+            /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
+            /// </summary>
+            public MatchEntry(Type[] types, Delegate interactMethod)
             {
                 this.types = types;
-                InteractMethod = @delegate;
+                InteractMethod = interactMethod;
             }
 
-            public bool CanHandle(Type[] args)
+            public bool Match(Type[] args)
             {
                 if (null == args)
                 {

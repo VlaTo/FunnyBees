@@ -104,7 +104,10 @@
     <Compile Include="Engine\BeehiveOwnedBees.cs" />
     <Compile Include="Engine\Component.cs" />
     <Compile Include="Engine\ComponentContainer.cs" />
+    <Compile Include="Engine\GameObject.cs" />
     <Compile Include="Engine\IComponent.cs" />
+    <Compile Include="Engine\IComponentObservable.cs" />
+    <Compile Include="Engine\IComponentObserver.cs" />
     <Compile Include="Engine\IInteraction.cs" />
     <Compile Include="Engine\IInteractor.cs" />
     <Compile Include="Engine\Interaction.cs" />
@@ -112,6 +115,7 @@
     <Compile Include="Engine\Interactor.cs" />
     <Compile Include="Engine\Lifetime.cs" />
     <Compile Include="Engine\BeeHost.cs" />
+    <Compile Include="Engine\SceneObject.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />

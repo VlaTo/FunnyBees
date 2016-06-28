@@ -2,8 +2,10 @@
 
 namespace FunnyBees.Engine
 {
-    public class Component : IComponent
+    public class Component : IComponent, IComponentObserver
     {
+        private IDisposable subscription;
+
         protected ComponentContainer Container
         {
             get;
@@ -19,6 +21,8 @@ namespace FunnyBees.Engine
 
             Container = container;
 
+            subscription = ((IComponentObservable) container).Subscribe(this);
+
             OnAttach();
         }
 
@@ -29,9 +33,21 @@ namespace FunnyBees.Engine
                 throw new InvalidOperationException();
             }
 
+            subscription.Dispose();
+
             Container = null;
 
             OnDetach();
+        }
+
+        void IComponentObserver.OnComponentAttached(IComponent component)
+        {
+            OnComponentAdded(component);
+        }
+
+        void IComponentObserver.OnComponentDetached(IComponent component)
+        {
+            OnComponentRemoved(component);
         }
 
         protected virtual void OnAttach()
@@ -39,6 +55,14 @@ namespace FunnyBees.Engine
         }
 
         protected virtual void OnDetach()
+        {
+        }
+
+        protected virtual void OnComponentAdded(IComponent component)
+        {
+        }
+
+        protected virtual void OnComponentRemoved(IComponent component)
         {
         }
     }
