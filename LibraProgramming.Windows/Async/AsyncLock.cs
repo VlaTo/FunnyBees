@@ -6,6 +6,9 @@ using LibraProgramming.Windows.Infrastructure;
 
 namespace LibraProgramming.Windows.Async
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [DebuggerDisplay("Id = {Id}")]
     [DebuggerTypeProxy(typeof(DebugView))]
     public sealed class AsyncLock
@@ -16,13 +19,23 @@ namespace LibraProgramming.Windows.Async
         private readonly IAsyncWaitQueue<IDisposable> queue;
         private readonly Task<IDisposable> cachedKeyTask;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int Id => IdManager<AsyncLock>.GetId(ref id);
 
+        /// <summary>
+        /// 
+        /// </summary>
         public AsyncLock()
             : this(new AsyncWaitQueue<IDisposable>())
         {
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="queue"></param>
         public AsyncLock(IAsyncWaitQueue<IDisposable> queue)
         {
             cachedKeyTask = Task.FromResult<IDisposable>(new Key(this));
@@ -30,6 +43,11 @@ namespace LibraProgramming.Windows.Async
             mutex = new object();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         public AwaitableDisposable<IDisposable> LockAsync(CancellationToken ct)
         {
             Task<IDisposable> task;
@@ -50,11 +68,20 @@ namespace LibraProgramming.Windows.Async
             return new AwaitableDisposable<IDisposable>(task);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public AwaitableDisposable<IDisposable> LockAsync()
         {
             return LockAsync(CancellationToken.None);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ct"></param>
+        /// <returns></returns>
         public IDisposable Lock(CancellationToken ct)
         {
             Task<IDisposable> task;
@@ -73,11 +100,18 @@ namespace LibraProgramming.Windows.Async
             return task.WaitAndUnwrapException();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IDisposable Lock()
         {
             return Lock(CancellationToken.None);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         internal void ReleaseLock()
         {
             IDisposable finish = null;
@@ -97,6 +131,9 @@ namespace LibraProgramming.Windows.Async
             finish?.Dispose();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private sealed class Key : IDisposable
         {
             private readonly AsyncLock @lock;

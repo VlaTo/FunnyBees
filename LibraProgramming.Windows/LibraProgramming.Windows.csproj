@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Async\AsyncConditionVariable.cs" />
+    <Compile Include="Async\AsyncCountdownEvent.cs" />
     <Compile Include="Async\AsyncLock.cs" />
     <Compile Include="Async\AsyncProducerConsumerQueue.cs" />
     <Compile Include="Async\AsyncProducerConsumerQueueExtension.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Async\AsyncWaitQueue.cs" />
     <Compile Include="Async\AsyncWaitQueueExtension.cs" />
     <Compile Include="Async\AwaitableDisposable.cs" />
+    <Compile Include="Async\DeferralManager.cs" />
     <Compile Include="Async\Deque.cs" />
     <Compile Include="Async\EventAsync.cs" />
     <Compile Include="Async\FrameworkElementExtension.cs" />
@@ -153,7 +155,6 @@
     <Compile Include="Infrastructure\IAwaitable.cs" />
     <Compile Include="Infrastructure\ICleanupRequired.cs" />
     <Compile Include="Infrastructure\IDeferrable.cs" />
-    <Compile Include="Infrastructure\IDeferred.cs" />
     <Compile Include="Infrastructure\INavigationRequired.cs" />
     <Compile Include="Infrastructure\ISetupRequired.cs" />
     <Compile Include="Infrastructure\TaskCompletionSource.cs" />

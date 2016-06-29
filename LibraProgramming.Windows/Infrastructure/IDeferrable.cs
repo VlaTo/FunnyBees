@@ -1,4 +1,6 @@
-﻿namespace LibraProgramming.Windows.Infrastructure
+﻿using System;
+
+namespace LibraProgramming.Windows.Infrastructure
 {
     /// <summary>
     /// 
@@ -9,6 +11,6 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        IDeferred GetDeferred();
+        IDisposable GetDeferral();
     }
 }

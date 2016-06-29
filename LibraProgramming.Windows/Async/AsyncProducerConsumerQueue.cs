@@ -21,8 +21,14 @@ namespace LibraProgramming.Windows.Async
         private readonly AsyncConditionVariable completedOrNotEmpty;
         private readonly CancellationTokenSource completed;
 
+        /// <summary>
+        /// 
+        /// </summary>
         internal bool IsEmpty => 0 == queue.Count;
 
+        /// <summary>
+        /// 
+        /// </summary>
         internal bool IsFull => maxCount == queue.Count;
 
         /// <summary>

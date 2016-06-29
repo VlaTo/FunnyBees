@@ -662,6 +662,7 @@ namespace LibraProgramming.Windows.Async
         }
 
         [DebuggerNonUserCode]
+        // ReSharper disable UnusedMember.Local
         private sealed class DebugView
         {
             private readonly AsyncReaderWriterLock @lock;
@@ -682,5 +683,6 @@ namespace LibraProgramming.Windows.Async
                 this.@lock = @lock;
             }
         }
+        // ReSharper restore UnusedMember.Local
     }
 }
