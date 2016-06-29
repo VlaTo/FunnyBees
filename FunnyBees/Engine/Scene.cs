@@ -8,7 +8,7 @@ namespace FunnyBees.Engine
     public class Scene
     {
         private readonly ISceneBuilder builder;
-        private readonly ICollection<SceneObject> objects;
+        private readonly IList<SceneObject> objects;
         private readonly ICollection<GameObject> updatable;
 
         /// <summary>
@@ -40,17 +40,17 @@ namespace FunnyBees.Engine
                 return;
             }
 
-            InsertUpdatable(updatable.Count, obj);
+            AppendUpdatable(obj);
         }
 
         private void InsertDrawable(int index, SceneObject sceneObject)
         {
-            throw new NotImplementedException();
+            objects.Insert(index, sceneObject);
         }
 
-        private void InsertUpdatable(int index, GameObject gameObject)
+        private void AppendUpdatable(GameObject gameObject)
         {
-            throw new NotImplementedException();
+            updatable.Add(gameObject);
         }
     }
 }
