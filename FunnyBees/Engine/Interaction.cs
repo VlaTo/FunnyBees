@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
 
 namespace FunnyBees.Engine
 {
     public class Interaction : IInteraction
     {
-        private readonly ComponentContainer left;
-        private readonly ComponentContainer right;
+        private readonly ComponentContainer source;
+        private readonly ComponentContainer target;
 
-        public Interaction(ComponentContainer left, ComponentContainer right)
+        public Interaction(ComponentContainer source, ComponentContainer target)
         {
-            this.left = left;
-            this.right = right;
+            this.source = source;
+            this.target = target;
         }
 
         public void Using<TInteractor>()
@@ -29,18 +26,8 @@ namespace FunnyBees.Engine
                 throw new ArgumentNullException(nameof(interactor));
             }
 
-            interactor.Interact(left, right);
+            interactor.Interact(source, target);
 
-            /*var type = typeof (IInteractor).MakeGenericType(left.GetType(), right.GetType());
-
-            if (type.IsInstanceOfType(interactor))
-            {
-                var methods = interactor.GetType().GetRuntimeMethods();
-
-                foreach (var method in methods.Where(info=>String.Equals("Interact", info.Name)))
-                {
-                }
-            }*/
         }
     }
 }

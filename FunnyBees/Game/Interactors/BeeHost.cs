@@ -1,4 +1,5 @@
 ﻿using FunnyBees.Engine;
+using FunnyBees.Game.Components;
 
 namespace FunnyBees.Game.Interactors
 {
@@ -11,9 +12,9 @@ namespace FunnyBees.Game.Interactors
         /// <param name="beehive"></param>
         public void Interact(Bee bee, Beehive beehive)
         {
-            var connector = beehive.GetComponent<BeehiveOwnedBees>();
+            var connector = beehive.GetComponent<BeesOwner>();
 
-            connector.Bees.Add(bee);
+            connector.AddBee(bee);
         }
 
         /// <summary>

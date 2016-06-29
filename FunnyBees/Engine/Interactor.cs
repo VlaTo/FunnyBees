@@ -52,44 +52,43 @@ namespace FunnyBees.Engine
         {
             var entries = new Collection<MatchEntry>();
 
-            foreach (var intf in type.GetInterfaces())
+            foreach (var @interface in type.GetInterfaces())
             {
-                if (false == intf.IsConstructedGenericType || false == typeof (IInteractor).IsAssignableFrom(type))
+                if (false == @interface.IsConstructedGenericType)
                 {
                     continue;
                 }
 
-                var args = intf.GetGenericArguments();
+                var definition = @interface.GetGenericTypeDefinition();
 
-                if (2 != args.Length)
+//                if (false == definition.IsAssignableFrom(typeof (IInteractor<,>)))
+                if (definition != typeof (IInteractor<,>))
                 {
                     continue;
                 }
 
-                if (Array.TrueForAll(args, arg => typeof (ComponentContainer).IsAssignableFrom(arg)))
+                var arguments = @interface.GetGenericArguments();
+
+                if (false == IsValidInterfaceArguments(arguments))
                 {
-                    var method = intf.GetRuntimeMethod("Interact", args);
-
-                    if (null == method)
-                    {
-                        throw new Exception();
-                    }
-
-                    var arg0 = Expression.Parameter(args[0]);
-                    var arg1 = Expression.Parameter(args[1]);
-                    var temp = Expression.Lambda(
-                        Expression.Call(
-                            Expression.Constant(this),
-                            method,
-                            arg0,
-                            arg1
-                            ),
-                        arg0,
-                        arg1)
-                        .Compile();
-
-                    entries.Add(new MatchEntry(args, temp));
+                    continue;
                 }
+
+                var method = @interface.GetTypeInfo().GetDeclaredMethod(nameof(Interact));
+                var parameters = method.GetParameters()
+                    .Select(parameter => Expression.Parameter(parameter.ParameterType, parameter.Name))
+                    .ToArray();
+                var @delegate = Expression.Lambda(
+                    Expression.Call(
+                        Expression.Constant(this),
+                        method,
+                        parameters[0],
+                        parameters[1]
+                        ),
+                    parameters)
+                    .Compile();
+
+                entries.Add(new MatchEntry(arguments, @delegate));
             }
 
             InteractorMatches matches;
@@ -101,6 +100,11 @@ namespace FunnyBees.Engine
             }
 
             matches.AddRange(entries);
+        }
+
+        private bool IsValidInterfaceArguments(Type[] argumentTypes)
+        {
+            return 2 == argumentTypes.Length && Array.TrueForAll(argumentTypes, arg => typeof (ComponentContainer).IsAssignableFrom(arg));
         }
 
         /// <summary>

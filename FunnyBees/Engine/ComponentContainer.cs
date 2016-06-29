@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using LibraProgramming.Windows;
 
@@ -9,7 +8,7 @@ namespace FunnyBees.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class ComponentContainer : IComponentObservable
+    public class ComponentContainer : IObservable<IComponentObserver>
     {
         private readonly IDictionary<Type, IComponent> components;
         private readonly ICollection<IComponentObserver> componentObservers; 
@@ -41,7 +40,7 @@ namespace FunnyBees.Engine
 
             foreach (var observer in observers)
             {
-                observer.OnComponentAttached(component);
+                observer.OnAttached(component);
             }
         }
 
@@ -71,7 +70,7 @@ namespace FunnyBees.Engine
 
             foreach (var observer in observers)
             {
-                observer.OnComponentAttached(component);
+                observer.OnAttached(component);
             }
         }
 
@@ -129,7 +128,7 @@ namespace FunnyBees.Engine
 
                 foreach (var observer in componentObservers.ToArray())
                 {
-                    observer.OnComponentDetached(component);
+                    observer.OnDetached(component);
                 }
 
                 return true;
@@ -158,7 +157,7 @@ namespace FunnyBees.Engine
         /// </summary>
         /// <param name="observer"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IComponentObserver observer)
+        IDisposable IObservable<IComponentObserver>.Subscribe(IComponentObserver observer)
         {
             if (false == componentObservers.Contains(observer))
             {

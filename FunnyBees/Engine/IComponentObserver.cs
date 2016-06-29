@@ -1,9 +1,24 @@
 namespace FunnyBees.Engine
 {
-    public interface IComponentObserver
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IComponentObserver : IObserver
     {
-        void OnComponentAttached(IComponent component);
+        void OnAttached(IComponent component);
 
-        void OnComponentDetached(IComponent component);
+        void OnDetached(IComponent component);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TComponent"></typeparam>
+    public interface IComponentObserver<in TComponent>
+        where TComponent : IComponent
+    {
+        void OnAttached(TComponent component);
+
+        void OnDetached(TComponent component);
     }
 }

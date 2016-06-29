@@ -227,7 +227,6 @@ namespace LibraProgramming.Windows.Interactivity
             }
 
             var current = property.GetValue(Target);
-            var typeinfo = property.PropertyType.GetTypeInfo();
             var value = Value;
 
             if (null == value || null == current)
@@ -235,22 +234,22 @@ namespace LibraProgramming.Windows.Interactivity
                 return null;
             }
 
-            if (typeof (Double).GetTypeInfo().IsAssignableFrom(typeinfo))
+            if (typeof (Double).IsAssignableFrom(property.PropertyType))
             {
                 return Convert.ToDouble(current) + Convert.ToDouble(value);
             }
 
-            if (typeof (int).GetTypeInfo().IsAssignableFrom(typeinfo))
+            if (typeof (int).IsAssignableFrom(property.PropertyType))
             {
                 return Convert.ToInt32(current) + Convert.ToInt32(value);
             }
 
-            if (typeof (float).GetTypeInfo().IsAssignableFrom(typeinfo))
+            if (typeof (float).IsAssignableFrom(property.PropertyType))
             {
                 return Convert.ToSingle(current) + Convert.ToSingle(value);
             }
 
-            if (typeof (String).GetTypeInfo().IsAssignableFrom(typeinfo))
+            if (typeof (String).IsAssignableFrom(property.PropertyType))
             {
                 return new StringBuilder(Convert.ToString(current)).Append(Convert.ToString(value)).ToString();
             }
@@ -308,19 +307,18 @@ namespace LibraProgramming.Windows.Interactivity
 
         private void AnimatePropertyChange(PropertyInfo property, object current, object value)
         {
-            var typeinfo = property.PropertyType.GetTypeInfo();
             var storyboard = new Storyboard();
             Timeline timeline;
 
-            if (typeof (Double).GetTypeInfo().IsAssignableFrom(typeinfo))
+            if (typeof (Double).IsAssignableFrom(property.PropertyType))
             {
                 timeline = CreateDoubleAnimation((double) current, (double) value);
             }
-            else if (typeof (Color).GetTypeInfo().IsAssignableFrom(typeinfo))
+            else if (typeof (Color).IsAssignableFrom(property.PropertyType))
             {
                 timeline = CreateColorAnimation((Color) current, (Color) value);
             }
-            else if (typeof (Point).GetTypeInfo().IsAssignableFrom(typeinfo))
+            else if (typeof (Point).IsAssignableFrom(property.PropertyType))
             {
                 timeline = CreatePointAnimation((Point) current, (Point) value);
             }
@@ -375,8 +373,8 @@ namespace LibraProgramming.Windows.Interactivity
                 var arguments = method.GetParameters();
 
                 if (arguments.Length >= 2 &&
-                    arguments[0].ParameterType.GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()) &&
-                    arguments[1].ParameterType.GetTypeInfo().IsAssignableFrom(typeinfo))
+                    arguments[0].ParameterType.IsAssignableFrom(type) &&
+                    arguments[1].ParameterType.IsInstanceOfType(value))
                 {
                     candidate = method;
                     break;
@@ -398,7 +396,7 @@ namespace LibraProgramming.Windows.Interactivity
                 throw new InvalidOperationException();
             }
 
-            if (false == typeof (DependencyObject).GetTypeInfo().IsAssignableFrom(targetType.GetTypeInfo()))
+            if (false == typeof (DependencyObject).IsAssignableFrom(targetType))
             {
                 throw new ArgumentException();
             }

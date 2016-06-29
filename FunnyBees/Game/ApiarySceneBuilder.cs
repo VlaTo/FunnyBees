@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using FunnyBees.Engine;
+using FunnyBees.Game.Components;
 using FunnyBees.Services;
 
 namespace FunnyBees.Game
@@ -19,23 +20,25 @@ namespace FunnyBees.Game
 
         public async Task CreateScene(Scene scene)
         {
+            var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
             var beehive = new Beehive();
 
-            beehive.AddComponent<BeehiveOwnedBees>();
+            beehive.AddComponent<BeesOwner>();
+            beehive.AddComponent(() => new BeeProducer(options.MaximumNumberOfBees));
 
-            var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
-            var ownedBees = beehive.GetComponent<BeehiveOwnedBees>();
+//            new Bee().InteractWith(beehive).Using<BeeHost>();
+//            var ownedBees = beehive.GetComponent<OwnedBees>();
 
             scene.AddObject(beehive);
 
-            for (var index = 0; index < options.MaximumNumberOfBees; index++)
+            /*for (var index = 0; index < options.MaximumNumberOfBees; index++)
             {
                 var bee = new Bee();
 
                 ownedBees.Bees.Add(bee);
                 bee.AddComponent<Lifetime>();
                 scene.AddObject(bee);
-            }
+            }*/
         }
     }
 }
