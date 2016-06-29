@@ -1,4 +1,6 @@
 ﻿using Windows.UI.Xaml;
+using FunnyBees.Engine;
+using FunnyBees.Game;
 using FunnyBees.Localization;
 using FunnyBees.Models;
 using FunnyBees.Services;
@@ -31,6 +33,9 @@ namespace FunnyBees
         /// <param name="registry"></param>
         public static void RegisterViewModels(IServiceRegistry registry)
         {
+            // Game
+            registry.Register<ISceneBuilder, ApiarySceneBuilder>(lifetime: InstanceLifetime.CreateNew);
+            // ViewModels
             registry.Register<ISimulation, Simulation>(lifetime: InstanceLifetime.CreateNew);
             registry.Register<HostPageViewModel>(lifetime: InstanceLifetime.CreateNew);
             registry.Register<MainPageViewModel>(lifetime: InstanceLifetime.CreateNew);

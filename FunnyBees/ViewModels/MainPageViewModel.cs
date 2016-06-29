@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using FunnyBees.Core;
 using FunnyBees.Engine;
+using FunnyBees.Game;
 using FunnyBees.Models;
 using FunnyBees.Services;
 using LibraProgramming.Windows;
@@ -12,8 +13,8 @@ using LibraProgramming.Windows.Commands;
 using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
 using LibraProgramming.Windows.Interaction;
-using Bee = FunnyBees.Engine.Bee;
-using Beehive = FunnyBees.Engine.Beehive;
+using Bee = FunnyBees.Game.Bee;
+using Beehive = FunnyBees.Game.Beehive;
 
 namespace FunnyBees.ViewModels
 {
@@ -22,7 +23,6 @@ namespace FunnyBees.ViewModels
     /// </summary>
     public class MainPageViewModel : ViewModel, ICleanupRequired
     {
-        private readonly IApplicationOptionsProvider optionsProvider;
         private readonly IUIThreadAccessor accessor;
         private readonly InteractionRequest<Confirmation> confirmRequest;
         private readonly InteractionRequest<Notification> notificationRequest;
@@ -30,6 +30,7 @@ namespace FunnyBees.ViewModels
         private ISimulationSession session;
         private bool isSessionRunning;
         private TimeSpan sessionElapsedTime;
+        private readonly Scene scene;
 
         /// <summary>
         /// 
@@ -98,9 +99,8 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public MainPageViewModel(IApplicationOptionsProvider optionsProvider, IUIThreadAccessor accessor, ISimulation simulation)
+        public MainPageViewModel(IUIThreadAccessor accessor, ISimulation simulation, ISceneBuilder sceneBuilder)
         {
-            this.optionsProvider = optionsProvider;
             this.accessor = accessor;
             this.simulation = simulation;
 
@@ -109,31 +109,25 @@ namespace FunnyBees.ViewModels
             Confirm = new RelayCommand(DoConfirm);
             RunSimulation = new AsyncRelayCommand(RunSimulationAsync);
             Beehives = new ObservableCollection<BeehiveViewModel>();
-
-            optionsProvider.OptionsChanged += OnOptionsChanged;
+            scene = new Scene(sceneBuilder);
         }
 
         Task ICleanupRequired.CleanupAsync()
         {
-            if (null != session)
+            /*if (null != session)
             {
                 session.Dispose();
                 session = null;
             }
 
-            optionsProvider.OptionsChanged -= OnOptionsChanged;
+            optionsProvider.OptionsChanged -= OnOptionsChanged;*/
 
             return Task.CompletedTask;
         }
 
-        private Task RunSimulationAsync(object notused)
+        private async Task RunSimulationAsync(object notused)
         {
-            var bee = new Bee();
-            var beehive = new Beehive();
-
-            beehive.AddComponent<BeehiveOwnedBees>();
-            bee.AddComponent<Lifetime>();
-            bee.InteractWith(beehive).Using<BeeHost>();
+            await scene.Initialize();
 
             /*if (null != session)
             {
@@ -149,8 +143,6 @@ namespace FunnyBees.ViewModels
             {
                 IsSessionRunning = null != session;
             });*/
-
-            return Task.CompletedTask;
         }
 
 /*

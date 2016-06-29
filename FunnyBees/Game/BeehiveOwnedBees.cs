@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using FunnyBees.Engine;
 
-namespace FunnyBees.Engine
+namespace FunnyBees.Game
 {
     public class BeehiveOwnedBees : Component
     {

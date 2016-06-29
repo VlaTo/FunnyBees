@@ -1,8 +1,9 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using FunnyBees.Engine;
+using Microsoft.Graphics.Canvas;
 
-namespace FunnyBees.Engine
+namespace FunnyBees.Game
 {
-    public class Beehive : SceneObject
+    public class Bee : SceneObject
     {
         public override void Draw(CanvasDrawingSession session)
         {
