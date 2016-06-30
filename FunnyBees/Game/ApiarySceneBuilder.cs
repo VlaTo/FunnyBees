@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using FunnyBees.Engine;
 using FunnyBees.Game.Components;
@@ -20,25 +21,60 @@ namespace FunnyBees.Game
 
         public async Task CreateScene(Scene scene)
         {
+            var random = new Random();
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
-            var beehive = new Beehive();
 
-            beehive.AddComponent<BeesOwner>();
-            beehive.AddComponent(() => new BeeProducer(options.MaximumNumberOfBees));
-
-//            new Bee().InteractWith(beehive).Using<BeeHost>();
-//            var ownedBees = beehive.GetComponent<OwnedBees>();
-
-            scene.AddObject(beehive);
-
-            /*for (var index = 0; index < options.MaximumNumberOfBees; index++)
+            for (var position = 0; position < options.BeehivesCount; position++)
             {
-                var bee = new Bee();
+                var beehive = new Beehive();
+                var owner = new BeesOwner();
 
-                ownedBees.Bees.Add(bee);
-                bee.AddComponent<Lifetime>();
-                scene.AddObject(bee);
-            }*/
+                beehive.AddComponent(owner);
+                beehive.AddComponent(new BeeProducer(options.BeehiveCapacity));
+
+                scene.AddObject(beehive);
+
+                var beesCount = random.Next(5, options.BeehiveCapacity);
+                var currentCount = 0;
+
+                // добавим пчелу-матку
+                if (currentCount < 1)
+                {
+                    var queen = new Bee();
+
+                    queen.AddComponent(new Lifetime(TimeSpan.MaxValue));
+                    queen.AddComponent(new QueenBee(beehive));
+
+                    owner.AddBee(queen);
+                    scene.AddObject(queen);
+
+                    currentCount++;
+                }
+
+                // добавим пчёл-"охранников"
+                for (var index = 0; index < 3 && currentCount < beesCount; index++, currentCount++)
+                {
+                    var guard = new Bee();
+
+                    guard.AddComponent(new Lifetime(TimeSpan.FromMinutes(5.0d)));
+                    guard.AddComponent(new GuardBee(beehive));
+
+                    owner.AddBee(guard);
+                    scene.AddObject(guard);
+                }
+
+                // добавим рабочих пчёл
+                while (currentCount++ < beesCount)
+                {
+                    var bee = new Bee();
+
+                    bee.AddComponent(new Lifetime(TimeSpan.FromMinutes(1.0d)));
+                    bee.AddComponent(new WorkBee());
+
+                    owner.AddBee(bee);
+                    scene.AddObject(bee);
+                }
+            }
         }
     }
 }

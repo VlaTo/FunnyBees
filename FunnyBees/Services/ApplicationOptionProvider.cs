@@ -59,9 +59,9 @@ namespace FunnyBees.Services
                 options = new ApplicationOptions
                 {
                     Interval = TimeSpan.FromMilliseconds(200.0d),
-                    NumberOfBeehives = 2,
+                    BeehivesCount = 2,
                     MinimumNumberOfBees = 25,
-                    MaximumNumberOfBees = 35
+                    BeehiveCapacity = 35
                 };
 
                 cache.Set(options);

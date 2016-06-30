@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using FunnyBees.ViewModels;
 
 namespace FunnyBees.Design
@@ -16,6 +17,17 @@ namespace FunnyBees.Design
         }
 
         public ObservableCollection<BeehiveViewModel> Beehives
+        {
+            get;
+        }
+
+        public bool IsSessionRunning
+        {
+            get;
+            set;
+        }
+
+        public ICommand RunSimulation
         {
             get;
         }

@@ -47,20 +47,18 @@ namespace FunnyBees.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void AddComponent<TComponent>(Func<TComponent> builder)
+        public void AddComponent<TComponent>(TComponent component)
             where TComponent : IComponent
         {
-            if (null == builder)
+            if (null == component)
             {
-                throw new ArgumentNullException(nameof(builder));
+                throw new ArgumentNullException(nameof(component));
             }
 
             if (IsComponentExists(typeof (TComponent)))
             {
                 throw new ArgumentException();
             }
-
-            var component = builder.Invoke();
 
             components.Add(typeof (TComponent), component);
 

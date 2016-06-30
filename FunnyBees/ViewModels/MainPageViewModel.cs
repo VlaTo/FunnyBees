@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -13,6 +14,7 @@ using LibraProgramming.Windows.Commands;
 using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
 using LibraProgramming.Windows.Interaction;
+using Microsoft.Graphics.Canvas.UI.Xaml;
 using Bee = FunnyBees.Game.Bee;
 using Beehive = FunnyBees.Game.Beehive;
 
@@ -112,6 +114,11 @@ namespace FunnyBees.ViewModels
             scene = new Scene(sceneBuilder);
         }
 
+        public void Update(CanvasAnimatedUpdateEventArgs args)
+        {
+            Debugger.Break();
+        }
+
         Task ICleanupRequired.CleanupAsync()
         {
             /*if (null != session)
@@ -127,22 +134,19 @@ namespace FunnyBees.ViewModels
 
         private async Task RunSimulationAsync(object notused)
         {
-            await scene.Initialize();
-
-            /*if (null != session)
+            if (false == IsSessionRunning)
             {
-                session.Dispose();
-                session = null;
+                await scene.Initialize();
             }
             else
             {
-                session = await simulation.RunAsync().ConfigureAwait(false);
+                
             }
 
             await accessor.ExecuteAsync(() =>
             {
-                IsSessionRunning = null != session;
-            });*/
+                IsSessionRunning = false == IsSessionRunning;
+            });
         }
 
 /*

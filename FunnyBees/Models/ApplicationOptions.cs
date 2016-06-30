@@ -19,7 +19,7 @@ namespace FunnyBees.Models
         /// <summary>
         /// 
         /// </summary>
-        public int NumberOfBeehives
+        public int BeehivesCount
         {
             get;
             set;
@@ -37,7 +37,7 @@ namespace FunnyBees.Models
         /// <summary>
         /// 
         /// </summary>
-        public int MaximumNumberOfBees
+        public int BeehiveCapacity
         {
             get;
             set;

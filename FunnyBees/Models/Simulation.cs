@@ -32,9 +32,9 @@ namespace FunnyBees.Models
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
             var beehives = new Collection<IBeehive>();
 
-            foreach (var index in Enumerable.Range(1, options.NumberOfBeehives + 1))
+            foreach (var index in Enumerable.Range(1, options.BeehivesCount + 1))
             {
-                var maximumNumberOfBees = random.Next(options.MinimumNumberOfBees, options.MaximumNumberOfBees);
+                var maximumNumberOfBees = random.Next(options.MinimumNumberOfBees, options.BeehiveCapacity);
                 var beehive = new Beehive(index, maximumNumberOfBees);
                 var hasQueen = false;
 
