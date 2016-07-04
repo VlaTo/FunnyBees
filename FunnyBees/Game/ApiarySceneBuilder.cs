@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FunnyBees.Engine;
 using FunnyBees.Game.Components;
+using FunnyBees.Game.Interactors;
 using FunnyBees.Services;
 
 namespace FunnyBees.Game
@@ -27,9 +28,8 @@ namespace FunnyBees.Game
             for (var position = 0; position < options.BeehivesCount; position++)
             {
                 var beehive = new Beehive();
-                var owner = new BeesOwner();
 
-                beehive.AddComponent(owner);
+                beehive.AddComponent<BeesOwner>();
                 beehive.AddComponent(new BeeProducer(options.BeehiveCapacity));
 
                 scene.AddObject(beehive);
@@ -44,8 +44,8 @@ namespace FunnyBees.Game
 
                     queen.AddComponent(new Lifetime(TimeSpan.MaxValue));
                     queen.AddComponent(new QueenBee(beehive));
+                    queen.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(queen);
                     scene.AddObject(queen);
 
                     currentCount++;
@@ -58,8 +58,8 @@ namespace FunnyBees.Game
 
                     guard.AddComponent(new Lifetime(TimeSpan.FromMinutes(5.0d)));
                     guard.AddComponent(new GuardBee(beehive));
+                    guard.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(guard);
                     scene.AddObject(guard);
                 }
 
@@ -70,8 +70,8 @@ namespace FunnyBees.Game
 
                     bee.AddComponent(new Lifetime(TimeSpan.FromMinutes(1.0d)));
                     bee.AddComponent(new WorkBee());
+                    bee.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(bee);
                     scene.AddObject(bee);
                 }
             }
