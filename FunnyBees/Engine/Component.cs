@@ -2,9 +2,10 @@
 
 namespace FunnyBees.Engine
 {
-    public class Component : IComponent
+    public class Component<TContainer> : IComponent
+        where TContainer : ComponentContainer
     {
-        protected ComponentContainer Container
+        protected TContainer Container
         {
             get;
             private set;
@@ -17,7 +18,7 @@ namespace FunnyBees.Engine
                 throw new InvalidOperationException();
             }
 
-            Container = container;
+            Container = (TContainer) container;
 
             OnAttach();
         }

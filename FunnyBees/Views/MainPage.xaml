@@ -66,7 +66,9 @@
                 Grid.Row="1"
                 ClearColor="CadetBlue"
                 CreateResources="OnCanvasCreateResources"
+                Update="OnCanvasUpdate"
                 Draw="OnCanvasDraw">
+<!--
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Update">
                         <i:CallMethodAction TargetObject="{Binding }" MethodName="Update" />
@@ -90,6 +92,7 @@
                         />
                     </i:DataTrigger>
                 </i:Interaction.Triggers>
+-->
             </canvas:CanvasAnimatedControl>
         </Grid>
         <ux:CustomDialog

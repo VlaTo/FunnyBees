@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Game.Components
 {
-    public class WorkBee : Component
+    public class WorkBee : Component<Bee>
     {
 
     }

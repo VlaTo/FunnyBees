@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Game.Components
 {
-    public class QueenBee : Component
+    public class QueenBee : Component<Bee>
     {
         private readonly Beehive beehive;
 
@@ -10,5 +10,7 @@ namespace FunnyBees.Game.Components
         {
             this.beehive = beehive;
         }
+
+
     }
 }

@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using FunnyBees.Core;
 using FunnyBees.Engine;
-using FunnyBees.Game;
 using FunnyBees.Models;
 using FunnyBees.Services;
-using LibraProgramming.Windows;
 using LibraProgramming.Windows.Commands;
-using LibraProgramming.Windows.Dependency.Tracking;
 using LibraProgramming.Windows.Infrastructure;
 using LibraProgramming.Windows.Interaction;
-using Microsoft.Graphics.Canvas.UI.Xaml;
-using Bee = FunnyBees.Game.Bee;
-using Beehive = FunnyBees.Game.Beehive;
+using Microsoft.Graphics.Canvas;
+using Microsoft.Graphics.Canvas.UI;
 
 namespace FunnyBees.ViewModels
 {
@@ -114,9 +108,14 @@ namespace FunnyBees.ViewModels
             scene = new Scene(sceneBuilder);
         }
 
-        public void Update(CanvasAnimatedUpdateEventArgs args)
+        public void DrawScene(CanvasDrawingSession drawingSession)
         {
-            Debugger.Break();
+            scene.Draw(drawingSession);
+        }
+
+        public void Update(CanvasTimingInformation info)
+        {
+            scene.Update(info.TotalTime);
         }
 
         Task ICleanupRequired.CleanupAsync()

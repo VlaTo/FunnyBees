@@ -7,10 +7,11 @@ using System.Reflection;
 
 namespace FunnyBees.Engine
 {
-    public class ComponentObserver : Component, IComponentObserver
+    public class ComponentObserver<TContainer> : Component<TContainer>, IComponentObserver
+        where TContainer : ComponentContainer
     {
         private static readonly IDictionary<Type, ImplementorEntry> cache;
-         
+
         private IDisposable subscription;
 
         protected ComponentObserver()
@@ -68,7 +69,7 @@ namespace FunnyBees.Engine
                 {
                     return;
                 }
-                
+
                 var entries = new HashSet<Tuple<Type, ObserverEntry>>();
 
                 foreach (var @interface in type.GetInterfaces())
@@ -84,7 +85,7 @@ namespace FunnyBees.Engine
                     {
                         throw new Exception();
                     }
-                    
+
                     entries.Add(new Tuple<Type, ObserverEntry>(arguments[0], ObserverEntry.CreateFrom(this, @interface)));
 
                 }
@@ -115,10 +116,10 @@ namespace FunnyBees.Engine
         /// </summary>
         private class ObserverEntry
         {
-             public Delegate AttachMethod
-             {
-                 get;
-             }
+            public Delegate AttachMethod
+            {
+                get;
+            }
 
             public Delegate DetachMethod
             {
@@ -131,7 +132,7 @@ namespace FunnyBees.Engine
                 DetachMethod = detachMethod;
             }
 
-            public static ObserverEntry CreateFrom(ComponentObserver @this, Type type)
+            public static ObserverEntry CreateFrom(ComponentObserver<TContainer> @this, Type type)
             {
                 var typeinfo = type.GetTypeInfo();
                 var onattached = CreateMethodDelegate(@this, typeinfo, "OnAttached");
@@ -140,7 +141,8 @@ namespace FunnyBees.Engine
                 return new ObserverEntry(onattached, ondetached);
             }
 
-            private static Delegate CreateMethodDelegate(ComponentObserver @this, TypeInfo typeinfo, string methodName)
+            private static Delegate CreateMethodDelegate(ComponentObserver<TContainer> @this, TypeInfo typeinfo,
+                string methodName)
             {
                 var method = typeinfo.GetDeclaredMethod(methodName);
                 var parameters = method.GetParameters()

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FunnyBees.Engine;
 using FunnyBees.Game.Components;
+using FunnyBees.Game.Interactors;
 using FunnyBees.Services;
 
 namespace FunnyBees.Game
@@ -21,20 +22,21 @@ namespace FunnyBees.Game
 
         public async Task CreateScene(Scene scene)
         {
+            const int guardiansCount = 3;
+
             var random = new Random();
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
 
             for (var position = 0; position < options.BeehivesCount; position++)
             {
                 var beehive = new Beehive();
-                var owner = new BeesOwner();
 
-                beehive.AddComponent(owner);
+                beehive.AddComponent<BeesOwner>();
                 beehive.AddComponent(new BeeProducer(options.BeehiveCapacity));
 
                 scene.AddObject(beehive);
 
-                var beesCount = random.Next(5, options.BeehiveCapacity);
+                var beesCount = random.Next(guardiansCount + 1 + 1, options.BeehiveCapacity);
                 var currentCount = 0;
 
                 // добавим пчелу-матку
@@ -42,24 +44,24 @@ namespace FunnyBees.Game
                 {
                     var queen = new Bee();
 
-                    queen.AddComponent(new Lifetime(TimeSpan.MaxValue));
+                    queen.AddComponent(new BeeLifetime(TimeSpan.MaxValue));
                     queen.AddComponent(new QueenBee(beehive));
+                    queen.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(queen);
                     scene.AddObject(queen);
 
                     currentCount++;
                 }
 
                 // добавим пчёл-"охранников"
-                for (var index = 0; index < 3 && currentCount < beesCount; index++, currentCount++)
+                for (var index = 0; index < guardiansCount && currentCount < beesCount; index++, currentCount++)
                 {
                     var guard = new Bee();
 
-                    guard.AddComponent(new Lifetime(TimeSpan.FromMinutes(5.0d)));
+                    guard.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(5.0d)));
                     guard.AddComponent(new GuardBee(beehive));
+                    guard.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(guard);
                     scene.AddObject(guard);
                 }
 
@@ -68,10 +70,10 @@ namespace FunnyBees.Game
                 {
                     var bee = new Bee();
 
-                    bee.AddComponent(new Lifetime(TimeSpan.FromMinutes(1.0d)));
+                    bee.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(1.0d)));
                     bee.AddComponent(new WorkBee());
+                    bee.InteractWith(beehive).Using<BeeHost>();
 
-                    owner.AddBee(bee);
                     scene.AddObject(bee);
                 }
             }

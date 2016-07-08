@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml;
+using FunnyBees.ViewModels;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
@@ -28,13 +29,14 @@ namespace FunnyBees.Views
         {
             using (var drawingSession = args.DrawingSession)
             {
-
+                ((MainPageViewModel) DataContext).DrawScene(drawingSession);
             }
         }
 
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
             //args.Timing.TotalTime
+            ((MainPageViewModel)DataContext).Update(args.Timing);
         }
     }
 }

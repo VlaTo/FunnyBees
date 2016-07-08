@@ -6,7 +6,7 @@ using LibraProgramming.Windows;
 
 namespace FunnyBees.Game.Components
 {
-    public class BeesOwner : Component, Engine.IObservable<IBeeLifetimeObserver>
+    public class BeesOwner : Component<Beehive>, Engine.IObservable<IBeeLifetimeObserver>
     {
         private readonly ICollection<Bee> bees;
         private readonly ICollection<IBeeLifetimeObserver> lifetimeObservers;

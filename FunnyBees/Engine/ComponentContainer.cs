@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using LibraProgramming.Windows;
 
@@ -11,7 +12,9 @@ namespace FunnyBees.Engine
     public class ComponentContainer : IObservable<IComponentObserver>
     {
         private readonly IDictionary<Type, IComponent> components;
-        private readonly ICollection<IComponentObserver> componentObservers; 
+        private readonly ICollection<IComponentObserver> componentObservers;
+
+        protected IEnumerable<IComponent> Components => components.Values;
 
         protected ComponentContainer()
         {

@@ -3,7 +3,7 @@ using FunnyBees.Engine;
 
 namespace FunnyBees.Game.Components
 {
-    public class BeeProducer : ComponentObserver, IBeeLifetimeObserver, IComponentObserver<BeesOwner>
+    public class BeeProducer : ComponentObserver<Beehive>, IBeeLifetimeObserver, IComponentObserver<BeesOwner>
     {
         private readonly int maximumBeesCount;
         private IDisposable subscription;
@@ -19,41 +19,24 @@ namespace FunnyBees.Game.Components
 
             var component = Container.GetComponent<BeesOwner>(failIfNotExists: false);
 
-            if (null != component)
-            {
-                subscription = ((Engine.IObservable<IBeeLifetimeObserver>) component).Subscribe(this);
-            }
+            SubscribeToBeesOwner(component);
         }
 
         protected override void OnDetach()
         {
             base.OnDetach();
 
-            if (null != subscription)
-            {
-                subscription.Dispose();
-                subscription = null;
-            }
+            ReleaseExistingSubscription();
         }
 
         void IComponentObserver<BeesOwner>.OnAttached(BeesOwner component)
         {
-            if (null != subscription)
-            {
-                subscription.Dispose();
-                subscription = null;
-            }
-
-            subscription = ((Engine.IObservable<IBeeLifetimeObserver>)component).Subscribe(this);
+            SubscribeToBeesOwner(component);
         }
 
         void IComponentObserver<BeesOwner>.OnDetached(BeesOwner component)
         {
-            if (null != subscription)
-            {
-                subscription.Dispose();
-                subscription = null;
-            }
+            ReleaseExistingSubscription();
         }
 
         void IBeeLifetimeObserver.OnAdded(Bee bee)
@@ -64,6 +47,23 @@ namespace FunnyBees.Game.Components
         void IBeeLifetimeObserver.OnRemoved(Bee bee)
         {
             //throw new System.NotImplementedException();
+        }
+
+        private void SubscribeToBeesOwner(BeesOwner component)
+        {
+            ReleaseExistingSubscription();
+            subscription = ((Engine.IObservable<IBeeLifetimeObserver>) component).Subscribe(this);
+        }
+
+        private void ReleaseExistingSubscription()
+        {
+            if (null == subscription)
+            {
+                return;
+            }
+
+            subscription.Dispose();
+            subscription = null;
         }
     }
 }
