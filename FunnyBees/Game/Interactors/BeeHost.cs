@@ -3,7 +3,7 @@ using FunnyBees.Game.Components;
 
 namespace FunnyBees.Game.Interactors
 {
-    public class BeeHost : Interactor, IInteractor<Bee, Beehive>, IInteractor<Beehive, Bee>
+    public class BeeHost : Interactor, IInteractor<Bee, Beehive>
     {
         /// <summary>
         /// Пчела прилетела в улей.
@@ -15,16 +15,6 @@ namespace FunnyBees.Game.Interactors
             var connector = beehive.GetComponent<BeesOwner>();
 
             connector.AddBee(bee);
-        }
-
-        /// <summary>
-        /// Пчела улетела из улья.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="target"></param>
-        public void Interact(Beehive component, Bee target)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
