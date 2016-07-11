@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Windows.ApplicationModel.VoiceCommands;
 using Microsoft.Graphics.Canvas;
 
 namespace FunnyBees.Engine
 {
-    public class Scene
+    public class Scene : DrawableObject
     {
         private readonly ISceneBuilder builder;
-        private readonly IList<DrawableObject> objects;
-        private readonly ICollection<SceneObject> updatable;
+//        private readonly IList<DrawableObject> objects;
+//        private readonly ICollection<SceneObject> updatable;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
@@ -25,8 +22,8 @@ namespace FunnyBees.Engine
 
             this.builder = builder;
 
-            objects = new Collection<DrawableObject>();
-            updatable = new Collection<SceneObject>();
+//            objects = new Collection<DrawableObject>();
+//            updatable = new Collection<SceneObject>();
         }
 
         /// <summary>
@@ -42,7 +39,7 @@ namespace FunnyBees.Engine
         /// 
         /// </summary>
         /// <param name="object"></param>
-        public void InsertObject(int index, DrawableObject @object)
+        /*public void InsertObject(int index, DrawableObject @object)
         {
             if (null == @object)
             {
@@ -52,13 +49,13 @@ namespace FunnyBees.Engine
             objects.Insert(index, @object);
 
             @object.Scene = this;
-        }
+        }*/
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="object"></param>
-        public void RemoveObject(DrawableObject @object)
+        /*public void RemoveObject(DrawableObject @object)
         {
             if (null == @object)
             {
@@ -69,22 +66,22 @@ namespace FunnyBees.Engine
             {
                 @object.Scene = null;
             }
-        }
+        }*/
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="object"></param>
-        public void AddObject(DrawableObject @object)
+        /*public void AddObject(DrawableObject @object)
         {
             InsertObject(objects.Count, @object);
-        }
+        }*/
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="elapsedTime"></param>
-        public void Update(TimeSpan elapsedTime)
+        /*public void Update(TimeSpan elapsedTime)
         {
             foreach (var sceneObject in objects)
             {
@@ -95,15 +92,41 @@ namespace FunnyBees.Engine
             {
                 gameObject.Update(elapsedTime);
             }
-        }
+        }*/
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="drawingSession"></param>
-        public void Draw(CanvasDrawingSession drawingSession)
+        public override void Draw(CanvasDrawingSession drawingSession)
         {
-            throw new NotImplementedException();
+            base.Draw(drawingSession);
         }
+
+        /*protected override void DoObjectAdded(SceneObject @object)
+        {
+            SetSceneInObject(@object, this);
+        }
+
+        protected override void DoObjectReplaced(SceneObject removedObject, SceneObject insertedObject)
+        {
+            SetSceneInObject(removedObject, null);
+            SetSceneInObject(insertedObject, this);
+        }
+
+        protected override void DoObjectRemove(SceneObject @object)
+        {
+            SetSceneInObject(@object, null);
+        }
+
+        private static void SetSceneInObject(SceneObject @object, Scene scene)
+        {
+            var drawable = @object as IDrawableObject;
+
+            if (null != drawable)
+            {
+                drawable.Scene = scene;
+            }
+        }*/
     }
 }

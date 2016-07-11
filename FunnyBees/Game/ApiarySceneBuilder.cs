@@ -34,7 +34,7 @@ namespace FunnyBees.Game
                 beehive.AddComponent<BeesOwner>();
                 beehive.AddComponent(new BeeProducer(options.BeehiveCapacity));
 
-                scene.AddObject(beehive);
+                scene.Children.Add(beehive);
 
                 var beesCount = random.Next(guardiansCount + 1 + 1, options.BeehiveCapacity);
                 var currentCount = 0;
@@ -46,9 +46,10 @@ namespace FunnyBees.Game
 
                     queen.AddComponent(new BeeLifetime(TimeSpan.MaxValue));
                     queen.AddComponent(new QueenBee(beehive));
-                    queen.InteractWith(beehive).Using<BeeHost>();
+                    queen.AddComponent<HomeBeehive>();
+                    queen.InteractWith(beehive).Using<BeeAssigner>();
 
-                    scene.AddObject(queen);
+                    scene.Children.Add(queen);
 
                     currentCount++;
                 }
@@ -60,9 +61,10 @@ namespace FunnyBees.Game
 
                     guard.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(5.0d)));
                     guard.AddComponent(new GuardBee(beehive));
-                    guard.InteractWith(beehive).Using<BeeHost>();
+                    guard.AddComponent<HomeBeehive>();
+                    guard.InteractWith(beehive).Using<BeeAssigner>();
 
-                    scene.AddObject(guard);
+                    scene.Children.Add(guard);
                 }
 
                 // добавим рабочих пчёл
@@ -71,10 +73,11 @@ namespace FunnyBees.Game
                     var bee = new Bee();
 
                     bee.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(1.0d)));
-                    bee.AddComponent(new WorkBee());
-                    bee.InteractWith(beehive).Using<BeeHost>();
+                    bee.AddComponent(new WorkBee(beehive));
+                    bee.AddComponent<HomeBeehive>();
+                    bee.InteractWith(beehive).Using<BeeAssigner>();
 
-                    scene.AddObject(bee);
+                    scene.Children.Add(bee);
                 }
             }
         }

@@ -35,7 +35,13 @@ namespace LibraProgramming.Windows.Interactivity
 
         static TriggerAction()
         {
-            IsEnabledProperty = DependencyProperty.Register("IsEnabled", typeof(bool), typeof(TriggerAction), new PropertyMetadata(true));
+            IsEnabledProperty = DependencyProperty
+                .Register(
+                    nameof(IsEnabled),
+                    typeof (bool),
+                    typeof (TriggerAction),
+                    new PropertyMetadata(true)
+                );
         }
 
         public override void Attach(FrameworkElement element)
@@ -50,7 +56,8 @@ namespace LibraProgramming.Windows.Interactivity
                 throw new InvalidOperationException("Cannot Host TriggerAction Multiple Times");
             }
 
-            if (null != element && !AttachedObjectTypeConstraint.GetTypeInfo().IsAssignableFrom(element.GetType().GetTypeInfo()))
+//            if (null != element && !AttachedObjectTypeConstraint.GetTypeInfo().IsAssignableFrom(element.GetType().GetTypeInfo()))
+            if (null != element && !AttachedObjectTypeConstraint.IsInstanceOfType(element))
             {
                 throw new InvalidOperationException("Type Constraint Violated");
             }

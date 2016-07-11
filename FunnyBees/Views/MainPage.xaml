@@ -21,7 +21,8 @@
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}"
     
-    Unloaded="OnPageUnload">
+    Loaded="OnLoaded"
+    Unloaded="OnUnload">
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid>
@@ -68,18 +69,17 @@
                 CreateResources="OnCanvasCreateResources"
                 Update="OnCanvasUpdate"
                 Draw="OnCanvasDraw">
-<!--
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Update">
+                    <!--<i:EventTrigger EventName="Update">
                         <i:CallMethodAction TargetObject="{Binding }" MethodName="Update" />
-                    </i:EventTrigger>
+                    </i:EventTrigger>-->
                     <i:DataTrigger
                         Binding="{Binding Path=IsSessionRunning}"
                         Comparison="Equal"
                         Value="False">
                         <i:ChangePropertyAction
                             PropertyName="Paused"
-                            Value="{Binding Path=IsSessionRunning, Converter={StaticResource NegationConverter}}"
+                            Value="True"
                         />
                     </i:DataTrigger>
                     <i:DataTrigger
@@ -88,11 +88,10 @@
                         Value="True">
                         <i:ChangePropertyAction
                             PropertyName="Paused"
-                            Value="{Binding Path=IsSessionRunning, Converter={StaticResource NegationConverter}}"
+                            Value="False"
                         />
                     </i:DataTrigger>
                 </i:Interaction.Triggers>
--->
             </canvas:CanvasAnimatedControl>
         </Grid>
         <ux:CustomDialog

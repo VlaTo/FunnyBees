@@ -1,5 +1,7 @@
 ﻿using System;
 using FunnyBees.Game;
+using FunnyBees.Game.Components;
+using FunnyBees.Game.Interactors;
 
 namespace FunnyBees.Engine
 {
@@ -32,8 +34,8 @@ namespace FunnyBees.Engine
 
             if (Age >= Lifetime)
             {
-                Container.GetComponent<Bee>()
-                Container.Die();
+                var home = Container.GetComponent<HomeBeehive>();
+                Container.InteractWith(home.Beehive).Using<BeeRemover>();
             }
         }
     }

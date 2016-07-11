@@ -9,13 +9,20 @@ namespace FunnyBees.Views
     /// </summary>
     public sealed partial class MainPage
     {
+        private MainPageViewModel viewModel;
+
         public MainPage()
         {
             InitializeComponent();
             AnimatedControl.Paused = true;
         }
 
-        private void OnPageUnload(object sender, RoutedEventArgs e)
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            viewModel = (MainPageViewModel) DataContext;
+        }
+
+        private void OnUnload(object sender, RoutedEventArgs e)
         {
             AnimatedControl.RemoveFromVisualTree();
             AnimatedControl = null;
@@ -29,14 +36,14 @@ namespace FunnyBees.Views
         {
             using (var drawingSession = args.DrawingSession)
             {
-                ((MainPageViewModel) DataContext).DrawScene(drawingSession);
+                viewModel.DrawScene(drawingSession);
             }
         }
 
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
             //args.Timing.TotalTime
-            ((MainPageViewModel)DataContext).Update(args.Timing);
+            viewModel.Update(args.Timing);
         }
     }
 }

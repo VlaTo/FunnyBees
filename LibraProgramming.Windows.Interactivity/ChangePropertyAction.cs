@@ -130,7 +130,7 @@ namespace LibraProgramming.Windows.Interactivity
                     nameof(Duration),
                     typeof (Duration),
                     typeof (ChangePropertyAction),
-                    new PropertyMetadata(new Duration(TimeSpan.Zero))
+                    new PropertyMetadata(Duration.Automatic)
                 );
             EasingFunctionProperty = DependencyProperty
                 .Register(
@@ -201,7 +201,7 @@ namespace LibraProgramming.Windows.Interactivity
                         value = GetIncrementedValue(property);
                     }
 
-                    property.SetValue(Target, value);
+                    property.SetValue(Target, Convert.ChangeType(value, property.PropertyType));
                 }
             }
             catch (FormatException exception)
@@ -359,7 +359,7 @@ namespace LibraProgramming.Windows.Interactivity
 
         private object TryAdding(object current, object value)
         {
-            var typeinfo = value.GetType().GetTypeInfo();
+//            var typeinfo = value.GetType().GetTypeInfo();
             var type = current.GetType();
             MethodInfo candidate = null;
 

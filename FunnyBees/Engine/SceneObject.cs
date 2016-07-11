@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace FunnyBees.Engine
@@ -10,9 +8,6 @@ namespace FunnyBees.Engine
     /// </summary>
     public class SceneObject : ComponentContainer, ISceneObject, ISceneObjectCollectionObserver
     {
-        private ICollection<IUpdatable> updatables;
-        private IDisposable subscription;
-
         public SceneObjectCollection Children
         {
             get;
@@ -26,40 +21,9 @@ namespace FunnyBees.Engine
 
         protected SceneObject()
         {
-            updatables = new Collection<IUpdatable>();
             Children = new SceneObjectCollection();
-            subscription = ((IObservable<ISceneObjectCollectionObserver>) Children).Subscribe(this);
+            ((IObservable<ISceneObjectCollectionObserver>) Children).Subscribe(this);
         }
-
-        /*public void AddChild(SceneObject @object)
-        {
-            InsertChild(children.Count, @object);
-        }
-
-        public void InsertChild(int position, SceneObject @object)
-        {
-            if (null == @object)
-            {
-                throw new ArgumentNullException(nameof(@object));
-            }
-
-            children.Insert(position, @object);
-
-            @object.Parent = this;
-        }
-
-        public void RemoveChild(SceneObject @object)
-        {
-            if (null == @object)
-            {
-                throw new ArgumentNullException(nameof(@object));
-            }
-
-            if (children.Remove(@object))
-            {
-                @object.Parent = null;
-            }
-        }*/
 
         /// <summary>
         /// 
@@ -71,6 +35,23 @@ namespace FunnyBees.Engine
             {
                 component.Update(elapsedTime);
             }
+
+            foreach (SceneObject child in Children)
+            {
+                child.Update(elapsedTime);
+            }
+        }
+
+        protected virtual void DoObjectAdded(SceneObject @object)
+        {
+        }
+
+        protected virtual void DoObjectReplaced(SceneObject removedObject, SceneObject insertedObject)
+        {
+        }
+
+        protected virtual void DoObjectRemove(SceneObject @object)
+        {
         }
 
         void ISceneObjectCollectionObserver.OnChildCollectionChanged(SceneObjectCollectionChange action, int index, SceneObject @object, SceneObject source)
@@ -80,7 +61,7 @@ namespace FunnyBees.Engine
                 case SceneObjectCollectionChange.Inserted:
                 {
                     @object.Parent = this;
-                    RegisterAsUpdatable(@object);
+                    DoObjectAdded(@object);
 
                     break;
                 }
@@ -89,7 +70,7 @@ namespace FunnyBees.Engine
                 {
                     @object.Parent = this;
                     source.Parent = null;
-                    RegisterAsUpdatable(@object);
+                    DoObjectReplaced(source, @object);
 
                     break;
                 }
@@ -97,19 +78,10 @@ namespace FunnyBees.Engine
                 case SceneObjectCollectionChange.Removed:
                 {
                     @object.Parent = null;
+                    DoObjectRemove(@object);
 
                     break;
                 }
-            }
-        }
-
-        private void RegisterAsUpdatable(SceneObject @object)
-        {
-            var impl = @object as IUpdatable;
-
-            if (null != impl)
-            {
-                updatables.Add(impl);
             }
         }
     }

@@ -11,18 +11,10 @@ namespace FunnyBees.Game
         /// <summary>
         /// 
         /// </summary>
-        public void Die()
-        {
-            Scene.RemoveObject(this);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="session"></param>
         public override void Draw(CanvasDrawingSession session)
         {
-            throw new System.NotImplementedException();
+//            throw new System.NotImplementedException();
         }
     }
 }

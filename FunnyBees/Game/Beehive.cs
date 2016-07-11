@@ -7,7 +7,7 @@ namespace FunnyBees.Game
     {
         public override void Draw(CanvasDrawingSession session)
         {
-            throw new System.NotImplementedException();
+//            throw new System.NotImplementedException();
         }
     }
 }

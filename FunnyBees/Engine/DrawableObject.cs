@@ -1,18 +1,27 @@
-﻿using Microsoft.Graphics.Canvas;
+﻿using System.Linq;
+using Microsoft.Graphics.Canvas;
 
 namespace FunnyBees.Engine
 {
     /// <summary>
     /// 
     /// </summary>
-    public abstract class DrawableObject : SceneObject, IDrawableObject
+    public class DrawableObject : SceneObject, IDrawableObject
     {
+/*
         public Scene Scene
         {
             get;
             set;
         }
+*/
 
-        public abstract void Draw(CanvasDrawingSession session);
+        public virtual void Draw(CanvasDrawingSession session)
+        {
+            foreach (var child in Children.OfType<IDrawableObject>())
+            {
+                child.Draw(session);
+            }
+        }
     }
 }
