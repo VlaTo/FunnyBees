@@ -59,7 +59,7 @@ namespace FunnyBees.Game
                 {
                     var guard = new Bee();
 
-                    guard.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(5.0d)));
+                    guard.AddComponent(new BeeLifetime(TimeSpan.FromSeconds(5.0d)));
                     guard.AddComponent(new GuardBee(beehive));
                     guard.AddComponent<HomeBeehive>();
                     guard.InteractWith(beehive).Using<BeeAssigner>();

@@ -134,6 +134,17 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Dependency\DependencyDictionary.cs" />
     <Compile Include="Dependency\DependencyTrackerException.cs" />
+    <Compile Include="Dependency\IDependecyObservablePropertyBuilder.cs" />
+    <Compile Include="Dependency\IDependentObservablePropertyBuilder.cs" />
+    <Compile Include="Dependency\IObservableModelSubscription.cs" />
+    <Compile Include="Dependency\IObservablePropertyTracker.cs" />
+    <Compile Include="Dependency\IObservablePropertyTrackerBuilder.cs" />
+    <Compile Include="Dependency\ObservableMetadata.cs" />
+    <Compile Include="Dependency\ObservableProperty.cs" />
+    <Compile Include="Dependency\ObservablePropertyMetadata.cs" />
+    <Compile Include="Dependency\ObservablePropertyTracker.cs" />
+    <Compile Include="Dependency\ObservablePropertyTrackerBuilder.cs" />
+    <Compile Include="Dependency\PropertyKey.cs" />
     <Compile Include="Dependency\PropertyPath.cs" />
     <Compile Include="Dependency\PropertyPathComparer.cs" />
     <Compile Include="Dependency\Tracking\DependencySubscription.cs" />
@@ -189,6 +200,7 @@
     <Compile Include="Navigations\NavigateToPageAction.cs" />
     <Compile Include="Navigations\PageNavigation.cs" />
     <Compile Include="Navigations\PageNavigationException.cs" />
+    <Compile Include="ObservableModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="StateMachine\IStateConfigurator.cs" />
