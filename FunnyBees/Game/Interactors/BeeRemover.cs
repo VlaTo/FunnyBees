@@ -8,7 +8,7 @@ namespace FunnyBees.Game.Interactors
         public void Interact(Bee bee, Beehive beehive)
         {
             var parent = bee.Parent;
-            var home = bee.GetComponent<HomeBeehive>();
+            var home = bee.GetComponent<BeehiveReference>();
 
             home.Beehive = null;
             parent.Children.Remove(bee);

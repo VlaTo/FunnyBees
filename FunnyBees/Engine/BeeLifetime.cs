@@ -34,7 +34,7 @@ namespace FunnyBees.Engine
 
             if (Age >= Lifetime)
             {
-                var home = Container.GetComponent<HomeBeehive>();
+                var home = Container.GetComponent<BeehiveReference>();
                 Container.InteractWith(home.Beehive).Using<BeeRemover>();
             }
         }

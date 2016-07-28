@@ -110,7 +110,7 @@
     <Compile Include="Game\Beehive.cs" />
     <Compile Include="Game\Components\BeeProducer.cs" />
     <Compile Include="Game\Components\GuardBee.cs" />
-    <Compile Include="Game\Components\HomeBeehive.cs" />
+    <Compile Include="Game\Components\BeehiveReference.cs" />
     <Compile Include="Game\Components\IBeeLifetimeObserver.cs" />
     <Compile Include="Game\Components\BeesOwner.cs" />
     <Compile Include="Engine\Component.cs" />

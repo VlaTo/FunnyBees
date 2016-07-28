@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Game.Components
 {
-    public class HomeBeehive : Component<Bee>
+    public class BeehiveReference : Component<Bee>
     {
         private Beehive beehive;
 

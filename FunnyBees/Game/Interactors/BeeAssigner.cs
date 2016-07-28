@@ -11,7 +11,7 @@ namespace FunnyBees.Game.Interactors
         /// <param name="beehive"></param>
         public void Interact(Bee bee, Beehive beehive)
         {
-            var home = bee.GetComponent<HomeBeehive>();
+            var home = bee.GetComponent<BeehiveReference>();
             home.Beehive = beehive;
         }
     }
