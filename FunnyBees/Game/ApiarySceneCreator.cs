@@ -53,7 +53,7 @@ namespace FunnyBees.Game
 
                     queen.AddComponent(new BeeLifetime(TimeSpan.MaxValue));
                     queen.AddComponent(new QueenBee(beehive));
-                    queen.AddComponent<HomeBeehive>();
+                    queen.AddComponent<BeehiveReference>();
                     queen.InteractWith(beehive).Using<BeeAssigner>();
 
                     scene.Children.Add(queen);
@@ -68,7 +68,7 @@ namespace FunnyBees.Game
 
                     guard.AddComponent(new BeeLifetime(TimeSpan.FromSeconds(5.0d)));
                     guard.AddComponent(new GuardBee(beehive));
-                    guard.AddComponent<HomeBeehive>();
+                    guard.AddComponent<BeehiveReference>();
                     guard.InteractWith(beehive).Using<BeeAssigner>();
 
                     scene.Children.Add(guard);
@@ -81,7 +81,7 @@ namespace FunnyBees.Game
 
                     bee.AddComponent(new BeeLifetime(TimeSpan.FromMinutes(1.0d)));
                     bee.AddComponent(new WorkBee(beehive));
-                    bee.AddComponent<HomeBeehive>();
+                    bee.AddComponent<BeehiveReference>();
                     bee.InteractWith(beehive).Using<BeeAssigner>();
 
                     scene.Children.Add(bee);
