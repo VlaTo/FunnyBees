@@ -1,9 +1,13 @@
-﻿namespace FunnyBees.Engine
+﻿using System;
+
+namespace FunnyBees.Engine
 {
     public interface IComponent
     {
         void Attach(ComponentContainer container);
 
-        void Remove();
+        void Detach();
+
+        void Update(TimeSpan elapsed);
     }
 }

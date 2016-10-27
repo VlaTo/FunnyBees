@@ -8,35 +8,42 @@ using FunnyBees.Services;
 
 namespace FunnyBees.Game
 {
-    public sealed class ApiarySceneBuilder : ISceneBuilder
+    public sealed class ApiarySceneCreator : ISceneCreator
     {
         private readonly IApplicationOptionsProvider optionsProvider;
 
         /// <summary>
         /// Инициализирует новый экземпляр класса <see cref="T:System.Object"/>.
         /// </summary>
-        public ApiarySceneBuilder(IApplicationOptionsProvider optionsProvider)
+        public ApiarySceneCreator(IApplicationOptionsProvider optionsProvider)
         {
             this.optionsProvider = optionsProvider;
         }
 
         public async Task CreateScene(Scene scene)
         {
-            const int guardiansCount = 3;
+//            const int guardiansCount = 3;
 
-            var random = new Random();
+//            var random = new Random();
             var options = await optionsProvider.GetOptionsAsync(CancellationToken.None);
 
             for (var position = 0; position < options.BeehivesCount; position++)
             {
                 var beehive = new Beehive();
 
-                beehive.AddComponent<BeesOwner>();
-                beehive.AddComponent(new BeeProducer(options.BeehiveCapacity));
+                beehive.AddComponent(new BeeManager(options.BeehiveCapacity));
 
-                scene.Children.Add(beehive);
+                scene.AddChild(beehive);
 
-                var beesCount = random.Next(guardiansCount + 1 + 1, options.BeehiveCapacity);
+                var queen = new Bee();
+
+                queen.AddComponent(new BeeLifetime(TimeSpan.FromSeconds(3.0d)));
+                queen.AddComponent(new QueenBee(beehive));
+                queen.InteractWith(beehive).Using<BeeHoster>();
+
+                scene.AddChild(queen);
+
+                /*var beesCount = random.Next(guardiansCount + 1 + 1, options.BeehiveCapacity);
                 var currentCount = 0;
 
                 // добавим пчелу-матку
@@ -78,7 +85,7 @@ namespace FunnyBees.Game
                     bee.InteractWith(beehive).Using<BeeAssigner>();
 
                     scene.Children.Add(bee);
-                }
+                }*/
             }
         }
     }

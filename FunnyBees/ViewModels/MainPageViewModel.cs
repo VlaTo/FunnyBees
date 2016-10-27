@@ -20,13 +20,13 @@ namespace FunnyBees.ViewModels
     public class MainPageViewModel : ViewModel, ICleanupRequired
     {
         private readonly IUIThreadAccessor accessor;
+        private readonly ISceneCreator sceneCreator;
         private readonly InteractionRequest<Confirmation> confirmRequest;
         private readonly InteractionRequest<Notification> notificationRequest;
         private readonly ISimulation simulation;
         private ISimulationSession session;
-        private bool isSessionRunning;
+        private bool _isSimulationRuning;
         private TimeSpan sessionElapsedTime;
-        private readonly Scene scene;
 
         /// <summary>
         /// 
@@ -53,18 +53,24 @@ namespace FunnyBees.ViewModels
             }
         }
 
+        public Scene Scene
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// 
         /// </summary>
-        public bool IsSessionRunning
+        public bool IsSimulationRuning
         {
             get
             {
-                return isSessionRunning;
+                return _isSimulationRuning;
             }
             set
             {
-                SetProperty(ref isSessionRunning, value);
+                SetProperty(ref _isSimulationRuning, value);
             }
         }
 
@@ -87,35 +93,42 @@ namespace FunnyBees.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        public ObservableCollection<BeehiveViewModel> Beehives
+        /*public ObservableCollection<BeehiveViewModel> Beehives
         {
             get;
-        } 
+        } */
 
         /// <summary>
         /// 
         /// </summary>
-        public MainPageViewModel(IUIThreadAccessor accessor, ISimulation simulation, ISceneBuilder sceneBuilder)
+        public MainPageViewModel(IUIThreadAccessor accessor, ISimulation simulation, ISceneCreator sceneCreator)
         {
             this.accessor = accessor;
             this.simulation = simulation;
+            this.sceneCreator = sceneCreator;
 
             confirmRequest = new InteractionRequest<Confirmation>();
             notificationRequest = new InteractionRequest<Notification>();
             Confirm = new RelayCommand(DoConfirm);
-            RunSimulation = new AsyncRelayCommand(RunSimulationAsync);
-            Beehives = new ObservableCollection<BeehiveViewModel>();
-            scene = new Scene(sceneBuilder);
+
+            var command = new AsyncRelayCommand(RunSimulationAsync);
+
+            command.Complete += OnRunSimulationComplete;
+
+            IsSimulationRuning = false;
+            RunSimulation = command;
         }
 
         public void DrawScene(CanvasDrawingSession drawingSession)
         {
-            scene.Draw(drawingSession);
         }
 
         public void Update(CanvasTimingInformation info)
         {
-            scene.Update(info.TotalTime);
+            if (null != Scene)
+            {
+                Scene.Update(info.TotalTime);
+            }
         }
 
         Task ICleanupRequired.CleanupAsync()
@@ -133,48 +146,21 @@ namespace FunnyBees.ViewModels
 
         private async Task RunSimulationAsync(object notused)
         {
-            if (false == IsSessionRunning)
-            {
-                await scene.Initialize();
-            }
-            else
-            {
-                
-            }
-
             await accessor.ExecuteAsync(() =>
             {
-                IsSessionRunning = false == IsSessionRunning;
+                IsSimulationRuning = true;
+            });
+            await Task.Delay(TimeSpan.FromSeconds(10.0d));
+        }
+
+        private async void OnRunSimulationComplete(IAsyncCommand sender, CommandCompleteEventArgs args)
+        {
+            await accessor.ExecuteAsync(() =>
+            {
+                IsSimulationRuning = false;
             });
         }
 
-/*
-        private void OnBeehiveChanged(IBeehive sender, BeehiveChangedEventArgs args)
-        {
-            var model = Beehives.First(beehive => beehive.Number == sender.Number);
-
-            accessor
-                .ExecuteAsync(() =>
-                {
-                    switch (args.Acion)
-                    {
-                        case BeehiveAcion.BeeAdded:
-                        {
-                            model.CurrentBeesCount++;
-                            break;
-                        }
-
-                        case BeehiveAcion.BeeRemoved:
-                        {
-                            model.CurrentBeesCount--;
-                            break;
-                        }
-
-                    }
-                })
-                .RunAndForget();
-        }
-*/
 
         /*private void OnSessionUpdated(object sender, SessionUpdatedEventArgs e)
         {

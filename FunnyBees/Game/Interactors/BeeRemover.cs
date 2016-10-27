@@ -3,6 +3,7 @@ using FunnyBees.Game.Components;
 
 namespace FunnyBees.Game.Interactors
 {
+/*
     public class BeeRemover : Interactor, IInteractor<Bee, Beehive>
     {
         public void Interact(Bee bee, Beehive beehive)
@@ -14,4 +15,5 @@ namespace FunnyBees.Game.Interactors
             parent.Children.Remove(bee);
         }
     }
+*/
 }

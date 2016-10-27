@@ -1,4 +1,5 @@
-﻿<local:ContentPage
+﻿<!-- d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"-->
+<local:ContentPage
     x:Class="FunnyBees.Views.MainPage"
     
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -16,8 +17,6 @@
     xmlns:cvt="using:LibraProgramming.Windows.UI.Xaml.Converters"
 
     mc:Ignorable="d"
-    
-    d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"
     
     DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}"
     
@@ -54,7 +53,7 @@
                     VerticalAlignment="Center">
                     <AppBarToggleButton
                         Command="{Binding Path=RunSimulation}"
-                        IsChecked="{Binding Path=IsSessionRunning}"
+                        IsChecked="{Binding Path=IsSimulationRuning}"
                         Label="Start">
                         <AppBarToggleButton.Icon>
                             <SymbolIcon Symbol="Play" />
@@ -70,11 +69,8 @@
                 Update="OnCanvasUpdate"
                 Draw="OnCanvasDraw">
                 <i:Interaction.Triggers>
-                    <!--<i:EventTrigger EventName="Update">
-                        <i:CallMethodAction TargetObject="{Binding }" MethodName="Update" />
-                    </i:EventTrigger>-->
                     <i:DataTrigger
-                        Binding="{Binding Path=IsSessionRunning}"
+                        Binding="{Binding Path=IsSimulationRuning}"
                         Comparison="Equal"
                         Value="False">
                         <i:ChangePropertyAction
@@ -83,7 +79,7 @@
                         />
                     </i:DataTrigger>
                     <i:DataTrigger
-                        Binding="{Binding Path=IsSessionRunning}"
+                        Binding="{Binding Path=IsSimulationRuning}"
                         Comparison="Equal"
                         Value="True">
                         <i:ChangePropertyAction

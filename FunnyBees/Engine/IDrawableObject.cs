@@ -2,16 +2,15 @@
 
 namespace FunnyBees.Engine
 {
-    public interface IDrawableObject : ISceneObject
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface IDrawableObject : ISceneObject, ISceneUpdatable
     {
-/*
-        Scene Scene
-        {
-            get;
-            set;
-        }
-*/
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
         void Draw(CanvasDrawingSession session);
     }
 }

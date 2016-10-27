@@ -8,7 +8,7 @@ namespace LibraProgramming.Windows.Locator
         {
             throw new ArgumentNullException(paramName, "");
         }
-
+        
         public static void MissingServiceRegistration(Type serviceType, string paramName)
         {
             throw new ArgumentException(paramName, "");

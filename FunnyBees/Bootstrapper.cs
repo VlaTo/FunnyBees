@@ -34,7 +34,7 @@ namespace FunnyBees
         public static void RegisterViewModels(IServiceRegistry registry)
         {
             // Game
-            registry.Register<ISceneBuilder, ApiarySceneBuilder>(lifetime: InstanceLifetime.CreateNew);
+            registry.Register<ISceneCreator, ApiarySceneCreator>(lifetime: InstanceLifetime.CreateNew);
             // ViewModels
             registry.Register<ISimulation, Simulation>(lifetime: InstanceLifetime.CreateNew);
             registry.Register<HostPageViewModel>(lifetime: InstanceLifetime.CreateNew);

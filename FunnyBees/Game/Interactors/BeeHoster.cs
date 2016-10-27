@@ -3,7 +3,10 @@ using FunnyBees.Game.Components;
 
 namespace FunnyBees.Game.Interactors
 {
-    public class BeeAssigner : Interactor, IInteractor<Bee, Beehive>
+    /// <summary>
+    /// 
+    /// </summary>
+    public class BeeHoster : Interactor, IInteractor<Bee, Beehive>
     {
         /// <summary>
         /// </summary>
@@ -11,8 +14,7 @@ namespace FunnyBees.Game.Interactors
         /// <param name="beehive"></param>
         public void Interact(Bee bee, Beehive beehive)
         {
-            var home = bee.GetComponent<HomeBeehive>();
-            home.Beehive = beehive;
+            beehive.GetComponent<BeeManager>().AddBee(bee);
         }
     }
 }

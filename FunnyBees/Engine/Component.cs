@@ -23,7 +23,7 @@ namespace FunnyBees.Engine
             OnAttach();
         }
 
-        public void Remove()
+        public void Detach()
         {
             if (null == Container)
             {
@@ -33,6 +33,10 @@ namespace FunnyBees.Engine
             Container = null;
 
             OnDetach();
+        }
+
+        public virtual void Update(TimeSpan elapsed)
+        {
         }
 
         protected virtual void OnAttach()

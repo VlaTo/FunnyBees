@@ -1,4 +1,5 @@
-﻿using FunnyBees.Engine;
+﻿using System.Diagnostics;
+using FunnyBees.Engine;
 using Microsoft.Graphics.Canvas;
 
 namespace FunnyBees.Game
@@ -8,13 +9,24 @@ namespace FunnyBees.Game
     /// </summary>
     public class Bee : DrawableObject
     {
+        public Beehive Beehive
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="session"></param>
         public override void Draw(CanvasDrawingSession session)
         {
-//            throw new System.NotImplementedException();
+        }
+
+        public void Die()
+        {
+            Beehive.RemoveChild(this);
+            Debug.WriteLine("[Bee.Die] executed");
         }
     }
 }

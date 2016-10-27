@@ -16,10 +16,10 @@ namespace FunnyBees.Design
             set;
         }
 
-        public ObservableCollection<BeehiveViewModel> Beehives
+        /*public ObservableCollection<BeehiveViewModel> Beehives
         {
             get;
-        }
+        }*/
 
         public bool IsSessionRunning
         {
@@ -34,7 +34,7 @@ namespace FunnyBees.Design
 
         public MainPageDesignModel()
         {
-            Beehives = new ObservableCollection<BeehiveViewModel>();
+//            Beehives = new ObservableCollection<BeehiveViewModel>();
             /*{
                 new BeehiveViewModel
                 {

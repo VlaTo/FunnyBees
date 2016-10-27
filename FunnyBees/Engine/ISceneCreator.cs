@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Engine
 {
-    public interface ISceneBuilder
+    public interface ISceneCreator
     {
         Task CreateScene(Scene scene);
     }

@@ -2,7 +2,7 @@
 
 namespace LibraProgramming.Windows.Dependency
 {
-    public sealed class ObservablePropertyTracker : IObservablePropertyTracker
+    /*public sealed class ObservablePropertyTracker : IObservablePropertyTracker
     {
         public static IObservablePropertyTracker Create<TModel>(Action<IObservablePropertyTrackerBuilder<TModel>> configurator)
             where TModel : ObservableModel
@@ -18,5 +18,5 @@ namespace LibraProgramming.Windows.Dependency
 
             return builder.Construct();
         }
-    }
+    }*/
 }

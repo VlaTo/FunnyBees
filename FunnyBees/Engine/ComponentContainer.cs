@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Collections.Immutable;
 using System.Linq;
 using LibraProgramming.Windows;
 
@@ -11,15 +11,15 @@ namespace FunnyBees.Engine
     /// </summary>
     public class ComponentContainer : IObservable<IComponentObserver>
     {
-        private readonly IDictionary<Type, IComponent> components;
-        private readonly ICollection<IComponentObserver> componentObservers;
+        private ImmutableDictionary<Type, IComponent> components;
+        private readonly ICollection<IComponentObserver> observers;
 
         protected IEnumerable<IComponent> Components => components.Values;
 
         protected ComponentContainer()
         {
-            components = new Dictionary<Type, IComponent>();
-            componentObservers = new List<IComponentObserver>();
+            components = ImmutableDictionary<Type, IComponent>.Empty;
+            observers = new List<IComponentObserver>();
         }
 
         /// <summary>
@@ -35,16 +35,9 @@ namespace FunnyBees.Engine
 
             var component = new TComponent();
 
-            components.Add(typeof (TComponent), component);
+            components = components.Add(typeof(TComponent), component);
 
-            var observers = componentObservers.ToArray();
-
-            component.Attach(this);
-
-            foreach (var observer in observers)
-            {
-                observer.OnAttached(component);
-            }
+            DoAttachComponent(component);
         }
 
         /// <summary>
@@ -63,16 +56,9 @@ namespace FunnyBees.Engine
                 throw new ArgumentException();
             }
 
-            components.Add(typeof (TComponent), component);
+            components = components.Add(typeof(TComponent), component);
 
-            var observers = componentObservers.ToArray();
-
-            component.Attach(this);
-
-            foreach (var observer in observers)
-            {
-                observer.OnAttached(component);
-            }
+            DoAttachComponent(component);
         }
 
         /// <summary>
@@ -116,26 +102,18 @@ namespace FunnyBees.Engine
         public bool RemoveComponent<TComponent>()
             where TComponent : IComponent
         {
-            var component = FindComponentInstance(typeof (TComponent));
+            var component = FindComponentInstance(typeof(TComponent));
 
             if (null == component)
             {
                 return false;
             }
 
-            if (components.Remove(typeof (TComponent)))
-            {
-                component.Remove();
+            components = components.Remove(typeof(TComponent));
 
-                foreach (var observer in componentObservers.ToArray())
-                {
-                    observer.OnDetached(component);
-                }
+            DoDetachComponent(component);
 
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -160,12 +138,34 @@ namespace FunnyBees.Engine
         /// <returns></returns>
         IDisposable IObservable<IComponentObserver>.Subscribe(IComponentObserver observer)
         {
-            if (false == componentObservers.Contains(observer))
+            if (false == observers.Contains(observer))
             {
-                componentObservers.Add(observer);
+                observers.Add(observer);
             }
 
-            return new DisposableToken<IComponentObserver>(observer, RemoveComponentObserver);
+            return new DisposableToken<IComponentObserver>(observer, RemoveObserver);
+        }
+
+        private void DoAttachComponent(IComponent component)
+        {
+            var array = observers.ToArray();
+
+            component.Attach(this);
+
+            foreach (var observer in array)
+            {
+                observer.OnAttached(component);
+            }
+        }
+
+        private void DoDetachComponent(IComponent component)
+        {
+            component.Detach();
+
+            foreach (var observer in observers.ToArray())
+            {
+                observer.OnDetached(component);
+            }
         }
 
         private bool IsComponentExists(Type targetType)
@@ -185,9 +185,9 @@ namespace FunnyBees.Engine
             return null;
         }
 
-        private void RemoveComponentObserver(IComponentObserver observer)
+        private void RemoveObserver(IComponentObserver observer)
         {
-            componentObservers.Remove(observer);
+            observers.Remove(observer);
         }
     }
 }

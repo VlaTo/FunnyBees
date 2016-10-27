@@ -1,88 +1,100 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace FunnyBees.Engine
 {
     /// <summary>
     /// 
     /// </summary>
-    public class SceneObject : ComponentContainer, ISceneObject, ISceneObjectCollectionObserver
+    public class SceneObject : ComponentContainer, ISceneObject
     {
-        public SceneObjectCollection Children
-        {
-            get;
-        }
+        private ImmutableList<ISceneObject> children;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public IEnumerable<ISceneObject> Children => children;
+
+        /// <summary>
+        /// 
+        /// </summary>
         public SceneObject Parent
         {
             get;
-            private set;
+            set;
         }
 
         protected SceneObject()
         {
-            Children = new SceneObjectCollection();
-            ((IObservable<ISceneObjectCollectionObserver>) Children).Subscribe(this);
+            children = ImmutableList<ISceneObject>.Empty;
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="elapsedTime"></param>
-        public virtual void Update(TimeSpan elapsedTime)
+        /// <param name="child"></param>
+        public void AddChild(ISceneObject child)
         {
-            foreach (var component in Components.OfType<IUpdatable>())
+            if (null == child)
             {
-                component.Update(elapsedTime);
+                throw new ArgumentNullException(nameof(child));
             }
 
-            foreach (SceneObject child in Children)
+            if (children.Contains(child))
             {
-                child.Update(elapsedTime);
+                throw new ArgumentException("", nameof(child));
             }
+
+            children = children.Add(child);
+            child.Parent = this;
+
+            DoChildAdded(child);
         }
 
-        protected virtual void DoObjectAdded(SceneObject @object)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
+        /// <returns></returns>
+        public int GetChildIndex(ISceneObject child)
         {
-        }
-
-        protected virtual void DoObjectReplaced(SceneObject removedObject, SceneObject insertedObject)
-        {
-        }
-
-        protected virtual void DoObjectRemove(SceneObject @object)
-        {
-        }
-
-        void ISceneObjectCollectionObserver.OnChildCollectionChanged(SceneObjectCollectionChange action, int index, SceneObject @object, SceneObject source)
-        {
-            switch (action)
+            if (null == child)
             {
-                case SceneObjectCollectionChange.Inserted:
-                {
-                    @object.Parent = this;
-                    DoObjectAdded(@object);
-
-                    break;
-                }
-
-                case SceneObjectCollectionChange.Replaced:
-                {
-                    @object.Parent = this;
-                    source.Parent = null;
-                    DoObjectReplaced(source, @object);
-
-                    break;
-                }
-
-                case SceneObjectCollectionChange.Removed:
-                {
-                    @object.Parent = null;
-                    DoObjectRemove(@object);
-
-                    break;
-                }
+                throw new ArgumentNullException(nameof(child));
             }
+
+            return children.IndexOf(child);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="child"></param>
+        public void RemoveChild(ISceneObject child)
+        {
+            if (null == child)
+            {
+                throw new ArgumentNullException(nameof(child));
+            }
+
+            if (false == children.Contains(child))
+            {
+                throw new ArgumentException("", nameof(child));
+            }
+
+            children = children.Remove(child);
+            child.Parent = null;
+
+            DoChildRemoved(child);
+        }
+
+        protected virtual void DoChildAdded(ISceneObject child)
+        {
+        }
+
+        protected virtual void DoChildRemoved(ISceneObject child)
+        {
         }
     }
 }

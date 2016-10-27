@@ -5,6 +5,7 @@ using LibraProgramming.Windows.Infrastructure;
 
 namespace FunnyBees.ViewModels
 {
+/*
     /// <summary>
     /// 
     /// </summary>
@@ -62,7 +63,7 @@ namespace FunnyBees.ViewModels
             {
                 SetProperty(ref maximumNumberOfBees, value);
             }
-        }*/
+        }#1#
 
         /// <summary>
         /// 
@@ -77,7 +78,7 @@ namespace FunnyBees.ViewModels
             {
                 SetProperty(ref currentBeesCount, value);
             }
-        }*/
+        }#1#
 
         static BeehiveViewModel()
         {
@@ -121,4 +122,5 @@ namespace FunnyBees.ViewModels
             return Task.CompletedTask;
         }
     }
+*/
 }

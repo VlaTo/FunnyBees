@@ -3,7 +3,8 @@ using FunnyBees.Engine;
 
 namespace FunnyBees.Game.Components
 {
-    public class BeeProducer : ComponentObserver<Beehive>, IBeeLifetimeObserver, IComponentObserver<BeesOwner>
+/*
+    public class BeeProducer : ComponentObserver<Beehive>, IBeeLifetimeObserver, IComponentObserver<BeeManager>
     {
         private readonly int maximumBeesCount;
         private IDisposable subscription;
@@ -17,7 +18,7 @@ namespace FunnyBees.Game.Components
         {
             base.OnAttach();
 
-            var component = Container.GetComponent<BeesOwner>(failIfNotExists: false);
+            var component = Container.GetComponent<BeeManager>(failIfNotExists: false);
 
             SubscribeToBeesOwner(component);
         }
@@ -29,12 +30,12 @@ namespace FunnyBees.Game.Components
             ReleaseExistingSubscription();
         }
 
-        void IComponentObserver<BeesOwner>.OnAttached(BeesOwner component)
+        void IComponentObserver<BeeManager>.OnAttached(BeeManager component)
         {
             SubscribeToBeesOwner(component);
         }
 
-        void IComponentObserver<BeesOwner>.OnDetached(BeesOwner component)
+        void IComponentObserver<BeeManager>.OnDetached(BeeManager component)
         {
             ReleaseExistingSubscription();
         }
@@ -49,7 +50,7 @@ namespace FunnyBees.Game.Components
             //throw new System.NotImplementedException();
         }
 
-        private void SubscribeToBeesOwner(BeesOwner component)
+        private void SubscribeToBeesOwner(BeeManager component)
         {
             ReleaseExistingSubscription();
             subscription = ((Engine.IObservable<IBeeLifetimeObserver>) component).Subscribe(this);
@@ -66,4 +67,5 @@ namespace FunnyBees.Game.Components
             subscription = null;
         }
     }
+*/
 }

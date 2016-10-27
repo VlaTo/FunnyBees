@@ -21,7 +21,7 @@ namespace FunnyBees.Game.Components
 
                 if (null != beehive)
                 {
-                    var owner = beehive.GetComponent<BeesOwner>();
+                    var owner = beehive.GetComponent<BeeManager>();
                     owner.RemoveBee(Container);
                 }
 
@@ -29,7 +29,7 @@ namespace FunnyBees.Game.Components
 
                 if (null != beehive)
                 {
-                    var owner = beehive.GetComponent<BeesOwner>();
+                    var owner = beehive.GetComponent<BeeManager>();
                     owner.AddBee(Container);
                 }
             }
