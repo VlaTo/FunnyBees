@@ -3,7 +3,7 @@ using FunnyBees.Engine;
 
 namespace FunnyBees.Game.Components
 {
-    public class QueenBee : Component<Bee>, IUpdatable
+    public class QueenBee : Component<Bee>
     {
         private static TimeSpan Period = TimeSpan.FromMilliseconds(1000.0d);
 
@@ -16,12 +16,8 @@ namespace FunnyBees.Game.Components
             lastChecked = TimeSpan.MinValue;
         }
 
-        void IUpdatable.Update(TimeSpan elapsedTime)
+        public override void Update(TimeSpan elapsed)
         {
-            if (Period < (elapsedTime - lastChecked))
-            {
-                
-            }
         }
     }
 }
