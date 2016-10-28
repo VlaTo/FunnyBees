@@ -19,7 +19,7 @@ namespace FunnyBees.Engine
             updatables = ImmutableList<ISceneUpdatable>.Empty;
         }
 
-        public void Update(TimeSpan elapsedTime)
+        public virtual void Update(TimeSpan elapsedTime)
         {
             foreach (var component in Components)
             {

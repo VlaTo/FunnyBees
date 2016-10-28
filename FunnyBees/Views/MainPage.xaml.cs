@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI.Xaml;
 using FunnyBees.Engine;
 using FunnyBees.Game;
@@ -55,6 +56,11 @@ namespace FunnyBees.Views
             var beehive = new Beehive();
 
             beehive.AddComponent(new BeeManager(10));
+            beehive.AddComponent(new BeehiveVisualizer
+            {
+                Origin = new Point(60.0d, 60.0d),
+                Size = new Size(100.0d, 100.0d)
+            });
 
             scene.AddChild(beehive);
 

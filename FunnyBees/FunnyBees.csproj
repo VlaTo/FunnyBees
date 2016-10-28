@@ -107,6 +107,7 @@
     <Compile Include="Engine\UpdatableObject.cs" />
     <Compile Include="Game\Beehive.cs" />
     <Compile Include="Game\Components\BeeBehaviour.cs" />
+    <Compile Include="Game\Components\BeehiveVisualizer.cs" />
     <Compile Include="Game\Components\BeeLifetime.cs" />
     <Compile Include="Game\Components\GuardBee.cs" />
     <Compile Include="Game\Components\BeeManager.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\DrawableObject.cs" />
     <Compile Include="Game\Interactors\BeeRemover.cs" />
+    <Compile Include="Game\RectangleShape.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />
@@ -137,6 +139,8 @@
     <Compile Include="Services\ApplicationOptionProvider.cs" />
     <Compile Include="Services\IApplicationOptionsProvider.cs" />
     <Compile Include="Services\IUIThreadAccessor.cs" />
+    <Compile Include="Shapes\CircleShape.cs" />
+    <Compile Include="Shapes\Shape.cs" />
     <Compile Include="ViewModels\HostPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\OptionsPageViewModel.cs" />
