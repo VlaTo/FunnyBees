@@ -2,17 +2,15 @@
 
 namespace FunnyBees.ViewModels
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ViewModelLocator
     {
         /// <summary>
         /// 
         /// </summary>
         public HostPageViewModel HostPageViewModel => ServiceLocator.Current.GetInstance<HostPageViewModel>();
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public MainPageViewModel MainPageViewModel => ServiceLocator.Current.GetInstance<MainPageViewModel>();
 
         /// <summary>
         /// 

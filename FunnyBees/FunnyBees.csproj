@@ -99,7 +99,6 @@
     <Compile Include="Core\CoreDispatcherExtension.cs" />
     <Compile Include="Core\ValueFormatConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
-    <Compile Include="Design\MainPageDesignModel.cs" />
     <Compile Include="Engine\IDrawableObject.cs" />
     <Compile Include="Engine\IObservable.cs" />
     <Compile Include="Engine\IObserver.cs" />
@@ -107,11 +106,9 @@
     <Compile Include="Engine\ISceneUpdatable.cs" />
     <Compile Include="Engine\UpdatableObject.cs" />
     <Compile Include="Game\Beehive.cs" />
+    <Compile Include="Game\Components\BeeBehaviour.cs" />
     <Compile Include="Game\Components\BeeLifetime.cs" />
-    <Compile Include="Game\Components\BeeProducer.cs" />
     <Compile Include="Game\Components\GuardBee.cs" />
-    <Compile Include="Game\Components\BeehiveReference.cs" />
-    <Compile Include="Game\Components\IBeeLifetimeObserver.cs" />
     <Compile Include="Game\Components\BeeManager.cs" />
     <Compile Include="Engine\Component.cs" />
     <Compile Include="Engine\ComponentContainer.cs" />
@@ -130,35 +127,17 @@
     <Compile Include="Game\Interactors\BeeHoster.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\DrawableObject.cs" />
-    <Compile Include="Game\ApiarySceneCreator.cs" />
     <Compile Include="Game\Interactors\BeeRemover.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />
-    <Compile Include="Models\Bee.cs" />
-    <Compile Include="Models\Beehive.cs" />
-    <Compile Include="Models\FuzzyValue.cs" />
-    <Compile Include="Models\IBee.cs" />
-    <Compile Include="Models\IBeeBehaviour.cs" />
-    <Compile Include="Models\IBeehive.cs" />
-    <Compile Include="Models\ISimulation.cs" />
-    <Compile Include="Models\ISimulationSession.cs" />
-    <Compile Include="Models\IUpdatable.cs" />
-    <Compile Include="Models\BeeBehaviour.cs" />
-    <Compile Include="Models\Simulation.cs" />
-    <Compile Include="Models\Simulation.Session.cs" />
-    <Compile Include="Models\UpdateContext.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Services\ApplicationOptionProvider.cs" />
     <Compile Include="Services\IApplicationOptionsProvider.cs" />
     <Compile Include="Services\IUIThreadAccessor.cs" />
-    <Compile Include="Services\SessionController.cs" />
-    <Compile Include="Services\TimeIntervalGenerator.cs" />
-    <Compile Include="ViewModels\BeehiveViewModel.cs" />
     <Compile Include="ViewModels\HostPageViewModel.cs" />
-    <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\OptionsPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
@@ -233,10 +212,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <DesignDataWithDesignTimeCreatableTypes Include="Design\MainPageDesignData.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </DesignDataWithDesignTimeCreatableTypes>
     <Page Include="Themes\Common.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

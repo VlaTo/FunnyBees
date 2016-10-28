@@ -21,6 +21,11 @@ namespace FunnyBees.Engine
 
         public void Update(TimeSpan elapsedTime)
         {
+            foreach (var component in Components)
+            {
+                component.Update(elapsedTime);
+            }
+
             foreach (var updatable in updatables)
             {
                 updatable.Update(elapsedTime);

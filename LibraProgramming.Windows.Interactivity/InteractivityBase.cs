@@ -20,45 +20,29 @@ namespace LibraProgramming.Windows.Interactivity
 
         internal event EventHandler AttachedObjectChanged;
 
-        FrameworkElement IAttachedObject.AttachedObject
-        {
-            get
-            {
-                return AttachedObject;
-            }
-        }
-        
+        FrameworkElement IAttachedObject.AttachedObject => AttachedObject;
+
         public virtual void Attach(FrameworkElement element)
         {
             if (null != element)
             {
-                element.AddDataContextChangedHandler(DataContextChanged);
+                element.AddDataContextChangedHandler(DoDataContextChanged);
 
                 if (null != element.DataContext)
                 {
-                    DataContextChanged(element, EventArgs.Empty);
+                    DoDataContextChanged(element, EventArgs.Empty);
                 }
             }
         }
 
         public virtual void Detach()
         {
-            if (null != AttachedObject)
-            {
-                AttachedObject.RemoveDataContextChangedHandler(DataContextChanged);
-            }
+            AttachedObject?.RemoveDataContextChangedHandler(DoDataContextChanged);
         }
 
         protected void OnAssociatedObjectChanged()
         {
-            var handler = AttachedObjectChanged;
-
-            if (null == handler)
-            {
-                return;
-            }
-
-            handler(this, new EventArgs());
+            AttachedObjectChanged?.Invoke(this, new EventArgs());
         }
         
         protected virtual void OnAttached()
@@ -73,23 +57,25 @@ namespace LibraProgramming.Windows.Interactivity
         {
         }    
 
-        private void DataContextChanged(object sender, EventArgs e)
+        private void DoDataContextChanged(object sender, EventArgs e)
         {
             var element = sender as FrameworkElement;
 
-            if (null != element)
+            if (null == element)
             {
-                var dataContext = DataContext;
-
-                SetBinding(DataContextProperty,
-                    new Binding
-                    {
-                        Path = new PropertyPath("DataContext"),
-                        Source = element
-                    });
-
-                OnDataContextChanged(dataContext, DataContext);
+                return;
             }
+
+            var dataContext = DataContext;
+
+            SetBinding(DataContextProperty,
+                new Binding
+                {
+                    Path = new PropertyPath("DataContext"),
+                    Source = element
+                });
+
+            OnDataContextChanged(dataContext, DataContext);
         }
     }
 }

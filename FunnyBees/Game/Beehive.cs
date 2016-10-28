@@ -1,12 +1,13 @@
 ﻿using FunnyBees.Engine;
-using Microsoft.Graphics.Canvas;
 
 namespace FunnyBees.Game
 {
-    public class Beehive : DrawableObject
+    public interface IBeehive
     {
-        public override void Draw(CanvasDrawingSession session)
-        {
-        }
+        
+    }
+
+    public class Beehive : DrawableObject, IBeehive
+    {
     }
 }

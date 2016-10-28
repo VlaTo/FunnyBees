@@ -22,7 +22,7 @@ namespace FunnyBees.Game.Components
             }
             else if ((elapsed - birth) > lifespan)
             {
-                Container.Die();
+                Container.GetComponent<BeeBehaviour>().Die();
             }
         }
     }

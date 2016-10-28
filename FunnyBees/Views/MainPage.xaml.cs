@@ -1,5 +1,10 @@
-﻿using Windows.UI.Xaml;
-using FunnyBees.ViewModels;
+﻿using System;
+using System.Threading.Tasks;
+using Windows.UI.Xaml;
+using FunnyBees.Engine;
+using FunnyBees.Game;
+using FunnyBees.Game.Components;
+using FunnyBees.Game.Interactors;
 using Microsoft.Graphics.Canvas.UI;
 using Microsoft.Graphics.Canvas.UI.Xaml;
 
@@ -9,17 +14,16 @@ namespace FunnyBees.Views
     /// </summary>
     public sealed partial class MainPage
     {
-        private MainPageViewModel viewModel;
+        private readonly Scene scene;
 
         public MainPage()
         {
             InitializeComponent();
-            AnimatedControl.Paused = true;
+            scene = new Scene();
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            viewModel = (MainPageViewModel) DataContext;
         }
 
         private void OnUnload(object sender, RoutedEventArgs e)
@@ -30,20 +34,40 @@ namespace FunnyBees.Views
 
         private void OnCanvasCreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
         {
+            args.TrackAsyncAction(DoCanvasCreateResources().AsAsyncAction());
         }
 
         private void OnCanvasDraw(ICanvasAnimatedControl sender, CanvasAnimatedDrawEventArgs args)
         {
             using (var drawingSession = args.DrawingSession)
             {
-                viewModel.DrawScene(drawingSession);
+                scene.Draw(drawingSession);
             }
         }
 
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
-            //args.Timing.TotalTime
-            viewModel.Update(args.Timing);
+            scene.Update(args.Timing.TotalTime);
+        }
+
+        private Task DoCanvasCreateResources()
+        {
+            var beehive = new Beehive();
+
+            beehive.AddComponent(new BeeManager(10));
+
+            scene.AddChild(beehive);
+
+            var queen = new Bee();
+
+            queen.AddComponent(new BeeLifetime(TimeSpan.FromSeconds(3.0d)));
+            queen.AddComponent<BeeBehaviour>();
+            queen.AddComponent<QueenBee>();
+            queen.InteractWith(beehive).Using<BeeHoster>();
+
+            scene.AddChild(queen);
+
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿<!-- d:DataContext="{d:DesignData Source=/Design/MainPageDesignData.xaml}"-->
-<local:ContentPage
+﻿<local:ContentPage
     x:Class="FunnyBees.Views.MainPage"
     
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -8,122 +7,19 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
-    xmlns:core="using:FunnyBees.Core"
-    xmlns:ux="using:LibraProgramming.Windows.UI.Xaml"
-    xmlns:uxc="using:LibraProgramming.Windows.UI.Xaml.Primitives.Commanding"
-    xmlns:i="using:LibraProgramming.Windows.Interactivity"
-    xmlns:wii="using:LibraProgramming.Windows.Interaction"
-    xmlns:uxi="using:LibraProgramming.Windows.UI.Xaml.Interactivity"
-    xmlns:cvt="using:LibraProgramming.Windows.UI.Xaml.Converters"
 
     mc:Ignorable="d"
-    
-    DataContext="{Binding Path=MainPageViewModel, Source={StaticResource ViewModelLocator}}"
     
     Loaded="OnLoaded"
     Unloaded="OnUnload">
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.Resources>
-                <cvt:BooleanNegationConverter x:Name="NegationConverter" />
-                <core:ValueFormatConverter x:Name="NumberConverter" />
-            </Grid.Resources>
-            <Grid
-                Grid.Row="0"
-                Background="{ThemeResource ApplicationPageHeaderBackgroundThemeBrush}"
-                Padding="16,0,0,0"
-                Height="48">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock
-                    Grid.Column="0"
-                    Style="{StaticResource PageTitleTextBlockStyle}"
-                    Text="{Binding Path=SessionElapsedTime, Converter={StaticResource NumberConverter}, ConverterParameter='\{0:hh\\:mm\\:ss\}'}"
-                />
-                <CommandBar
-                    Grid.Column="1"
-                    Background="{ThemeResource ApplicationPageHeaderBackgroundThemeBrush}"
-                    VerticalAlignment="Center">
-                    <AppBarToggleButton
-                        Command="{Binding Path=RunSimulation}"
-                        IsChecked="{Binding Path=IsSimulationRuning}"
-                        Label="Start">
-                        <AppBarToggleButton.Icon>
-                            <SymbolIcon Symbol="Play" />
-                        </AppBarToggleButton.Icon>
-                    </AppBarToggleButton>
-                </CommandBar>
-            </Grid>
-            <canvas:CanvasAnimatedControl
-                x:Name="AnimatedControl"
-                Grid.Row="1"
-                ClearColor="CadetBlue"
-                CreateResources="OnCanvasCreateResources"
-                Update="OnCanvasUpdate"
-                Draw="OnCanvasDraw">
-                <i:Interaction.Triggers>
-                    <i:DataTrigger
-                        Binding="{Binding Path=IsSimulationRuning}"
-                        Comparison="Equal"
-                        Value="False">
-                        <i:ChangePropertyAction
-                            PropertyName="Paused"
-                            Value="True"
-                        />
-                    </i:DataTrigger>
-                    <i:DataTrigger
-                        Binding="{Binding Path=IsSimulationRuning}"
-                        Comparison="Equal"
-                        Value="True">
-                        <i:ChangePropertyAction
-                            PropertyName="Paused"
-                            Value="False"
-                        />
-                    </i:DataTrigger>
-                </i:Interaction.Triggers>
-            </canvas:CanvasAnimatedControl>
-        </Grid>
-        <ux:CustomDialog
-            Title="User Interaction Dialog #1"
-            IsOpen="False"
-            MaxDialogWidth="700">
-            <ux:CustomDialog.Actions>
-                <uxc:PredefinedDialogAction Action="Ok" />
-                <uxc:PredefinedDialogAction Action="Cancel" />
-            </ux:CustomDialog.Actions>
-            <i:Interaction.Triggers>
-                <wii:InteractionRequestTrigger SourceObject="{Binding Path=ConfirmRequest}">
-                    <uxi:ConfirmationPopupAction />
-                </wii:InteractionRequestTrigger>
-            </i:Interaction.Triggers>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock
-                    Grid.Row="0"
-                    TextWrapping="Wrap">
-                    <Span>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt
-                        ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci
-                        tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                    </Span>
-                    <Span>
-                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum
-                        dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit
-                        praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum
-                        soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
-                    </Span>
-                </TextBlock>
-            </Grid>
-        </ux:CustomDialog>
+        <canvas:CanvasAnimatedControl
+            x:Name="AnimatedControl"
+            ClearColor="CadetBlue"
+            CreateResources="OnCanvasCreateResources"
+            Update="OnCanvasUpdate"
+            Draw="OnCanvasDraw"
+        />
     </Grid>
 </local:ContentPage>

@@ -10,12 +10,6 @@ namespace FunnyBees.Game.Components
         private readonly Beehive beehive;
         private TimeSpan lastChecked;
 
-        public QueenBee(Beehive beehive)
-        {
-            this.beehive = beehive;
-            lastChecked = TimeSpan.MinValue;
-        }
-
         public override void Update(TimeSpan elapsed)
         {
         }
