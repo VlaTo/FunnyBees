@@ -25,5 +25,10 @@ namespace FunnyBees.Game.Components
                 Container.GetComponent<BeeBehaviour>().Die();
             }
         }
+
+        public void Die()
+        {
+            Container.GetComponent<BeeBehaviour>().Die();
+        }
     }
 }
