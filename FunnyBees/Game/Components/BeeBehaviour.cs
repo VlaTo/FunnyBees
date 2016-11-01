@@ -1,4 +1,5 @@
-﻿using FunnyBees.Engine;
+﻿using System;
+using FunnyBees.Engine;
 using FunnyBees.Shapes;
 using LibraProgramming.Windows.StateMachine;
 
@@ -6,45 +7,16 @@ namespace FunnyBees.Game.Components
 {
     public interface IBeeActions
     {
-        bool IsAppeared
-        {
-            get;
-            set;
-        }
-
         void Die();
+
+        void Collect();
     }
 
     public class BeeBehaviour : Component<Bee>, IBeeActions
     {
-        private bool isAppeared;
-        private StateMachine<BeeStates, BeeActions> states;
+        private readonly StateMachine<BeeStates, BeeActions> states;
         private CircleShape circle;
-
-        public bool IsAppeared
-        {
-            get
-            {
-                return isAppeared;
-            }
-            set
-            {
-                if (value == isAppeared)
-                {
-                    return;
-                }
-
-                if (value)
-                {
-                    circle = new CircleShape();
-                    Container.AddChild(circle);
-                }
-                else
-                {
-                    Container.RemoveChild(circle);
-                }
-            }
-        }
+        private TimeSpan currentStateTime;
 
         public Beehive Beehive
         {
@@ -54,18 +26,79 @@ namespace FunnyBees.Game.Components
 
         public BeeBehaviour()
         {
-            states = new StateMachine<BeeStates, BeeActions>(BeeStates.Imago);
+            states = new StateMachine<BeeStates, BeeActions>(BeeStates.Idle);
 
             states
-                .Configure(BeeStates.Imago)
-                .Permit(BeeActions.Flyout, BeeStates.Working)
-                .OnEnter(DoWorkingBegin);
+                .Configure(BeeStates.Idle)
+                .Permit(BeeActions.Search, BeeStates.Searching).OnEnter(DoSearchingBegin);
             states
-                .Configure(BeeStates.Working)
-                .Permit(BeeActions.Flyin, )
+                .Configure(BeeStates.Searching)
+                .Permit(BeeActions.Collect, BeeStates.Collecting).OnEnter(DoCollecting)
+                .Permit(BeeActions.Die, BeeStates.Died).OnEnter(DoDie);
+            states
+                .Configure(BeeStates.Collecting)
+                .Permit(BeeActions.Return, BeeStates.Returning).OnEnter(DoReturning)
+                .Permit(BeeActions.Die, BeeStates.Died).OnEnter(DoDie);
+            states
+                .Configure(BeeStates.Returning)
+                .Permit(BeeActions.Idle, BeeStates.Idle).OnEnter(DoIdle);
+            states
+                .Configure(BeeStates.Died)
+                .Ignore(BeeActions.Die)
+                .Ignore(BeeActions.Idle)
+                .Ignore(BeeActions.Return)
+                .Ignore(BeeActions.Collect)
+                .Ignore(BeeActions.Search);
+        }
+
+        public void Collect()
+        {
+            states.Fire(BeeActions.Collect);
         }
 
         public void Die()
+        {
+            states.Fire(BeeActions.Die);
+        }
+
+        public override void Update(TimeSpan elapsed)
+        {
+            switch (states.CurrentState)
+            {
+                case BeeStates.Collecting:
+                {
+                    var duration = elapsed - currentStateTime;
+
+                    if (TimeSpan.FromSeconds(10.0d) < duration)
+                    {
+                        states.Fire(BeeActions.Return);
+                    }
+
+                    break;
+                }
+
+                case BeeStates.Returning:
+                {
+                    var duration = elapsed - currentStateTime;
+
+                    if (TimeSpan.FromSeconds(1.0d) < duration)
+                    {
+                        states.Fire(BeeActions.Idle);
+                    }
+
+
+                    break;
+                }
+            }
+        }
+
+        private void DoIdle(BeeStates obj)
+        {
+            Container.RemoveChild(circle);
+            circle = null;
+        }
+
+        private void DoDie(BeeStates obj)
         {
             var parent = Container.Parent;
 
@@ -73,9 +106,20 @@ namespace FunnyBees.Game.Components
             parent.RemoveChild(Container);
         }
 
-        private void DoWorkingBegin(BeeStates obj)
+        private void DoSearchingBegin(BeeStates obj)
         {
-            throw new System.NotImplementedException();
+            circle = new CircleShape();
+            Container.AddChild(circle);
+        }
+
+        private void DoCollecting(BeeStates obj)
+        {
+            currentStateTime = Scene.Current.ElapsedTime;
+        }
+
+        private void DoReturning(BeeStates obj)
+        {
+            currentStateTime = Scene.Current.ElapsedTime;
         }
 
         /// <summary>
@@ -85,8 +129,9 @@ namespace FunnyBees.Game.Components
         {
             Died = -1,
             Idle,
-
-            Working,
+            Searching,
+            Collecting,
+            Returning
         }
 
         /// <summary>
@@ -94,8 +139,10 @@ namespace FunnyBees.Game.Components
         /// </summary>
         private enum BeeActions
         {
-            Flyout,
-            Flyin,
+            Idle,
+            Search,
+            Collect,
+            Return,
             Die
         }
     }

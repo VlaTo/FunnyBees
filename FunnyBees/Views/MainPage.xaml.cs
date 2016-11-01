@@ -21,6 +21,7 @@ namespace FunnyBees.Views
         {
             InitializeComponent();
             scene = new Scene();
+            Scene.Current = scene;
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -48,7 +49,8 @@ namespace FunnyBees.Views
 
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
-            scene.Update(args.Timing.TotalTime);
+            var elapsedTime = args.Timing.TotalTime;
+            scene.Update(elapsedTime);
         }
 
         private Task DoCanvasCreateResources()
