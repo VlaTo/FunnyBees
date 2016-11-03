@@ -108,7 +108,6 @@
     <Compile Include="Game\Beehive.cs" />
     <Compile Include="Game\Components\BeeBehaviour.cs" />
     <Compile Include="Game\Components\BeehiveVisualizer.cs" />
-    <Compile Include="Game\Components\BeeLifetime.cs" />
     <Compile Include="Game\Components\GuardBee.cs" />
     <Compile Include="Game\Components\BeeManager.cs" />
     <Compile Include="Engine\Component.cs" />
@@ -123,8 +122,8 @@
     <Compile Include="Game\Bee.cs" />
     <Compile Include="Engine\Interactor.cs" />
     <Compile Include="Engine\ISceneCreator.cs" />
-    <Compile Include="Game\Components\QueenBee.cs" />
-    <Compile Include="Game\Components\WorkBee.cs" />
+    <Compile Include="Game\Components\QueenBeeBehaviour.cs" />
+    <Compile Include="Game\Components\WorkingBeeBehaviour.cs" />
     <Compile Include="Game\Interactors\BeeHoster.cs" />
     <Compile Include="Engine\Scene.cs" />
     <Compile Include="Engine\DrawableObject.cs" />

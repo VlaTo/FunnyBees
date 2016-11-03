@@ -90,6 +90,13 @@ namespace LibraProgramming.Windows.StateMachine
         public void Fire(TTrigger trigger)
         {
             var descriptor = GetCurrentStateDescriptor();
+            var ignored = descriptor.GetTransition<IgnoredTransition>(trigger);
+
+            if (null != ignored)
+            {
+                return;
+            }
+
             var transition = descriptor.GetTransition<PermittedStateTransition<TState>>(trigger);
 
             if (null == transition)

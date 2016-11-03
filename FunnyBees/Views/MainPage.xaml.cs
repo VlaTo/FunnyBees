@@ -68,12 +68,17 @@ namespace FunnyBees.Views
 
             var queen = new Bee();
 
-            queen.AddComponent(new BeeLifetime(TimeSpan.FromSeconds(3.0d)));
-            queen.AddComponent<BeeBehaviour>();
-            queen.AddComponent<QueenBee>();
+            queen.AddComponent<QueenBeeBehaviour>();
             queen.InteractWith(beehive).Using<BeeHoster>();
 
             scene.AddChild(queen);
+
+            var bee = new Bee();
+
+            bee.AddComponent(new WorkingBeeBehaviour(TimeSpan.FromSeconds(30.0d)));
+            bee.InteractWith(beehive).Using<BeeHoster>();
+
+            scene.AddChild(bee);
 
             return Task.CompletedTask;
         }

@@ -37,7 +37,7 @@ namespace FunnyBees.Game.Components
 
             bees = bees.Add(bee);
 
-            bee.GetComponent<BeeBehaviour>().Beehive = Container;
+            bee.Beehive = Container;
 
             DoBeeAdded(bee);
 
@@ -51,12 +51,10 @@ namespace FunnyBees.Game.Components
                 throw new ArgumentNullException(nameof(bee));
             }
 
-            var behaviour = bee.GetComponent<BeeBehaviour>();
-
-            if (Object.Equals(behaviour.Beehive, Container))
+            if (Object.Equals(bee.Beehive, Container))
             {
                 bees = bees.Remove(bee);
-                behaviour.Beehive = null;
+                bee.Beehive = null;
 
                 DoBeeRemoved(bee);
             }

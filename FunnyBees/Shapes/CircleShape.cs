@@ -11,9 +11,8 @@ namespace FunnyBees.Shapes
             base.Draw(session);
 
             var center = new Vector2(80.0f, 80.0f);
-            var 
             session.DrawCircle(center, 20.0f, Colors.Black);
-            session.DrawLine(center,);
+            //session.DrawLine(center,);
         }
     }
 }
