@@ -4,7 +4,7 @@ using FunnyBees.Engine;
 
 namespace FunnyBees.Game.Components
 {
-    public class BeehiveVisualizer : Component<Beehive>
+    public class BeehiveShape : Component<Beehive>
     {
         public Point Origin
         {

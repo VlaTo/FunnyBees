@@ -49,16 +49,18 @@ namespace FunnyBees.Views
 
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
-            var elapsedTime = args.Timing.TotalTime;
-            scene.Update(elapsedTime);
+            scene.Update(args.Timing.TotalTime);
         }
 
         private Task DoCanvasCreateResources()
         {
+            var map = new Map(new Size(200.0d, 200.0d), 20, 20);
             var beehive = new Beehive();
 
+            scene.AddChild(map);
+
             beehive.AddComponent(new BeeManager(10));
-            beehive.AddComponent(new BeehiveVisualizer
+            beehive.AddComponent(new BeehiveShape
             {
                 Origin = new Point(60.0d, 60.0d),
                 Size = new Size(100.0d, 100.0d)
@@ -75,7 +77,7 @@ namespace FunnyBees.Views
 
             var bee = new Bee();
 
-            bee.AddComponent(new WorkingBeeBehaviour(TimeSpan.FromSeconds(30.0d)));
+            bee.AddComponent(new HoneyBeeBehaviour(lifespan: TimeSpan.FromSeconds(30.0d)));
             bee.InteractWith(beehive).Using<BeeHoster>();
 
             scene.AddChild(bee);

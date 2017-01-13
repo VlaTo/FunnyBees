@@ -5,7 +5,7 @@ using LibraProgramming.Windows.StateMachine;
 
 namespace FunnyBees.Game.Components
 {
-    public class WorkingBeeBehaviour : BeeBehaviour
+    public class HoneyBeeBehaviour : BeeBehaviour
     {
         private readonly TimeSpan lifespan;
         private readonly StateMachine<BeeStates, BeeActions> states;
@@ -13,7 +13,7 @@ namespace FunnyBees.Game.Components
         private CircleShape circle;
         private TimeSpan currentStateTime;
 
-        public WorkingBeeBehaviour(TimeSpan lifespan)
+        public HoneyBeeBehaviour(TimeSpan lifespan)
         {
             this.lifespan = lifespan;
 

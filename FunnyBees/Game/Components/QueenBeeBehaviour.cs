@@ -93,7 +93,7 @@ namespace FunnyBees.Game.Components
 
                 foreach (var bee in beehive.GetComponent<BeeManager>().Bees)
                 {
-                    var worker = bee.GetComponent<WorkingBeeBehaviour>(failIfNotExists: false);
+                    var worker = bee.GetComponent<HoneyBeeBehaviour>(failIfNotExists: false);
 
                     if (null == worker)
                     {
