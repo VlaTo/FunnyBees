@@ -96,6 +96,8 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FunnyBeesGame.cs" />
+    <Compile Include="Controls\MapDefinition.cs" />
     <Compile Include="Core\CoreDispatcherExtension.cs" />
     <Compile Include="Core\ValueFormatConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
@@ -223,6 +225,11 @@
     <Page Include="Themes\DarkTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Themes\LightTheme.xaml">
       <Generator>MSBuild:Compile</Generator>

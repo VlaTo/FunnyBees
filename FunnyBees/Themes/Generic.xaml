@@ -1,0 +1,24 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="using:FunnyBees.Controls"
+    xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml">
+    <Style TargetType="c:FunnyBeesGame">
+       <Setter Property="Template">
+           <Setter.Value>
+               <ControlTemplate TargetType="c:FunnyBeesGame">
+                   <Border
+                       Background="{TemplateBinding Background}"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       BorderThickness="{TemplateBinding BorderThickness}"
+                       Padding="{TemplateBinding Padding}">
+                        <w2d:CanvasAnimatedControl
+                            x:Name="PART_Canvas"
+                            ClearColor="Transparent"
+                        />
+                    </Border>
+               </ControlTemplate>
+           </Setter.Value>
+       </Setter> 
+    </Style>
+</ResourceDictionary>
