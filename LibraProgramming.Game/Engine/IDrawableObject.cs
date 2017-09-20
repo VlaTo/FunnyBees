@@ -1,6 +1,4 @@
-﻿using Microsoft.Graphics.Canvas;
-
-namespace FunnyBees.Engine
+﻿namespace LibraProgramming.Game.Engine
 {
     /// <summary>
     /// 
@@ -10,7 +8,7 @@ namespace FunnyBees.Engine
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="session"></param>
-        void Draw(CanvasDrawingSession session);
+        /// <param name="context"></param>
+        void Draw(IDrawingContext context);
     }
 }

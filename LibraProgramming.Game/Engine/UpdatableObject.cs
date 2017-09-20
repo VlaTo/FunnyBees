@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 
-namespace FunnyBees.Engine
+namespace LibraProgramming.Game.Engine
 {
     /// <summary>
     /// 
@@ -12,6 +12,9 @@ namespace FunnyBees.Engine
     {
         private ImmutableList<ISceneUpdatable> updatables;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IReadOnlyCollection<ISceneUpdatable> Updatables => new ReadOnlyCollection<ISceneUpdatable>(updatables);
 
         protected UpdatableObject()
@@ -19,6 +22,10 @@ namespace FunnyBees.Engine
             updatables = ImmutableList<ISceneUpdatable>.Empty;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// </summary>
+        /// <param name="elapsedTime"></param>
         public virtual void Update(TimeSpan elapsedTime)
         {
             foreach (var component in Components)
@@ -34,9 +41,7 @@ namespace FunnyBees.Engine
 
         protected override void DoChildAdded(ISceneObject child)
         {
-            var updatable = child as ISceneUpdatable;
-
-            if (null != updatable)
+            if (child is ISceneUpdatable updatable)
             {
                 updatables = updatables.Add(updatable);
             }
@@ -44,9 +49,7 @@ namespace FunnyBees.Engine
 
         protected override void DoChildRemoved(ISceneObject child)
         {
-            var updatable = child as ISceneUpdatable;
-
-            if (null != updatable)
+            if (child is ISceneUpdatable updatable)
             {
                 updatables = updatables.Remove(updatable);
             }

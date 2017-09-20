@@ -103,6 +103,20 @@
     <Compile Include="Core\CoreDispatcherExtension.cs" />
     <Compile Include="Core\ValueFormatConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
+    <Compile Include="Game\Behaviors\BeeBehaviour.cs" />
+    <Compile Include="Game\Behaviors\HoneyBeeBehaviour.cs" />
+    <Compile Include="Game\Behaviors\QueenBeeBehaviour.cs" />
+    <Compile Include="Game\Behaviors\QueenBeeBehaviour1.cs" />
+    <Compile Include="Game\Behaviors\WorkingBeeBehavoiur.cs" />
+    <Compile Include="Game\Components\Bee.cs" />
+    <Compile Include="Game\Components\Beehive.cs" />
+    <Compile Include="Game\Components\BeehiveShape.cs" />
+    <Compile Include="Game\Components\BeeManager.cs" />
+    <Compile Include="Game\Components\GuardBee.cs" />
+    <Compile Include="Game\Interactors\BeeHoster.cs" />
+    <Compile Include="Game\Interactors\BeeRemover.cs" />
+    <Compile Include="Game\Map.cs" />
+    <Compile Include="Game\Visuals\RectangleShape.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
     <Compile Include="Localization\IStringResourceLoader.cs" />
@@ -249,6 +263,7 @@
       <Link>LibraProgramming.snk</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

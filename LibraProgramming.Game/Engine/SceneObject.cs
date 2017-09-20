@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using LibraProgramming.Game.Components;
 
-namespace FunnyBees.Engine
+namespace LibraProgramming.Game.Engine
 {
     /// <summary>
     /// 
@@ -16,8 +17,8 @@ namespace FunnyBees.Engine
         /// </summary>
         public IEnumerable<ISceneObject> Children => children;
 
+        /// <inheritdoc />
         /// <summary>
-        /// 
         /// </summary>
         public SceneObject Parent
         {
@@ -30,8 +31,8 @@ namespace FunnyBees.Engine
             children = ImmutableList<ISceneObject>.Empty;
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="child"></param>
         public void AddChild(ISceneObject child)
@@ -52,8 +53,8 @@ namespace FunnyBees.Engine
             DoChildAdded(child);
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="child"></param>
         /// <returns></returns>
@@ -67,8 +68,8 @@ namespace FunnyBees.Engine
             return children.IndexOf(child);
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="child"></param>
         public void RemoveChild(ISceneObject child)

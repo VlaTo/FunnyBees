@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Collections.ObjectModel;
-using Microsoft.Graphics.Canvas;
 
-namespace FunnyBees.Engine
+namespace LibraProgramming.Game.Engine
 {
     /// <summary>
-    /// 
     /// </summary>
     public class DrawableObject : UpdatableObject, IDrawableObject
     {
@@ -19,6 +17,10 @@ namespace FunnyBees.Engine
             drawables = ImmutableList<IDrawableObject>.Empty;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// </summary>
+        /// <param name="session"></param>
         public virtual void Draw(CanvasDrawingSession session)
         {
             foreach (var drawable in drawables)
@@ -31,9 +33,7 @@ namespace FunnyBees.Engine
         {
             base.DoChildAdded(child);
 
-            var drawable = child as IDrawableObject;
-
-            if (null != drawable)
+            if (child is IDrawableObject drawable)
             {
                 drawables = drawables.Add(drawable);
             }
@@ -43,9 +43,7 @@ namespace FunnyBees.Engine
         {
             base.DoChildRemoved(child);
 
-            var drawable = child as IDrawableObject;
-
-            if (null != drawable)
+            if (child is IDrawableObject drawable)
             {
                 drawables = drawables.Remove(drawable);
             }
