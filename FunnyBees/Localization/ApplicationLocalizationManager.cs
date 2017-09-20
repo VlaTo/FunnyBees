@@ -1,5 +1,4 @@
 ﻿using Windows.ApplicationModel.Resources.Core;
-using LibraProgramming.Windows.UI.Xaml.Localization;
 
 namespace FunnyBees.Localization
 {

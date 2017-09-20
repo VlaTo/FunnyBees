@@ -2,7 +2,7 @@
 
 namespace FunnyBees.Controls
 {
-    public class MapDefinition : DependencyObject
+    public class MapDefinition
     {
 
     }

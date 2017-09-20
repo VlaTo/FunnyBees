@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:c="using:FunnyBees.Controls"
     xmlns:w2d="using:Microsoft.Graphics.Canvas.UI.Xaml">
-    <Style TargetType="c:FunnyBeesGame">
+    <Style TargetType="c:GameControl">
        <Setter Property="Template">
            <Setter.Value>
-               <ControlTemplate TargetType="c:FunnyBeesGame">
+               <ControlTemplate TargetType="c:GameControl">
                    <Border
                        Background="{TemplateBinding Background}"
                        BorderBrush="{TemplateBinding BorderBrush}"

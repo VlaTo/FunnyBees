@@ -1,25 +1,26 @@
 ﻿<local:ContentPage
     x:Class="FunnyBees.Views.MainPage"
-    
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:FunnyBees.Views"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:canvas="using:Microsoft.Graphics.Canvas.UI.Xaml"
-
-    mc:Ignorable="d"
-    
-    Loaded="OnLoaded"
-    Unloaded="OnUnload">
+    xmlns:controls="using:FunnyBees.Controls"
+    mc:Ignorable="d">
     <Grid
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <canvas:CanvasAnimatedControl
+        <controls:GameControl>
+            <controls:GameControl.Map>
+                <controls:MapDefinition>
+                </controls:MapDefinition>
+            </controls:GameControl.Map>
+        </controls:GameControl>
+        <!--<canvas:CanvasAnimatedControl
             x:Name="AnimatedControl"
             ClearColor="CadetBlue"
             CreateResources="OnCanvasCreateResources"
             Update="OnCanvasUpdate"
             Draw="OnCanvasDraw"
-        />
+        />-->
     </Grid>
 </local:ContentPage>

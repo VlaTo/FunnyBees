@@ -6,9 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cmd="using:LibraProgramming.Windows.Commands"
-    xmlns:ux="using:LibraProgramming.Windows.UI.Xaml"
-    xmlns:uxc="using:LibraProgramming.Windows.UI.Xaml.Primitives.Commanding"
-    xmlns:uxt="using:LibraProgramming.Windows.UI.Xaml.StateTriggers"
     xmlns:views="using:FunnyBees.Views"
 
     mc:Ignorable="d">
@@ -305,50 +302,11 @@
                 />
             <!--</Grid>-->
         </SplitView>
-        <ux:CustomDialog
-            Title="User Interaction Dialog #1"
-            IsOpen="False"
-            MaxDialogWidth="700">
-            <ux:CustomDialog.Actions>
-                <uxc:PredefinedDialogAction Action="Ok" />
-                <uxc:PredefinedDialogAction Action="Cancel" />
-            </ux:CustomDialog.Actions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <TextBlock
-                    Grid.Row="0"
-                    TextWrapping="Wrap">
-                    <Span>
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt
-                        ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci
-                        tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
-                    </Span>
-                    <Span>
-                        Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum
-                        dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit
-                        praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum
-                        soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum.
-                    </Span>
-                </TextBlock>
-                <ComboBox
-                    Grid.Row="1"
-                    SelectedIndex="0"
-                    Margin="0,20,0,0"
-                    MinWidth="200">
-                    <x:String>Lorem ipsum dolor</x:String>
-                    <x:String>Consectetuer adipiscing</x:String>
-                    <x:String>Laoreet dolore magna</x:String>
-                </ComboBox>
-            </Grid>
-        </ux:CustomDialog>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="LayoutStates">
                 <VisualState>
                     <VisualState.StateTriggers>
-                        <uxt:AdaptiveSizeStateTrigger MinWindowWidth="720" />
+                        <AdaptiveTrigger MinWindowWidth="720" />
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="MenuSplitView.DisplayMode" Value="CompactOverlay" />

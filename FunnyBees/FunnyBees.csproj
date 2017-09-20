@@ -11,12 +11,13 @@
     <AssemblyName>FunnyBees</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
+    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>FunnyBees_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -90,50 +91,22 @@
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <PRIResource Include="Localization\Neutral\Resources.resw" />
-    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\FunnyBeesGame.cs" />
+    <Compile Include="Controls\ControlPrimitive.cs" />
+    <Compile Include="Controls\GameControl.cs" />
     <Compile Include="Controls\MapDefinition.cs" />
+    <Compile Include="Controls\MissingTemplatePartException.cs" />
     <Compile Include="Core\CoreDispatcherExtension.cs" />
     <Compile Include="Core\ValueFormatConverter.cs" />
     <Compile Include="Core\RuntimeDataCache.cs" />
-    <Compile Include="Engine\IDrawableObject.cs" />
-    <Compile Include="Engine\IObservable.cs" />
-    <Compile Include="Engine\IObserver.cs" />
-    <Compile Include="Engine\ISceneObject.cs" />
-    <Compile Include="Engine\ISceneUpdatable.cs" />
-    <Compile Include="Engine\UpdatableObject.cs" />
-    <Compile Include="Game\Beehive.cs" />
-    <Compile Include="Game\Components\BeeBehaviour.cs" />
-    <Compile Include="Game\Components\BeehiveShape.cs" />
-    <Compile Include="Game\Components\GuardBee.cs" />
-    <Compile Include="Game\Components\BeeManager.cs" />
-    <Compile Include="Engine\Component.cs" />
-    <Compile Include="Engine\ComponentContainer.cs" />
-    <Compile Include="Engine\ComponentObserver.cs" />
-    <Compile Include="Engine\SceneObject.cs" />
-    <Compile Include="Engine\IComponent.cs" />
-    <Compile Include="Engine\IComponentObserver.cs" />
-    <Compile Include="Engine\IInteraction.cs" />
-    <Compile Include="Engine\IInteractor.cs" />
-    <Compile Include="Engine\Interaction.cs" />
-    <Compile Include="Game\Bee.cs" />
-    <Compile Include="Engine\Interactor.cs" />
-    <Compile Include="Engine\ISceneCreator.cs" />
-    <Compile Include="Game\Components\QueenBeeBehaviour.cs" />
-    <Compile Include="Game\Components\HoneyBeeBehaviour.cs" />
-    <Compile Include="Game\Interactors\BeeHoster.cs" />
-    <Compile Include="Engine\Scene.cs" />
-    <Compile Include="Engine\DrawableObject.cs" />
-    <Compile Include="Game\Interactors\BeeRemover.cs" />
-    <Compile Include="Game\Map.cs" />
-    <Compile Include="Game\RectangleShape.cs" />
     <Compile Include="Localization\ApplicationLocalizationManager.cs" />
     <Compile Include="Localization\IApplicationLocalization.cs" />
+    <Compile Include="Localization\IStringResourceLoader.cs" />
+    <Compile Include="Localization\LocalizationManager.cs" />
     <Compile Include="Models\ApplicationOptions.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -141,8 +114,6 @@
     <Compile Include="Services\ApplicationOptionProvider.cs" />
     <Compile Include="Services\IApplicationOptionsProvider.cs" />
     <Compile Include="Services\IUIThreadAccessor.cs" />
-    <Compile Include="Shapes\CircleShape.cs" />
-    <Compile Include="Shapes\Shape.cs" />
     <Compile Include="ViewModels\HostPageViewModel.cs" />
     <Compile Include="ViewModels\ViewModel.cs" />
     <Compile Include="ViewModels\OptionsPageViewModel.cs" />
@@ -165,7 +136,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="FunnyBees_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\BadgeLogo.scale-100.png" />
@@ -253,34 +223,40 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LibraProgramming.Hessian\LibraProgramming.Hessian.csproj">
-      <Project>{cdfa46e2-5d84-47f6-a099-d1578cdd5b4f}</Project>
-      <Name>LibraProgramming.Hessian</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LibraProgramming.Windows.Interaction\LibraProgramming.Windows.Interaction.csproj">
-      <Project>{350a8b7b-21f2-4c1d-8047-e3b1d54ddbdd}</Project>
-      <Name>LibraProgramming.Windows.Interaction</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LibraProgramming.Windows.Interactivity\LibraProgramming.Windows.Interactivity.csproj">
-      <Project>{2d4157f0-799c-4efc-b768-aa60f8864cc3}</Project>
-      <Name>LibraProgramming.Windows.Interactivity</Name>
+    <ProjectReference Include="..\LibraProgramming.Game\LibraProgramming.Game.csproj">
+      <Project>{42da47a5-6aca-4a36-b4c4-5cc634e2303d}</Project>
+      <Name>LibraProgramming.Game</Name>
     </ProjectReference>
     <ProjectReference Include="..\LibraProgramming.Windows.Locator\LibraProgramming.Windows.Locator.csproj">
       <Project>{f5d1f73f-3de8-430d-ba05-63dcd5979f3a}</Project>
       <Name>LibraProgramming.Windows.Locator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LibraProgramming.Windows.UI.Xaml\LibraProgramming.Windows.UI.Xaml.csproj">
-      <Project>{3be83c00-6868-4607-9370-dda54c351bd1}</Project>
-      <Name>LibraProgramming.Windows.UI.Xaml</Name>
     </ProjectReference>
     <ProjectReference Include="..\LibraProgramming.Windows\LibraProgramming.Windows.csproj">
       <Project>{a2b61275-bbaa-4f7c-867c-78337354b28d}</Project>
       <Name>LibraProgramming.Windows</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
+      <Version>5.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="Win2D.uwp">
+      <Version>1.21.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LibraProgramming.snk">
+      <Link>LibraProgramming.snk</Link>
+    </None>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\LibraProgramming.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

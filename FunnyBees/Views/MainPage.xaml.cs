@@ -24,17 +24,7 @@ namespace FunnyBees.Views
             Scene.Current = scene;
         }
 
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void OnUnload(object sender, RoutedEventArgs e)
-        {
-            AnimatedControl.RemoveFromVisualTree();
-            AnimatedControl = null;
-        }
-
-        private void OnCanvasCreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
+        /*private void OnCanvasCreateResources(CanvasAnimatedControl sender, CanvasCreateResourcesEventArgs args)
         {
             args.TrackAsyncAction(DoCanvasCreateResources().AsAsyncAction());
         }
@@ -50,9 +40,9 @@ namespace FunnyBees.Views
         private void OnCanvasUpdate(ICanvasAnimatedControl sender, CanvasAnimatedUpdateEventArgs args)
         {
             scene.Update(args.Timing.TotalTime);
-        }
+        }*/
 
-        private Task DoCanvasCreateResources()
+        /*private Task DoCanvasCreateResources()
         {
             var map = new Map(new Size(200.0d, 200.0d), 20, 20);
             var beehive = new Beehive();
@@ -83,6 +73,6 @@ namespace FunnyBees.Views
             scene.AddChild(bee);
 
             return Task.CompletedTask;
-        }
+        }*/
     }
 }
